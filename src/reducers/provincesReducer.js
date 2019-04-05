@@ -1,10 +1,10 @@
-import { SET_PROVINCES } from "../actions/types";
+import * as TYPES from '../actions/types';
 
-const provincesReducerDefaultState = [];
+const INITIAL_STATE = [];
 
-export default (state = provincesReducerDefaultState, action) => {
+export default (state = INITIAL_STATE, action) => {
   switch(action.type) {
-    case SET_PROVINCES:
+    case TYPES.SET_PROVINCES:
       return action.provinces;
     default:
       return state;

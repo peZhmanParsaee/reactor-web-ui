@@ -1,15 +1,15 @@
-import { ADD_INVOICE, SET_INVOICES } from '../actions/types';
+import * as TYPES from '../actions/types';
 
-const invoicesReducerDefaultState = [];
+const INITIAL_STATE = [];
 
-export default (state = invoicesReducerDefaultState, action) => {
+export default (state = INITIAL_STATE, action) => {
   switch(action.type) {
-    case ADD_INVOICE:
+    case TYPES.ADD_INVOICE:
       return [
         ...state,
         action.invoice
       ];
-    case SET_INVOICES:
+    case TYPES.SET_INVOICES:
       return action.invoices;
     default:
       return state;

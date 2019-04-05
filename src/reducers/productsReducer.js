@@ -1,15 +1,15 @@
-import { ADD_PRODUCT, SET_PRODUCTS } from '../actions/types';
+import * as TYPES from '../actions/types';
 
-const productsReducerDefaultState = [];
+const INITIAL_STATE = [];
 
-export default (state = productsReducerDefaultState, action) => {
+export default (state = INITIAL_STATE, action) => {
   switch(action.type) {
-    case ADD_PRODUCT:
+    case TYPES.ADD_PRODUCT:
       return [
         ...state,
         action.product
       ];
-    case SET_PRODUCTS:
+    case TYPES.SET_PRODUCTS:
       return action.products;
     default:
       return state;
