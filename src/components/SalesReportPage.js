@@ -64,6 +64,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
+import appStyle from '../styles/jss/layouts/appStyle';
 
 
 import { SingleDatePicker } from 'react-dates';
@@ -245,7 +246,7 @@ class SalesReportPage extends React.PureComponent {
 
     return (
       <div>
-        <div classes="wrapper">
+        <div className={classes.wrapper}>
           <div classes="root">
             <CssBaseline />
             <AppBar
@@ -361,28 +362,29 @@ class SalesReportPage extends React.PureComponent {
                 </ListItem>
               </List>
             </Drawer>
-            <div classes="appContent">
-              <div classes="mainContent">
-                <div ref="iScroll" style={{ height: "80vh", overflow: "auto" }}>
-                                  
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>مبلغ فاکتور</TableCell>
-                        <TableCell>نام خریدار</TableCell>
-                        <TableCell>نام محصول</TableCell>
-                        <TableCell>شماره فاکتور</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      { this.displayInvoices() }
-                    </TableBody>
-                  </Table>
-                  
-          
-                  {this.state.loadingState ? <p className="loading"> در حال بارگزاری ادامه داده ها ...</p> : ""}
-          
-                </div>
+            <div className={classes.mainPanel}>
+              <div className={classes.content}>
+                <div className={classes.container}>
+                  <div ref="iScroll" style={{ height: "80vh", overflow: "auto" }}>
+                                    
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>مبلغ فاکتور</TableCell>
+                          <TableCell>نام خریدار</TableCell>
+                          <TableCell>نام محصول</TableCell>
+                          <TableCell>شماره فاکتور</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        { this.displayInvoices() }
+                      </TableBody>
+                    </Table>
+                    
+                    {this.state.loadingState ? <p className="loading"> در حال بارگزاری ادامه داده ها ...</p> : ""}
+            
+                  </div>
+                </div>              
               </div>
             </div>
           </div>
@@ -398,4 +400,4 @@ SalesReportPage.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(SalesReportPage);
+export default withStyles(appStyle, { withTheme: true })(SalesReportPage);

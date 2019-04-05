@@ -45,7 +45,7 @@ import Footer from "./Footer";
 
 
 import theme from '../themes/AppTheme';
-
+import appStyle from '../styles/jss/layouts/appStyle';
 
 import { separateDigits } from '../helpers/numberHelpers';
 import { startAddInvoice } from '../actions/invoices';
@@ -573,46 +573,61 @@ class AddInvoicePage extends React.Component {
     
     return (
       <MuiThemeProvider theme={theme}>
-        <div classes={classes.wrapper}>
-          <div classes={classes.root}>
+        <div className={classes.wrapper}>
+          <div className={classes.root}>
             <CssBaseline />
             <Header/>
-            <div classes={classes.appContent}>
-              <div classes={classes.mainContent}>
-                <Stepper activeStep={activeStep}>
-                  { steps.map((label, index) => {
-                    const props = {};
-                    const labelProps = {};
-                    return (
-                      <Step key={label} {...props}>
-                        <StepLabel {...labelProps}>{label}</StepLabel>
-                      </Step>
-                    );
-                  })}
-                </Stepper>        
-                { stepContent }
-                <div className="stepper_actions">
-                  <Button disabled={activeStep === 0}
-                    onClick={this.handleBackStep}
-                    className={classes.button}
-                  >
-                    بازگشت
-                  </Button>
-                  <Button variant="contained"
-                    color="primary"
-                    onClick={this.handleNextStep}
-                    className={classes.button}
-                  >
-                    { this.state.activeStep === 1 ? "ثبت" : "مرحله بعد" }
-                  </Button>
+            
+              <div className={classes.mainContent}>
+                <div className={classes.container}>
+                  <Grid container>
+                    <Grid item xs={12}>
+
+                      <Typography
+                        variant="headline"
+                        style={{ textTransform: 'capitalize' }}
+                      >
+                        ثبت فاکتور جدید
+                      </Typography>
+                      <Stepper activeStep={activeStep}>
+                        { steps.map((label, index) => {
+                          const props = {};
+                          const labelProps = {};
+                          return (
+                            <Step key={label} {...props}>
+                              <StepLabel {...labelProps}>{label}</StepLabel>
+                            </Step>
+                          );
+                        })}
+                      </Stepper>        
+                      { stepContent }
+                      <div className="stepper_actions">
+                        <Button disabled={activeStep === 0}
+                          onClick={this.handleBackStep}
+                          className={classes.button}
+                        >
+                          بازگشت
+                        </Button>
+                        <Button variant="contained"
+                          color="primary"
+                          onClick={this.handleNextStep}
+                          className={classes.button}
+                        >
+                          { this.state.activeStep === 1 ? "ثبت" : "مرحله بعد" }
+                        </Button>
+                      </div>
+                    </Grid>
+                  </Grid>
+                  
+                  
+                  <ToastMessage
+                      variant={this.state.message.type}
+                      message={this.state.message.text}
+                      open={this.state.message.show}
+                    />
                 </div>
-                <ToastMessage
-                    variant={this.state.message.type}
-                    message={this.state.message.text}
-                    open={this.state.message.show}
-                  />
               </div>
-            </div>
+            
           </div>
         </div>        
         <Footer />
@@ -637,4 +652,4 @@ const mapDispatchToProps = (dispatch) => ({
   startAddInvoice: (invoice) => dispatch(startAddInvoice(invoice))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AddInvoicePage));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(appStyle)(AddInvoicePage));

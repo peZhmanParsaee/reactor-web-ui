@@ -51,4 +51,5 @@ const footerStyle = {
     width: "auto"
   }
 };
+
 export default footerStyle;
