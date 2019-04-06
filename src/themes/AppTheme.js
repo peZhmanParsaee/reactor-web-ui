@@ -6,7 +6,7 @@ const drawerWidth = 240;
 const AppTheme = createMuiTheme({
   typography: {
     fontFamily: [
-      'Vazir',
+      'VazirFD',
       'Tahoma',
       'Arial',
       'sans-serif'
