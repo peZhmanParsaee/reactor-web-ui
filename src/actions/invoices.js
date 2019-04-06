@@ -51,16 +51,15 @@ export const setInvoices = (invoices) => {
   };
 };
 
-export const startSetInvoices = () => {
-  return (dispatch) => {
+export const startSetInvoices = () => async dispatch => {
+  try {
+    const res = await axios.get(`${API_ENDPOINT}/api/v1/invoice`);      
     
-    return axios.get(`${API_ENDPOINT}/api/v1/invoice`)
-      .then(res => {
-        
-        if (res.data.status === true) {
-          dispatch(setInvoices(res.data.payload));
-        }
-
-      });
-  };
+    if (res.data.status === true) {
+      dispatch(setInvoices(res.data.payload));
+    }
+      
+  } catch (err) {
+    // console.log(err);
+  }
 };
