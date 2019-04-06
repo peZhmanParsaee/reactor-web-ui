@@ -30,6 +30,13 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogActions from '@material-ui/core/DialogActions';
+import Input from '@material-ui/core/Input';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 // @material-ui/icons
 import Icon from '@material-ui/core/Icon';
@@ -49,52 +56,10 @@ import appStyle from '../styles/jss/layouts/appStyle';
 
 import { separateDigits } from '../helpers/numberHelpers';
 import { startAddInvoice } from '../actions/invoices';
-
-
-// const styles = theme => ({
-//   root: {
-//     // width: '90%'
-//     display: 'flex',
-//     flexWrap: 'wrap'
-//   },
-//   TextField: {
-//     marginLeft: theme.spacing.unit,
-//     marginRight: theme.spacing.unit,
-//     width: 200
-//   },
-//   totalPrice: {
-//     fontWeight: 500
-//   },
-//   stepper_actions: {
-//     textAlign: "right"
-//   }
-// });
-
+import { startAddProduct } from '../actions/products';
 
 const drawerWidth = 256;
 
-const styles = {
-  root: {
-    display: 'flex',
-    minHeight: '100vh',
-  },
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-  },
-  appContent: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  mainContent: {
-    flex: 1,
-    padding: '48px 36px 0',
-    background: '#ff4400',
-  },
-};
 
 function getSteps() {
   return [ 'تکمیل اطلاعات اولیه', 'تاریخ تحویل' ];
@@ -128,6 +93,11 @@ class AddInvoicePage extends React.Component {
       text: "",
       show: false,
       type: "warning"
+    },
+    newProduct: {
+      name: '',
+      stock: 0,
+      unitPrice: 0
     }
   };
   async componentDidMount() {
@@ -335,6 +305,66 @@ class AddInvoicePage extends React.Component {
       }
     }));
   };
+  onCloseDialog = () => {
+    this.setState(() => ({ 
+      isAddProductDialogOpen: false,
+      newProduct: {
+        name: '',
+        stock: 0,
+        unitPrice: 0
+      }
+    }));
+  };
+  onAddProduct = () => {
+    if (!this.state.newProduct.name || !this.state.newProduct.stock || !this.state.newProduct.unitPrice) {
+      this.showMessage({ 
+        type: "warning",
+        text: "خطای اعتبارسنجی، ورودیها را بررسی کنید."
+      });
+      return;
+    }
+    
+    this.props.startAddProduct(this.state.newProduct);
+    this.showMessage({ 
+      type: "success",
+      text: "محصول اضافه شد."
+    });
+    this.onCloseDialog();
+  }
+  onNameChage = (event) => {
+    event.persist();
+    const name = event.target.value;
+    this.setState(() => ({ 
+      newProduct: {        
+        ...this.state.newProduct,
+        name
+      }
+    }));
+  }
+  onStockChange = (event) => {
+    event.persist();
+    const stock = event.target.value;
+    if (stock.match(/^[1-9]{1}[0-9]{0,6}$/) || !stock) {
+      this.setState(() => ({
+        newProduct: {
+          ...this.state.newProduct,
+          stock
+        }
+      }));
+    }
+  }
+  onUnitPriceChange = (event) => {
+    event.persist();
+    const unitPrice = event.target.value;
+    if (unitPrice.match(/^[1-9]{1}[0-9]{0,5}$/) || !unitPrice) {
+      this.setState(() => ({
+        newProduct: {
+          ...this.state.newProduct,
+          unitPrice
+        }
+      }));
+    }
+  }
   render() {
     // this.initNewFactor();
 
@@ -466,10 +496,59 @@ class AddInvoicePage extends React.Component {
           </GridContainer>
           <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
-              <AddProductDialog 
-                show={this.state.isAddProductDialogOpen} 
-                onClose={this.closeAddProductDialog}
-              />
+              <Dialog 
+                open={this.state.isAddProductDialogOpen}
+                onClose={this.onCloseDialog}
+                >
+                <DialogTitle>اضافه کردن محصول جدید</DialogTitle>
+                <DialogContent>
+                  <FormControl fullWidth>
+                    <InputLabel htmlFor="name"
+                      className="form-control__input-label"
+                    >نام محصول</InputLabel>
+                    <Input id="name"
+                      onChange={this.onNameChage}
+                      value={this.state.newProduct.name}
+                    />
+                  </FormControl>
+                  <FormControl fullWidth>
+                    <InputLabel htmlFor="stock"
+                      className="form-control__input-label"
+                    >موجودی</InputLabel>
+                    <Input id="stock"
+                      value={this.state.newProduct.stock}
+                      onChange={this.onStockChange}
+                      type="text"
+                      startAdornment={<InputAdornment position="start">عدد</InputAdornment>}
+                    />
+                  </FormControl>
+                  <FormControl fullWidth
+                  >
+                    <InputLabel htmlFor="unit-price"            
+                      className="form-control__input-label"
+                    >قیمت واحد</InputLabel>
+                    <Input id="unit-price"
+                      value={this.state.newProduct.unitPrice}
+                      onChange={this.onUnitPriceChange}
+                      type="text"
+                      startAdornment={<InputAdornment position="end">تومان</InputAdornment>}
+                    />
+                  </FormControl>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.onAddProduct}
+                    color="primary"
+                    variant="contained"
+                  >
+                    ذخیره
+                  </Button>
+                  <Button onClick={this.onCloseDialog}
+                    variant="contained"
+                  >
+                    انصراف
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </GridItem>
           </GridContainer>
         </div>
@@ -580,8 +659,8 @@ class AddInvoicePage extends React.Component {
             
               <div className={classes.mainContent}>
                 <div className={classes.container}>
-                  <Grid container>
-                    <Grid item xs={12}>
+                  <GridContainer>
+                    <GridItem xs={12}>
 
                       <Typography
                         variant="headline"
@@ -594,8 +673,12 @@ class AddInvoicePage extends React.Component {
                           const props = {};
                           const labelProps = {};
                           return (
-                            <Step key={label} {...props}>
-                              <StepLabel {...labelProps}>{label}</StepLabel>
+                            <Step key={label} {...props} className="class-snf">
+                              <StepLabel 
+                                classes={{ // apply this style
+                                  iconContainer: classes.iconContainer
+                                }}
+                                {...labelProps}>{label}</StepLabel>
                             </Step>
                           );
                         })}
@@ -616,8 +699,8 @@ class AddInvoicePage extends React.Component {
                           { this.state.activeStep === 1 ? "ثبت" : "مرحله بعد" }
                         </Button>
                       </div>
-                    </Grid>
-                  </Grid>
+                    </GridItem>
+                  </GridContainer>
                   
                   
                   <ToastMessage
@@ -649,7 +732,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  startAddInvoice: (invoice) => dispatch(startAddInvoice(invoice))
+  startAddInvoice: (invoice) => dispatch(startAddInvoice(invoice)),
+  startAddProduct: (product) => dispatch(startAddProduct(product))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(appStyle)(AddInvoicePage));

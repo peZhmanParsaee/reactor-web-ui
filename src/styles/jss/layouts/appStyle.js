@@ -31,6 +31,11 @@ const appStyle = theme => ({
   container,
   map: {
     marginTop: "70px"
+  },
+  iconContainer: { // define styles for icon container
+    // transform: 'scale(1)',
+    paddingRight: 0,
+    paddingLeft: "8px"
   }
 });
 

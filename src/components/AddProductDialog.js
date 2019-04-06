@@ -49,12 +49,17 @@ class AddProductDialog extends React.Component {
     }
     
     this.props.startAddProduct(this.state);
+    this.setState(() => ({
+      showMessage: true, 
+      messageType: "success",
+      message: "محصول اضافه شد."
+    }));
     this.clearState();
     this.props.onClose();
   }
   onCloseDialog = () => {
     this.clearState();
-    this.props.onClose();
+    this.props.onClose();    
   }
   onNameChage = (event) => {
     event.persist();
@@ -101,7 +106,7 @@ class AddProductDialog extends React.Component {
             <Input id="stock"
               value={this.state.stock}
               onChange={this.onStockChange}
-              type="number"
+              type="text"
               startAdornment={<InputAdornment position="start">عدد</InputAdornment>}
             />
           </FormControl>
@@ -113,7 +118,7 @@ class AddProductDialog extends React.Component {
             <Input id="unit-price"
               value={this.state.unitPrice}
               onChange={this.onUnitPriceChange}
-              type="number"
+              type="text"
               startAdornment={<InputAdornment position="end">تومان</InputAdornment>}
             />
           </FormControl>
