@@ -37,6 +37,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
 
 // @material-ui/icons
 import Icon from '@material-ui/core/Icon';
@@ -50,6 +52,11 @@ import GridContainer from './Grid/GridContainer';
 import GridItem from './Grid/GridItem';
 import Footer from "./Footer";
 
+import Autosuggest from 'react-autosuggest';
+import deburr from 'lodash/deburr';
+import match from 'autosuggest-highlight/match';
+import parse from 'autosuggest-highlight/parse';
+
 
 import theme from '../themes/AppTheme';
 import appStyle from '../styles/jss/layouts/appStyle';
@@ -60,6 +67,63 @@ import { startAddProduct } from '../actions/products';
 
 const drawerWidth = 256;
 
+const suggestions = [
+  { label: 'Afghanistan' },
+  { label: 'Aland Islands' },
+  { label: 'Albania' },
+  { label: 'Algeria' },
+  { label: 'American Samoa' },
+  { label: 'Andorra' },
+  { label: 'Angola' },
+  { label: 'Anguilla' },
+  { label: 'Antarctica' },
+  { label: 'Antigua and Barbuda' },
+  { label: 'Argentina' },
+  { label: 'Armenia' },
+  { label: 'Aruba' },
+  { label: 'Australia' },
+  { label: 'Austria' },
+  { label: 'Azerbaijan' },
+  { label: 'Bahamas' },
+  { label: 'Bahrain' },
+  { label: 'Bangladesh' },
+  { label: 'Barbados' },
+  { label: 'Belarus' },
+  { label: 'Belgium' },
+  { label: 'Belize' },
+  { label: 'Benin' },
+  { label: 'Bermuda' },
+  { label: 'Bhutan' },
+  { label: 'Bolivia, Plurinational State of' },
+  { label: 'Bonaire, Sint Eustatius and Saba' },
+  { label: 'Bosnia and Herzegovina' },
+  { label: 'Botswana' },
+  { label: 'Bouvet Island' },
+  { label: 'Brazil' },
+  { label: 'British Indian Ocean Territory' },
+  { label: 'Brunei Darussalam' },
+];
+
+
+function renderInputComponent(inputProps) {
+  const { classes, inputRef = () => {}, ref, ...other } = inputProps;
+
+  return (
+    <TextField
+      fullWidth
+      InputProps={{
+        inputRef: node => {
+          ref(node);
+          inputRef(node);
+        },
+        classes: {
+          input: classes.input,
+        },
+      }}
+      {...other}
+    />
+  );
+}
 
 function getSteps() {
   return [ 'تکمیل اطلاعات اولیه', 'تاریخ تحویل' ];
@@ -98,7 +162,10 @@ class AddInvoicePage extends React.Component {
       name: '',
       stock: 0,
       unitPrice: 0
-    }
+    },
+    single: '',
+    popper: '',
+    suggestions: [],
   };
   async componentDidMount() {
     const res = await axios.get(`${API_ENDPOINT}/api/v1/invoice/new-invoice-no`);
@@ -365,13 +432,102 @@ class AddInvoicePage extends React.Component {
       }));
     }
   }
+  handleSuggestionsFetchRequested = ({ value }) => {
+    this.setState({
+      suggestions: this.getSuggestions(value),
+    });
+  };
+
+  handleSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: [],
+    });
+  };
+
+  handleChange = name => (event, { newValue }) => {
+    console.log(newValue);
+    
+    const selectedCustomer = this.props.customers.find(x => x.fullName === newValue);
+    
+    console.log(selectedCustomer);
+    if (selectedCustomer) {
+      this.setState({
+        [name]: newValue,
+        invoice: { 
+          ...this.state.invoice,
+          customerId: selectedCustomer._id
+        }
+      });
+    } else {
+      this.setState({
+        [name]: newValue
+      });
+    }
+    
+  };
+  
+  renderSuggestion = (suggestion, { query, isHighlighted }) => {
+    const matches = match(suggestion.fullName, query);
+    const parts = parse(suggestion.fullName, matches);
+
+    return (
+      <MenuItem selected={isHighlighted} component="div">
+        <div>
+          {parts.map((part, index) =>
+            part.highlight ? (
+              <span key={String(index)} style={{ fontWeight: 500 }}>
+                {part.text}
+              </span>
+            ) : (
+              <strong key={String(index)} style={{ fontWeight: 300 }}>
+                {part.text}
+              </strong>
+            ),
+          )}
+        </div>
+      </MenuItem>
+    );
+  }
+
+  getSuggestions = (value) => {
+    const inputValue = deburr(value.trim()).toLowerCase();
+    const inputLength = inputValue.length;
+    let count = 0;
+
+    return inputLength === 0
+      ? []
+      : this.props.customers.filter(suggestion => {
+          const keep =
+            count < 5 && suggestion.fullName.slice(0, inputLength).toLowerCase() === inputValue;
+          console.log(`keep is ${keep}`);
+
+          if (keep) {
+            count += 1;
+          }
+
+          return keep;
+        });
+  }
+
+  getSuggestionValue = (suggestion) => {
+    return suggestion.fullName;
+  }
+  
   render() {
-    // this.initNewFactor();
 
     const { classes } = this.props;
     const steps = getSteps();
     const { activeStep } = this.state;
     let stepContent;
+
+    const autosuggestProps = {
+      renderInputComponent,
+      suggestions: this.state.suggestions,
+      onSuggestionsFetchRequested: this.handleSuggestionsFetchRequested,
+      onSuggestionsClearRequested: this.handleSuggestionsClearRequested,
+      getSuggestionValue: this.getSuggestionValue,
+      renderSuggestion: this.renderSuggestion,
+    };
 
     if (activeStep === 0) {
       stepContent = (
@@ -389,7 +545,36 @@ class AddInvoicePage extends React.Component {
               </Typography>
               { this.state.invoice.date }     
             </GridItem>          
-            <GridItem xs={12} sm={12} md={6}>
+            <GridItem xs={12} sm={12} md={6}
+              className="autosuggest"
+            >
+              <FormControl>
+                <Typography>
+                  نام و نام خانوادگی
+                </Typography>
+                <Autosuggest
+                  {...autosuggestProps}
+                  inputProps={{
+                    classes,
+                    placeholder: 'جست و جو',
+                    value: this.state.single,
+                    onChange: this.handleChange('single'),
+                  }}
+                  theme={{
+                    container: classes.container,
+                    suggestionsContainerOpen: classes.suggestionsContainerOpen,
+                    suggestionsList: classes.suggestionsList,
+                    suggestion: classes.suggestion,
+                  }}
+                  renderSuggestionsContainer={options => (
+                    <Paper {...options.containerProps} square>
+                      {options.children}
+                    </Paper>
+                  )}
+                />
+              </FormControl>
+            </GridItem>
+            {/* <GridItem xs={12} sm={12} md={6}>
               <FormControl>
                 <InputLabel htmlFor="customer">نام و نام خانوادگی</InputLabel>
                 <Select
@@ -405,7 +590,8 @@ class AddInvoicePage extends React.Component {
                   })}
                 </Select>
               </FormControl>
-            </GridItem>
+            </GridItem> */}
+            
           </GridContainer>
           <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
