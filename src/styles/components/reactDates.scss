@@ -1,10 +1,16 @@
-// // set z-index higher than .tether-element
-// .DateRangePicker__picker, .SingleDatePicker__picker {
-//   z-index: 130000;
-//   pointer-events: all;
-// }
-// // make .tether-element non-reactive
-// .tether-element {
+// set z-index higher than .tether-element
+[class^='DateRangePicker__picker'],
+[class^='SingleDatePicker__picker'] {
+  z-index: 130000;
+  pointer-events: all;
+}
+// make .tether-element non-reactive
+// [class^='element']
+// .tether- {
 //   z-index: 120000;
 //   pointer-events: none;
 // }
+
+[class^='MuiDrawer-paper'] {
+    overflow: visible;
+}

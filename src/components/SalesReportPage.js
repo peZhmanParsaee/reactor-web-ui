@@ -210,7 +210,7 @@ class SalesReportPage extends React.PureComponent {
   };
   onFromDateChange = (date) => {
     if (date) {
-      this.setState(() => ({ date }));
+      this.setState(() => ({ fromDate: date }));
     }
   };
   onFromDateFocusChange = ({ focused }) => {
@@ -218,7 +218,7 @@ class SalesReportPage extends React.PureComponent {
   };
   onToDateChange = (date) => {
     if (date) {
-      this.setState(() => ({ date }));
+      this.setState(() => ({ toDate: date }));
     }
   };
   onToDateFocusChange = ({ focused }) => {
@@ -400,4 +400,4 @@ SalesReportPage.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(appStyle, { withTheme: true })(SalesReportPage);
+export default withStyles(appStyle)(SalesReportPage);

@@ -55,6 +55,13 @@ const appStyle = theme => ({
   divider: {
     height: theme.spacing.unit * 2,
   },
+  drawer: {
+    overflow: "visible"
+  },
+  drawerPaper: {
+    width: drawerWidth,
+    overflow: "visible"
+  },
 });
 
 export default appStyle;
