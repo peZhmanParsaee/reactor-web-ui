@@ -749,7 +749,7 @@ class AddInvoicePage extends React.Component {
           <GridContainer>
             <GridItem xs={12} sm={12} md={6}
               style={{
-                marginBottom: "20px"
+                marginBottom: "30px"
               }}
             >
               <Typography 
@@ -775,7 +775,7 @@ class AddInvoicePage extends React.Component {
             </GridItem>
             <GridItem xs={12} sm={12} md={6}
               style={{
-                marginBottom: "20px"
+                marginBottom: "30px"
               }}
             >
               <Typography
@@ -812,7 +812,7 @@ class AddInvoicePage extends React.Component {
             </GridItem>
             <GridItem xs={12} sm={12} md={12}
               style={{
-                marginBottom: "20px"
+                marginBottom: "30px"
               }}
             >
               <FormControl component="fieldset" className="formControl">
@@ -836,7 +836,7 @@ class AddInvoicePage extends React.Component {
             </GridItem>
             <GridItem xs={12} sm={12} md={12}
               style={{
-                marginBottom: "20px"
+                marginBottom: "30px"
               }}
             >
               <FormControl className="formControl"
@@ -920,7 +920,7 @@ class AddInvoicePage extends React.Component {
                           const props = {};
                           const labelProps = {};
                           return (
-                            <Step key={label} {...props} className="class-snf">
+                            <Step key={label} {...props}>
                               <StepLabel 
                                 className={{ // apply this style
                                   iconContainer: classes.iconContainer

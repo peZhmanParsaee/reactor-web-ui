@@ -392,10 +392,10 @@ class SalesReportPage extends React.PureComponent {
                         okLabel="تأیید"
                         cancelLabel="لغو"
                         clearLabel="پاک کردن"
-                        labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "")}
+                        labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "از تاریخ")}
                         value={this.state.startDate}
                         onChange={this.handleStartDateChange}
-                        animateYearScrolling={false}
+                        animateYearScrolling={false}                        
                       />
                     </div>
                   </MuiPickersUtilsProvider>
@@ -408,7 +408,7 @@ class SalesReportPage extends React.PureComponent {
                         okLabel="تأیید"
                         cancelLabel="لغو"
                         clearLabel="پاک کردن"
-                        labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "")}
+                        labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "تا تاریخ")}
                         value={this.state.endDate}
                         onChange={this.handleEndDateChange}
                         animateYearScrolling={false}
@@ -440,13 +440,13 @@ class SalesReportPage extends React.PureComponent {
                         value="INVOICE_ITEMS"
                         control={<Radio color="primary" />}
                         label="آیتم های فاکتور"
-                        labelPlacement="start"
+                        labelPlacement="end"
                       />
                       <FormControlLabel
                         value="INVOICES"
                         control={<Radio color="primary" />}
                         label="فاکتور"
-                        labelPlacement="start"
+                        labelPlacement="end"
                       />
                     </RadioGroup>
                   </FormControl>
@@ -468,7 +468,12 @@ class SalesReportPage extends React.PureComponent {
             
               <div className={classes.content}>
                 <div className={classes.container}>
-                  <div ref="iScroll" style={{ height: "auto", overflow: "auto" }}>
+                  <div ref="iScroll" 
+                    style={{ 
+                      height: "auto", 
+                      overflow: "auto",
+                      marginBottom: "100px"
+                    }}>
                     {
                       this.state.invoiceType === 'INVOICES' && (
                         <Table>
