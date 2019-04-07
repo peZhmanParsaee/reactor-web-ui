@@ -25,6 +25,7 @@ import ToastMessage from './ToastMessage';
 import GridContainer from './Grid/GridContainer';
 import GridItem from './Grid/GridItem';
 import Footer from "./Footer";
+import { separateDigits } from '../helpers/numberHelpers';
 
 // theme
 import appTheme from '../themes/AppTheme';
@@ -55,6 +56,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 
+import { MuiPickersUtilsProvider, TimePicker, DatePicker } from 'material-ui-pickers';
 
 
 import Radio from '@material-ui/core/Radio';
@@ -114,20 +116,25 @@ class SalesReportPage extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-        loadingState: false,
-        invoices: [],
-        offset: 0,
-        limit: 10,
-        finished: false,
-        open: false,
-        fromDate: null,
-        toDate: null,
-        fromDateCalendarFocused: false,
-        toDateCalendarFocused: false,
-        invoiceType: "INVOICE_ITEMS"
+      loadingState: false,
+      invoices: [],
+      offset: 0,
+      limit: 10,
+      finished: false,
+      open: false,
+      fromDate: null,
+      toDate: null,
+      fromDateCalendarFocused: false,
+      toDateCalendarFocused: false,
+      invoiceType: "INVOICE_ITEMS",
+      selectedDate: new Date('2014-08-18T21:11:54'),
      };
      moment.locale('fa-IR');
-   }
+  }
+
+  handleDateChange = date => {
+    this.setState({ selectedDate: date });
+  };
   
   componentDidMount() {
     this.loadMoreItems();
@@ -137,37 +144,58 @@ class SalesReportPage extends React.PureComponent {
         this.loadMoreItems();
       }
     });
-  }
-  
+  };  
   displayInvoices() {
     let jsxItems = [];
 
+    console.dir(this.state);
+
     for (var invoice of this.state.invoices) {
       console.log(`invoice is ${JSON.stringify(invoice)}`);
-      const jsx = (
-        <TableRow key={invoice._id}>
-         <TableCell>
-           { invoice.totalPrice }
-         </TableCell>
-         <TableCell>
-           { invoice.customerId }
-         </TableCell>
-         <TableCell>
-          { invoice.products.map(invoiceProduct => {
-               return (
-                 <p>                  
-                   <span>{invoiceProduct.name}</span>
-                   <span> {invoiceProduct.count} عدد</span>
-                 </p>
-               );
-             })
-           }
-         </TableCell>
-         <TableCell>{ invoice.no }</TableCell>
-       </TableRow>
-     );
-     
-     jsxItems.push(jsx);
+      if (this.state.invoiceType === "INVOICES") {
+        const jsx = (
+          <TableRow key={invoice._id}>
+           <TableCell>
+             { invoice.customerName }
+           </TableCell>
+           <TableCell>
+             { separateDigits({ number: invoice.totalPrice, showCurrency: true }) }
+           </TableCell>
+           <TableCell>{ invoice.no }</TableCell>
+           <TableCell>
+            { invoice.products.map(invoiceProduct => {
+                 return (
+                   <p>                  
+                     <span>{invoiceProduct.name}</span>
+                     <span> {invoiceProduct.count} عدد</span>
+                   </p>
+                 );
+               })
+             }
+           </TableCell>
+           <TableCell>{ invoice.deliverAtFormatted }</TableCell>
+         </TableRow>
+       );
+       
+       jsxItems.push(jsx);
+      }
+      if (this.state.invoiceType === "INVOICE_ITEMS") {
+        const jsx = (
+          <TableRow key={invoice.invoiceId}>
+           <TableCell>
+             { invoice.customerName }
+           </TableCell>           
+           <TableCell>
+             { invoice.productName }
+           </TableCell>
+           <TableCell>
+             { invoice.invoiceNo }
+           </TableCell>
+         </TableRow>
+       );
+       
+       jsxItems.push(jsx);
+      }
     }
 
      return jsxItems;
@@ -225,9 +253,10 @@ class SalesReportPage extends React.PureComponent {
     this.setState(() => ({ toDateCalendarFocused: focused }));
   };
   onInvoiceTypeChange = (event) => {
+    console.dir(this.state);
     const invoiceType = event.target.value;
     console.log(`invoiceType: ${invoiceType}`);
-    this.setState(() => ({ invoiceType }));
+    this.setState(() => ({ invoiceType, invoices: [] }));
   };
   onSeachClick = () => {
     console.log('search ....');
@@ -362,31 +391,66 @@ class SalesReportPage extends React.PureComponent {
                 </ListItem>
               </List>
             </Drawer>
-            <div className={classes.mainPanel}>
+            
               <div className={classes.content}>
                 <div className={classes.container}>
                   <div ref="iScroll" style={{ height: "80vh", overflow: "auto" }}>
-                                    
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>مبلغ فاکتور</TableCell>
-                          <TableCell>نام خریدار</TableCell>
-                          <TableCell>نام محصول</TableCell>
-                          <TableCell>شماره فاکتور</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        { this.displayInvoices() }
-                      </TableBody>
-                    </Table>
+                    {
+                      this.state.invoiceType === 'INVOICES' && (
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>نام خریدار</TableCell>
+                              <TableCell>مبلغ</TableCell>
+                              <TableCell>شماره فاکتور</TableCell>
+                              <TableCell>محصولات</TableCell>
+                              <TableCell>زمان تحویل</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            { this.displayInvoices() }
+                          </TableBody>
+                        </Table>
+                      )
+                    }
+
+                    {
+                      this.state.invoiceType === 'INVOICE_ITEMS' && (
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>نام خریدار</TableCell>
+                              <TableCell>نام محصول</TableCell>
+                              <TableCell>شماره فاکتور</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            { this.displayInvoices() }
+                          </TableBody>
+                        </Table>
+                      )
+                    }
+                    
                     
                     {this.state.loadingState ? <p className="loading"> در حال بارگزاری ادامه داده ها ...</p> : ""}
             
                   </div>
+                  {
+                    // <GridContainer className={classes.grid} justify="space-around">
+                    //   <MuiPickersUtilsProvider>
+                    //     <DatePicker
+                    //       margin="normal"
+                    //       label="Date picker"
+                    //       value={this.state.selectedDate}
+                    //       onChange={this.handleDateChange}
+                    //     />
+                    //   </MuiPickersUtilsProvider>                    
+                    // </GridContainer>
+                  }
+                  
                 </div>              
               </div>
-            </div>
+            
           </div>
         </div>        
         <Footer />
