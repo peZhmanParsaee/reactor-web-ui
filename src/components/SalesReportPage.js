@@ -74,44 +74,9 @@ import appStyle from '../styles/jss/layouts/appStyle';
 
 
 import { SingleDatePicker } from 'react-dates';
+import { TimePicker, DatePicker, DateTimePicker } from 'material-ui-pickers'
+import Calendar from 'material-ui-pickers/DatePicker/components/Calendar';
 
-
-const drawerWidth = 300;
-
-const styles = theme => ({
-  root: {
-    display: 'flex',
-  },  
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: '0 8px',
-    justifyContent: 'flex-end',
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing.unit * 3,
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginRight: -drawerWidth,
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginRight: 0,
-  }
-});
 
 const renderMonthText = (input) => {  
   return input.format('jMM');
@@ -250,18 +215,14 @@ class SalesReportPage extends React.PureComponent {
   handleDrawerClose = () => {
     this.setState(() => ({ open: false }));
   };
-  onFromDateChange = (date) => {
-    if (date) {
-      this.setState(() => ({ fromDate: date }));
-    }
+  onFromDateChange = (date) => {    
+    this.setState(() => ({ fromDate: date }));    
   };
   onFromDateFocusChange = ({ focused }) => {
     this.setState(() => ({ fromDateCalendarFocused: focused }));
   };
-  onToDateChange = (date) => {
-    if (date) {
-      this.setState(() => ({ toDate: date }));
-    }
+  onToDateChange = (date) => {    
+    this.setState(() => ({ toDate: date }));
   };
   onToDateFocusChange = ({ focused }) => {
     this.setState(() => ({ toDateCalendarFocused: focused }));
@@ -279,6 +240,9 @@ class SalesReportPage extends React.PureComponent {
     }), () => {
       this.loadMoreItems();
     });
+  };
+  handleDateChange = date => {
+    this.setState({ selectedDate: date })
   };
   render() {
     const { classes, theme } = this.props;    
@@ -332,6 +296,7 @@ class SalesReportPage extends React.PureComponent {
                     }}
                   />
                 </ListItem>
+
                 {
                   // <ListItem key={2}>
                   //   <div style={{position: 'absolute'}}>
@@ -384,6 +349,7 @@ class SalesReportPage extends React.PureComponent {
                       />
                     </div>
                   </MuiPickersUtilsProvider>
+
                 </ListItem>
                 <ListItem key={6}>
                   <MuiPickersUtilsProvider utils={JalaliUtils} locale="fa">
@@ -500,6 +466,7 @@ class SalesReportPage extends React.PureComponent {
             
                   </div>
                   {
+
                     // <GridContainer className={classes.grid} justify="space-around">
                     //   <MuiPickersUtilsProvider>
                     //     <DatePicker
@@ -512,6 +479,7 @@ class SalesReportPage extends React.PureComponent {
                     // </GridContainer>
                   }
                   
+
                 </div>              
               </div>
             
