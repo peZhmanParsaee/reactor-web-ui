@@ -474,11 +474,11 @@ class SalesReportPage extends React.PureComponent {
                         <Table>
                           <TableHead>
                             <TableRow>
-                              <TableCell style={{ textAlign: "center", width: "20%" }}>نام خریدار</TableCell>
-                              <TableCell style={{ textAlign: "center", width: "20%" }}>مبلغ</TableCell>
-                              <TableCell style={{ textAlign: "center", width: "20%" }}>شماره فاکتور</TableCell>
-                              <TableCell style={{ textAlign: "center", width: "20%" }}>محصولات</TableCell>
-                              <TableCell style={{ textAlign: "center", width: "20%" }}>زمان تحویل</TableCell>
+                              <TableCell style={{ textAlign: "center", width: "20%", fontWeight: "bold" }}>نام خریدار</TableCell>
+                              <TableCell style={{ textAlign: "center", width: "20%", fontWeight: "bold" }}>مبلغ</TableCell>
+                              <TableCell style={{ textAlign: "center", width: "20%", fontWeight: "bold" }}>شماره فاکتور</TableCell>
+                              <TableCell style={{ textAlign: "center", width: "20%", fontWeight: "bold" }}>محصولات</TableCell>
+                              <TableCell style={{ textAlign: "center", width: "20%", fontWeight: "bold" }}>زمان تحویل</TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
@@ -493,9 +493,9 @@ class SalesReportPage extends React.PureComponent {
                         <Table>
                           <TableHead>
                             <TableRow>
-                              <TableCell style={{ textAlign: "center" }}>نام خریدار</TableCell>
-                              <TableCell style={{ textAlign: "center" }}>نام محصول</TableCell>
-                              <TableCell style={{ textAlign: "center" }}>شماره فاکتور</TableCell>
+                              <TableCell style={{ textAlign: "center", fontWeight: "bold" }}>نام خریدار</TableCell>
+                              <TableCell style={{ textAlign: "center", fontWeight: "bold" }}>نام محصول</TableCell>
+                              <TableCell style={{ textAlign: "center", fontWeight: "bold" }}>شماره فاکتور</TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
