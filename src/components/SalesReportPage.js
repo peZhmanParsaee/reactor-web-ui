@@ -68,6 +68,8 @@ import appStyle from '../styles/jss/layouts/appStyle';
 
 
 import { SingleDatePicker } from 'react-dates';
+import { TimePicker, DatePicker, DateTimePicker } from 'material-ui-pickers'
+import Calendar from 'material-ui-pickers/DatePicker/components/Calendar';
 
 
 const drawerWidth = 300;
@@ -114,19 +116,19 @@ class SalesReportPage extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-        loadingState: false,
-        invoices: [],
-        offset: 0,
-        limit: 10,
-        finished: false,
-        open: false,
-        fromDate: null,
-        toDate: null,
-        fromDateCalendarFocused: false,
-        toDateCalendarFocused: false,
-        invoiceType: "INVOICE_ITEMS"
-     };
-     moment.locale('fa-IR');
+      loadingState: false,
+      invoices: [],
+      offset: 0,
+      limit: 10,
+      finished: false,
+      open: false,
+      fromDate: null,
+      toDate: null,
+      fromDateCalendarFocused: false,
+      toDateCalendarFocused: false,
+      invoiceType: "INVOICE_ITEMS",
+      selectedDate: new Date(),
+     };     
    }
   
   componentDidMount() {
@@ -208,18 +210,14 @@ class SalesReportPage extends React.PureComponent {
   handleDrawerClose = () => {
     this.setState(() => ({ open: false }));
   };
-  onFromDateChange = (date) => {
-    if (date) {
-      this.setState(() => ({ fromDate: date }));
-    }
+  onFromDateChange = (date) => {    
+    this.setState(() => ({ fromDate: date }));    
   };
   onFromDateFocusChange = ({ focused }) => {
     this.setState(() => ({ fromDateCalendarFocused: focused }));
   };
-  onToDateChange = (date) => {
-    if (date) {
-      this.setState(() => ({ toDate: date }));
-    }
+  onToDateChange = (date) => {    
+    this.setState(() => ({ toDate: date }));
   };
   onToDateFocusChange = ({ focused }) => {
     this.setState(() => ({ toDateCalendarFocused: focused }));
@@ -241,8 +239,13 @@ class SalesReportPage extends React.PureComponent {
       this.loadMoreItems();
     });
   };
+  handleDateChange = date => {
+    this.setState({ selectedDate: date })
+  };
   render() {
     const { classes, theme } = this.props;
+    // moment.locale('fa-IR');
+    // moment.loadPersian();
 
     return (
       <div>
@@ -295,12 +298,14 @@ class SalesReportPage extends React.PureComponent {
                       focused={this.state.fromDateCalendarFocused}
                       onFocusChange={this.onFromDateFocusChange}
                       numberOfMonths={1}
+                      isOutsideRange={() => false}
                       anchorDirection="right"
                       showDefaultInputIcon
                       isRTL
                       monthFormat="YYYY/MM/DD"
+                      
                     />
-                  </div>                  
+                  </div>
                 </ListItem>
                 <ListItem key={3}>
                   <SingleDatePicker
@@ -384,6 +389,27 @@ class SalesReportPage extends React.PureComponent {
                     {this.state.loadingState ? <p className="loading"> در حال بارگزاری ادامه داده ها ...</p> : ""}
             
                   </div>
+                  {
+                    // <DatePicker
+                    //   value={this.state.selectedDate}
+                    //   onChange={this.handleDateChange}
+                    // />
+
+                  
+                  
+
+                  // <Calendar
+                  //   date={new Date()}
+                  //   disablePast={true}
+                  //   disableFuture={false}
+                  //   onChange={(date) => console.log(date)}
+                  //   leftArrowIcon={<KeyboardArrowLeft/>}
+                  //   rightArrowIcon={<KeyboardArrowRight/>}
+                  // />
+                  
+                }
+
+
                 </div>              
               </div>
             </div>
