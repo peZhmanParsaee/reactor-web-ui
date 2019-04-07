@@ -533,23 +533,24 @@ class AddInvoicePage extends React.Component {
       stepContent = (
         <div className="container">
           <GridContainer>
-            <GridItem xs={12} sm={12} md={6}>
-              <Typography>
+            <GridItem xs={12} sm={12} md={6} style={{marginBottom: '15px'}}>
+              <Typography style={{fontWeight: 'bold'}}>
                 شماره فاکتور
               </Typography>
-              { this.state.invoice.no }
+              <span>{ this.state.invoice.no }</span>
             </GridItem>
-            <GridItem xs={12} sm={12} md={6}>
-              <Typography>
+            <GridItem xs={12} sm={12} md={6} style={{marginBottom: '15px'}}>
+              <Typography style={{fontWeight: 'bold'}}>
                 تاریخ امروز
               </Typography>
-              { this.state.invoice.date }     
+              <span>{ this.state.invoice.date }</span>
             </GridItem>          
             <GridItem xs={12} sm={12} md={6}
               className="autosuggest"
+              style={{marginBottom: '15px'}}
             >
               <FormControl>
-                <Typography>
+                <Typography style={{fontWeight: 'bold'}}>
                   نام و نام خانوادگی
                 </Typography>
                 <Autosuggest
@@ -599,24 +600,26 @@ class AddInvoicePage extends React.Component {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>نام محصول</TableCell>
-                    <TableCell>تعداد</TableCell>
-                    <TableCell>قیمت واحد</TableCell>
-                    <TableCell>قیمت کل</TableCell>
-                    <TableCell></TableCell>
+                    <TableCell style={{width:'30%', textAlign: 'center'}}>نام محصول</TableCell>
+                    <TableCell style={{width:'20%', textAlign: 'center'}}>تعداد</TableCell>
+                    <TableCell style={{width:'20%', textAlign: 'center'}}>قیمت واحد</TableCell>
+                    <TableCell style={{width:'20%', textAlign: 'center'}}>قیمت کل</TableCell>
+                    <TableCell style={{width:'10%', textAlign: 'center'}}></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   { this.state.invoice.products.map(product => {
                     return (
                       <TableRow key={product._id}>
-                        <TableCell component="th" scope="product">
+                        <TableCell component="th" scope="product" style={{textAlign: 'center'}}>
                           { product.name }
                         </TableCell>
-                        <TableCell>{ product.count }</TableCell>
-                        <TableCell>{ separateDigits({ number: product.unitPrice, showCurrency: true }) }</TableCell>
-                        <TableCell className="totalPrice">{ separateDigits({ number: product.totalPrice }) }</TableCell>
-                        <TableCell>
+                        <TableCell style={{textAlign: 'center'}}>{ product.count }</TableCell>
+                        <TableCell style={{textAlign: 'center'}}>{ separateDigits({ number: product.unitPrice, showCurrency: true }) }</TableCell>
+                        <TableCell className="totalPrice"
+                          style={{textAlign: 'center'}}
+                        >{ separateDigits({ number: product.totalPrice }) }</TableCell>
+                        <TableCell style={{textAlign: 'center'}}>
                           <IconButton 
                             onClick={() => { 
                               this.onRemoveProductFromInvoice(product._id);
@@ -630,13 +633,14 @@ class AddInvoicePage extends React.Component {
                   })}
                   
                     <TableRow>
-                      <TableCell>
+                      <TableCell style={{textAlign: 'center'}}>
                         <IconButton onClick={this.onOpenAddProductDialog}>
                           <Icon>add_circle</Icon>
                         </IconButton>
                         <Select
                           value={this.state.invoice.newProduct._id}
-                          onChange={this.onNewProductSelectChange}                  
+                          onChange={this.onNewProductSelectChange}
+                          className={classes.selectBox}
                         >
                         {this.props.products.filter(product => {
                           const found = this.state.invoice.products.find(invoiceProduct => {
@@ -652,7 +656,7 @@ class AddInvoicePage extends React.Component {
                         })}
                       </Select>
                       </TableCell>
-                      <TableCell>
+                      <TableCell style={{textAlign: 'center'}}>
                         <TextField
                           type="number"
                           value={this.state.invoice.newProduct.count}
@@ -660,13 +664,13 @@ class AddInvoicePage extends React.Component {
                         >
                         </TextField>
                       </TableCell>
-                      <TableCell>
+                      <TableCell style={{textAlign: 'center'}}>
                         <Typography>{ separateDigits({ number: this.state.invoice.newProduct.unitPrice, showCurrency: true }) }</Typography>
                       </TableCell>
-                      <TableCell>
+                      <TableCell style={{textAlign: 'center'}}>
                         <Typography>{ separateDigits({ number: this.state.invoice.newProduct.totalPrice }) }</Typography>
                       </TableCell>
-                      <TableCell>
+                      <TableCell style={{textAlign: 'center'}}>
                         <IconButton 
                           onClick={this.onAddNewProductToInvoice}
                         >
@@ -743,13 +747,22 @@ class AddInvoicePage extends React.Component {
       stepContent = (
         <div className="container">
           <GridContainer>
-            <GridItem xs={12} sm={12} md={6}>
-              <Typography>
+            <GridItem xs={12} sm={12} md={6}
+              style={{
+                marginBottom: "20px"
+              }}
+            >
+              <Typography 
+                style={{
+                  fontWeight: "bold"
+                }}
+              >
                 استان
               </Typography>
               <Select
                 value={this.state.invoice.address.provinceId}
                 onChange={this.onProvinceChange}
+                className={classes.selectBox}
               >
                 {this.props.provinces.map(province => {
                   return (
@@ -760,13 +773,22 @@ class AddInvoicePage extends React.Component {
                 })}
               </Select>
             </GridItem>
-            <GridItem xs={12} sm={12} md={6}>
-              <Typography>
+            <GridItem xs={12} sm={12} md={6}
+              style={{
+                marginBottom: "20px"
+              }}
+            >
+              <Typography
+                style={{
+                  fontWeight: "bold"
+                }}
+              >
                 شهر
               </Typography>
               <Select
                 value={this.state.invoice.address.cityId}
                 onChange={this.onCityChange}
+                className={classes.selectBox}
               >
                 {this.props.provinces
                   .find(province => {
@@ -788,47 +810,84 @@ class AddInvoicePage extends React.Component {
               }
               </Select>
             </GridItem>
-            <GridItem xs={12} sm={12} md={12}>
+            <GridItem xs={12} sm={12} md={12}
+              style={{
+                marginBottom: "20px"
+              }}
+            >
               <FormControl component="fieldset" className="formControl">
-                <FormLabel component="legend">نوع پست</FormLabel>
+                <FormLabel component="legend"
+                  style={{
+                    fontWeight: "bold"
+                  }}
+                >نوع پست</FormLabel>
                 <RadioGroup
                   aria-label="MailType"
                   name="mailType"
                   className={classes.group}
                   value={this.state.invoice.mailType}
                   onChange={this.onMailTypeChange}
+                  style={{display: 'flex', flexDirection: 'row'}}
                 >
                   <FormControlLabel value="registered" control={<Radio />} label="عادی" />
                   <FormControlLabel value="certified" control={<Radio />} label="پیشتاز" />
                 </RadioGroup>
               </FormControl>
             </GridItem>
-            <GridItem>
-              <FormControl component="fieldset" className="formControl">
-                <FormLabel component="legend">تاریخ تحویل</FormLabel>                
+            <GridItem xs={12} sm={12} md={12}
+              style={{
+                marginBottom: "20px"
+              }}
+            >
+              <FormControl className="formControl"
+                
+              >
+                <FormLabel component="legend"
                   
-                <TextField
-                  type="number"
-                  value={this.state.invoice.deliverAfter}
-                  onChange={this.ondeliverAfterChange}
-                />
+                >تاریخ تحویل</FormLabel>                
+                
+                <div style={{display: 'flex', flexDirection: 'row'}}>
+                  <TextField
+                    type="number"
+                    value={this.state.invoice.deliverAfter}
+                    onChange={this.ondeliverAfterChange}
+                    style={{
+                      display: "inline-block",
+                      marginLeft: "10px"
+                    }}
+                  />
 
-                <Select
-                  value={this.state.invoice.deliverAfterTimeUnit}
-                  onChange={this.onDeliverAfterTimeUnit}                  
-                >
-                  <MenuItem key="hour" value="hour">
-                    ساعت
-                  </MenuItem>
-                  <MenuItem key="day" value="day">
-                    روز
-                  </MenuItem>
-                  <MenuItem key="month" value="month">
-                    ماه
-                  </MenuItem>
-                </Select>
+                  <Select
+                    value={this.state.invoice.deliverAfterTimeUnit}
+                    onChange={this.onDeliverAfterTimeUnit}
+                    className={classes.selectBox}
+                    style={{
+                      display: "inline-block",
+                      marginLeft: "10px"
+                    }}
+                  >
+                    <MenuItem key="hour" value="hour">
+                      ساعت
+                    </MenuItem>
+                    <MenuItem key="day" value="day">
+                      روز
+                    </MenuItem>
+                    <MenuItem key="month" value="month">
+                      ماه
+                    </MenuItem>
+                  </Select>
 
+                  <Typography
+                    style={{
+                      display: "inline-block",
+                      marginLeft: "10px"
+                    }}
+                  >
+                    بعد از تاریخ ثبت سفارش
+                  </Typography>
 
+                </div>
+                
               </FormControl>
             </GridItem>
           </GridContainer>
@@ -850,7 +909,9 @@ class AddInvoicePage extends React.Component {
 
                       <Typography
                         variant="headline"
-                        style={{ textTransform: 'capitalize' }}
+                        style={{ 
+                          marginTop: "18px"
+                        }}
                       >
                         ثبت فاکتور جدید
                       </Typography>
@@ -861,7 +922,7 @@ class AddInvoicePage extends React.Component {
                           return (
                             <Step key={label} {...props} className="class-snf">
                               <StepLabel 
-                                classes={{ // apply this style
+                                className={{ // apply this style
                                   iconContainer: classes.iconContainer
                                 }}
                                 {...labelProps}>{label}</StepLabel>
