@@ -3,7 +3,7 @@ import moment from 'moment-jalaali';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-import { withStyles, MuiThemeProvider, createMuiTheme,  } from '@material-ui/core/styles';
+import { withStyles, MuiThemeProvider } from '@material-ui/core/styles';
 import propTypes from 'prop-types';
 
 // @material-ui/core
@@ -64,46 +64,6 @@ import appStyle from '../styles/jss/layouts/appStyle';
 import { separateDigits } from '../helpers/numberHelpers';
 import { startAddInvoice } from '../actions/invoices';
 import { startAddProduct } from '../actions/products';
-
-const drawerWidth = 256;
-
-const suggestions = [
-  { label: 'Afghanistan' },
-  { label: 'Aland Islands' },
-  { label: 'Albania' },
-  { label: 'Algeria' },
-  { label: 'American Samoa' },
-  { label: 'Andorra' },
-  { label: 'Angola' },
-  { label: 'Anguilla' },
-  { label: 'Antarctica' },
-  { label: 'Antigua and Barbuda' },
-  { label: 'Argentina' },
-  { label: 'Armenia' },
-  { label: 'Aruba' },
-  { label: 'Australia' },
-  { label: 'Austria' },
-  { label: 'Azerbaijan' },
-  { label: 'Bahamas' },
-  { label: 'Bahrain' },
-  { label: 'Bangladesh' },
-  { label: 'Barbados' },
-  { label: 'Belarus' },
-  { label: 'Belgium' },
-  { label: 'Belize' },
-  { label: 'Benin' },
-  { label: 'Bermuda' },
-  { label: 'Bhutan' },
-  { label: 'Bolivia, Plurinational State of' },
-  { label: 'Bonaire, Sint Eustatius and Saba' },
-  { label: 'Bosnia and Herzegovina' },
-  { label: 'Botswana' },
-  { label: 'Bouvet Island' },
-  { label: 'Brazil' },
-  { label: 'British Indian Ocean Territory' },
-  { label: 'Brunei Darussalam' },
-];
-
 
 function renderInputComponent(inputProps) {
   const { classes, inputRef = () => {}, ref, ...other } = inputProps;
@@ -170,7 +130,6 @@ class AddInvoicePage extends React.Component {
   async componentDidMount() {
     const res = await axios.get(`${API_ENDPOINT}/api/v1/invoice/new-invoice-no`);
     if (res.data.status === true) {
-      console.log('res.data.payload ', res.data.payload);
       this.setState(() => ({            
         invoice: {
           ...this.state.invoice,              
@@ -319,7 +278,6 @@ class AddInvoicePage extends React.Component {
     }
   }
   onProvinceChange = (event) => {
-    console.log(event.target.value);
     const provinceId = event.target.value;
     this.setState(() => ({
       invoice: {
@@ -331,7 +289,6 @@ class AddInvoicePage extends React.Component {
     }));
   }
   onCityChange = (event) => {
-    console.log(event.target.value);
     const cityId = event.target.value;
     this.setState(() => ({
       invoice: {
@@ -445,11 +402,8 @@ class AddInvoicePage extends React.Component {
   };
 
   handleChange = name => (event, { newValue }) => {
-    console.log(newValue);
-    
     const selectedCustomer = this.props.customers.find(x => x.fullName === newValue);
-    
-    console.log(selectedCustomer);
+        
     if (selectedCustomer) {
       this.setState({
         [name]: newValue,
@@ -499,7 +453,7 @@ class AddInvoicePage extends React.Component {
       : this.props.customers.filter(suggestion => {
           const keep =
             count < 5 && suggestion.fullName.slice(0, inputLength).toLowerCase() === inputValue;
-          console.log(`keep is ${keep}`);
+          
 
           if (keep) {
             count += 1;
@@ -575,24 +529,6 @@ class AddInvoicePage extends React.Component {
                 />
               </FormControl>
             </GridItem>
-            {/* <GridItem xs={12} sm={12} md={6}>
-              <FormControl>
-                <InputLabel htmlFor="customer">نام و نام خانوادگی</InputLabel>
-                <Select
-                  value={this.state.invoice.customerId}
-                  onChange={this.onCustomerChange}                  
-                >
-                  {this.props.customers.map(customer => {
-                    return (
-                      <MenuItem key={customer._id} value={customer._id}>
-                        { customer.fullName }
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-            </GridItem> */}
-            
           </GridContainer>
           <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
