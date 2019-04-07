@@ -32,6 +32,8 @@ const footerStyle = {
     bottom: "0",
     borderTop: "1px solid " + grayColor[11],
     padding: "15px 0",
+    position: "fixed",
+    width: "100%",
     ...defaultFont
   },
   container,
