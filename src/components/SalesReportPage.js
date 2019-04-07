@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles, MuiThemeProvider, createMuiTheme,  } from '@material-ui/core/styles';
 import axios from 'axios';
@@ -55,9 +55,13 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
-
-import { MuiPickersUtilsProvider, TimePicker, DatePicker } from 'material-ui-pickers';
-
+import {
+  DatePicker,
+  TimePicker,
+  DateTimePicker,
+  MuiPickersUtilsProvider
+} from "material-ui-pickers";
+import JalaliUtils from "@date-io/jalaali";
 
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -109,7 +113,19 @@ const styles = theme => ({
   }
 });
 
+const renderMonthText = (input) => {
+  console.log(`renderMonthText`);
+  console.log(input);
+  return input.format('jMM');
+  return null;
+}
 
+const renderDayContents = (input) => {
+  console.log(`renderDayContents`);
+  console.log(input);
+  return input.format('DD');
+  return null;
+}
 
 
 class SalesReportPage extends React.PureComponent {
@@ -128,14 +144,20 @@ class SalesReportPage extends React.PureComponent {
       toDateCalendarFocused: false,
       invoiceType: "INVOICE_ITEMS",
       selectedDate: new Date('2014-08-18T21:11:54'),
+      selectedDate2: moment(),
+      startDate: null,
+      endDate: null
      };
-     moment.locale('fa-IR');
   }
 
-  handleDateChange = date => {
-    this.setState({ selectedDate: date });
+  handleStartDateChange = date => {
+    console.log(date);
+    this.setState(() => ({ startDate: date }));
   };
-  
+  handleEndDateChange = date => {
+    console.log(date);
+    this.setState(() => ({ endDate: date }));
+  };
   componentDidMount() {
     this.loadMoreItems();
 
@@ -144,7 +166,7 @@ class SalesReportPage extends React.PureComponent {
         this.loadMoreItems();
       }
     });
-  };  
+  };
   displayInvoices() {
     let jsxItems = [];
 
@@ -155,14 +177,14 @@ class SalesReportPage extends React.PureComponent {
       if (this.state.invoiceType === "INVOICES") {
         const jsx = (
           <TableRow key={invoice._id}>
-           <TableCell>
+           <TableCell style={{ textAlign: "center" }}>
              { invoice.customerName }
            </TableCell>
-           <TableCell>
+           <TableCell style={{ textAlign: "center" }}>
              { separateDigits({ number: invoice.totalPrice, showCurrency: true }) }
            </TableCell>
-           <TableCell>{ invoice.no }</TableCell>
-           <TableCell>
+           <TableCell style={{ textAlign: "center" }}>{ invoice.no }</TableCell>
+           <TableCell style={{ textAlign: "center" }}>
             { invoice.products.map(invoiceProduct => {
                  return (
                    <p>                  
@@ -173,7 +195,7 @@ class SalesReportPage extends React.PureComponent {
                })
              }
            </TableCell>
-           <TableCell>{ invoice.deliverAtFormatted }</TableCell>
+           <TableCell style={{ textAlign: "center" }}>{ invoice.deliverAtFormatted }</TableCell>
          </TableRow>
        );
        
@@ -182,13 +204,13 @@ class SalesReportPage extends React.PureComponent {
       if (this.state.invoiceType === "INVOICE_ITEMS") {
         const jsx = (
           <TableRow key={invoice.invoiceId}>
-           <TableCell>
+           <TableCell style={{ textAlign: "center" }}>
              { invoice.customerName }
            </TableCell>           
-           <TableCell>
+           <TableCell style={{ textAlign: "center" }}>
              { invoice.productName }
            </TableCell>
-           <TableCell>
+           <TableCell style={{ textAlign: "center" }}>
              { invoice.invoiceNo }
            </TableCell>
          </TableRow>
@@ -199,13 +221,16 @@ class SalesReportPage extends React.PureComponent {
     }
 
      return jsxItems;
-  };  
+  };
   loadMoreItems() {
     if (this.state.finished === false) {
       console.log('not finished yet ');
       this.setState({ loadingState: true });
 
-      axios.get(`${API_ENDPOINT}/api/v1/invoice?invoiceType=${this.state.invoiceType}&offset=${this.state.offset}&limit=${this.state.limit}&fromDate=${this.state.fromDate}&toDate=${this.state.toDate}`)
+      // axios.get(`${API_ENDPOINT}/api/v1/invoice?invoiceType=${this.state.invoiceType}&offset=${this.state.offset}&limit=${this.state.limit}&fromDate=${this.state.fromDate}&toDate=${this.state.toDate}`)
+      const startDateTimeStamp = this.state.startDate && moment(this.state.startDate).valueOf();
+      const endDateTimeStamp = this.state.endDate && moment(this.state.endDate).valueOf();
+      axios.get(`${API_ENDPOINT}/api/v1/invoice?invoiceType=${this.state.invoiceType}&offset=${this.state.offset}&limit=${this.state.limit}&fromDate=${startDateTimeStamp}&toDate=${endDateTimeStamp}`)
         .then(res => {
           if (res.data.status === true) {
             if (res.data.payload.length) {
@@ -271,8 +296,10 @@ class SalesReportPage extends React.PureComponent {
     });
   };
   render() {
-    const { classes, theme } = this.props;
-
+    const { classes, theme } = this.props;    
+    moment.locale('fa-IR');
+    moment.loadPersian();
+    
     return (
       <div>
         <div className={classes.wrapper}>
@@ -300,7 +327,7 @@ class SalesReportPage extends React.PureComponent {
             </AppBar>
             <Drawer
               className={classes.drawer}
-              anchor="right"
+              anchor="left"
               open={this.state.open}
               classes={{
                 paper: classes.drawerPaper,
@@ -314,47 +341,94 @@ class SalesReportPage extends React.PureComponent {
               <Divider />
               <List>
                 <ListItem key={1}>
-                  <ListItemText primary="انتخاب بازه زمانی" />
-                </ListItem>
-                <ListItem key={2}>
-                  <div style={{position: 'absolute'}}>
-                    <SingleDatePicker
-                      date={this.state.fromDate}
-                      onDateChange={this.onFromDateChange}
-                      focused={this.state.fromDateCalendarFocused}
-                      onFocusChange={this.onFromDateFocusChange}
-                      numberOfMonths={1}
-                      anchorDirection="right"
-                      showDefaultInputIcon
-                      isRTL
-                      monthFormat="YYYY/MM/DD"
-                    />
-                  </div>                  
-                </ListItem>
-                <ListItem key={3}>
-                  <SingleDatePicker
-                    date={this.state.toDate}
-                    onDateChange={this.onToDateChange}
-                    focused={this.state.toDateCalendarFocused}
-                    onFocusChange={this.onToDateFocusChange}
-                    numberOfMonths={1}
-                    isOutsideRange={() => false}
-                    numberOfMonths={1}
-                    anchorDirection="right"
-                    showDefaultInputIcon
-                    isRTL
-                    monthFormat="YYYY/MM/DD"
+                  <ListItemText primary="انتخاب بازه زمانی"
+                    style={{
+                      textAlign: "right"
+                    }}
                   />
+                </ListItem>
+                {
+                  // <ListItem key={2}>
+                  //   <div style={{position: 'absolute'}}>
+                  //     <SingleDatePicker
+                  //       date={this.state.fromDate}
+                  //       onDateChange={this.onFromDateChange}
+                  //       focused={this.state.fromDateCalendarFocused}
+                  //       onFocusChange={this.onFromDateFocusChange}
+                  //       numberOfMonths={1}
+                  //       anchorDirection="right"
+                  //       showDefaultInputIcon
+                  //       isRTL
+                  //       monthFormat="MMMM YYYY"
+                  //       placeholder="از تاریخ"
+                  //       renderMonthText={renderMonthText} 
+                  //       renderDayContents={renderDayContents}
+                  //     />
+                  //   </div>                  
+                  // </ListItem>
+                  // <ListItem key={3}>
+                  //   <SingleDatePicker
+                  //     date={this.state.toDate}
+                  //     onDateChange={this.onToDateChange}
+                  //     focused={this.state.toDateCalendarFocused}
+                  //     onFocusChange={this.onToDateFocusChange}
+                  //     numberOfMonths={1}
+                  //     isOutsideRange={() => false}
+                  //     numberOfMonths={1}
+                  //     anchorDirection="right"
+                  //     showDefaultInputIcon
+                  //     isRTL
+                  //     monthFormat="YYYY/MM/DD"
+                  //     placeholder="تا تاریخ"
+                  //   />
+                  // </ListItem>
+                }
+                
+                <ListItem key={5}>
+                  <MuiPickersUtilsProvider utils={JalaliUtils} locale="fa">
+                    <div className="picker">
+                      <DatePicker
+                        clearable
+                        okLabel="تأیید"
+                        cancelLabel="لغو"
+                        clearLabel="پاک کردن"
+                        labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "")}
+                        value={this.state.startDate}
+                        onChange={this.handleStartDateChange}
+                        animateYearScrolling={false}
+                      />
+                    </div>
+                  </MuiPickersUtilsProvider>
+                </ListItem>
+                <ListItem key={6}>
+                  <MuiPickersUtilsProvider utils={JalaliUtils} locale="fa">
+                    <div className="picker">
+                      <DatePicker
+                        clearable
+                        okLabel="تأیید"
+                        cancelLabel="لغو"
+                        clearLabel="پاک کردن"
+                        labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "")}
+                        value={this.state.endDate}
+                        onChange={this.handleEndDateChange}
+                        animateYearScrolling={false}
+                      />
+                    </div>
+                  </MuiPickersUtilsProvider>
                 </ListItem>
               </List>
               <Divider />
               <List>
-                <ListItem key={1}>
-                  <ListItemText>نوع فاکتور</ListItemText>  
+                <ListItem key={11}>
+                  <ListItemText
+                    style={{
+                      textAlign: "right"
+                    }}
+                  >نوع فاکتور</ListItemText>  
                 </ListItem>
-                <ListItem key={2}>
+                <ListItem key={12}>
                   <FormControl component="fieldset" className={classes.formControl}>
-                    <FormLabel component="legend">نوع فاکتور</FormLabel>
+                    {/* <FormLabel component="legend">نوع فاکتور</FormLabel> */}
                     <RadioGroup
                       aria-label="gender"
                       name="invoiceType"
@@ -377,7 +451,7 @@ class SalesReportPage extends React.PureComponent {
                     </RadioGroup>
                   </FormControl>
                 </ListItem>
-                <ListItem key={3}>
+                <ListItem key={13}>
                   <ListItemSecondaryAction>
                     <Button
                       variant="contained"
@@ -394,17 +468,17 @@ class SalesReportPage extends React.PureComponent {
             
               <div className={classes.content}>
                 <div className={classes.container}>
-                  <div ref="iScroll" style={{ height: "80vh", overflow: "auto" }}>
+                  <div ref="iScroll" style={{ height: "auto", overflow: "auto" }}>
                     {
                       this.state.invoiceType === 'INVOICES' && (
                         <Table>
                           <TableHead>
                             <TableRow>
-                              <TableCell>نام خریدار</TableCell>
-                              <TableCell>مبلغ</TableCell>
-                              <TableCell>شماره فاکتور</TableCell>
-                              <TableCell>محصولات</TableCell>
-                              <TableCell>زمان تحویل</TableCell>
+                              <TableCell style={{ textAlign: "center", width: "20%" }}>نام خریدار</TableCell>
+                              <TableCell style={{ textAlign: "center", width: "20%" }}>مبلغ</TableCell>
+                              <TableCell style={{ textAlign: "center", width: "20%" }}>شماره فاکتور</TableCell>
+                              <TableCell style={{ textAlign: "center", width: "20%" }}>محصولات</TableCell>
+                              <TableCell style={{ textAlign: "center", width: "20%" }}>زمان تحویل</TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
@@ -419,9 +493,9 @@ class SalesReportPage extends React.PureComponent {
                         <Table>
                           <TableHead>
                             <TableRow>
-                              <TableCell>نام خریدار</TableCell>
-                              <TableCell>نام محصول</TableCell>
-                              <TableCell>شماره فاکتور</TableCell>
+                              <TableCell style={{ textAlign: "center" }}>نام خریدار</TableCell>
+                              <TableCell style={{ textAlign: "center" }}>نام محصول</TableCell>
+                              <TableCell style={{ textAlign: "center" }}>شماره فاکتور</TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
