@@ -844,7 +844,6 @@ class AddInvoicePage extends React.Component {
                     <GridItem xs={12}>
 
                       <Typography
-                        variant="headline"
                         style={{ 
                           marginTop: "18px"
                         }}

@@ -14,7 +14,6 @@ export const startSetProvinces = () => {
               .then(res => {
                 if (res.data.status === true) {
                   dispatch(setProvinces(res.data.payload));
-                  console.log('disptach setProvinces');
                 }
               });
 

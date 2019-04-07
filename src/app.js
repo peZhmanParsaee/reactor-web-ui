@@ -39,7 +39,3 @@ store.dispatch(startSetProvinces()).then(() => {
     });
   });
 });
-
-store.subscribe((state) => {
-  console.log(state);
-});

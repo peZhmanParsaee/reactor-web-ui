@@ -113,16 +113,12 @@ const styles = theme => ({
   }
 });
 
-const renderMonthText = (input) => {
-  console.log(`renderMonthText`);
-  console.log(input);
+const renderMonthText = (input) => {  
   return input.format('jMM');
   return null;
 }
 
 const renderDayContents = (input) => {
-  console.log(`renderDayContents`);
-  console.log(input);
   return input.format('DD');
   return null;
 }
@@ -151,11 +147,9 @@ class SalesReportPage extends React.PureComponent {
   }
 
   handleStartDateChange = date => {
-    console.log(date);
     this.setState(() => ({ startDate: date }));
   };
   handleEndDateChange = date => {
-    console.log(date);
     this.setState(() => ({ endDate: date }));
   };
   componentDidMount() {
@@ -170,10 +164,7 @@ class SalesReportPage extends React.PureComponent {
   displayInvoices() {
     let jsxItems = [];
 
-    console.dir(this.state);
-
     for (var invoice of this.state.invoices) {
-      console.log(`invoice is ${JSON.stringify(invoice)}`);
       if (this.state.invoiceType === "INVOICES") {
         const jsx = (
           <TableRow key={invoice._id}>
@@ -224,7 +215,6 @@ class SalesReportPage extends React.PureComponent {
   };
   loadMoreItems() {
     if (this.state.finished === false) {
-      console.log('not finished yet ');
       this.setState({ loadingState: true });
 
       // axios.get(`${API_ENDPOINT}/api/v1/invoice?invoiceType=${this.state.invoiceType}&offset=${this.state.offset}&limit=${this.state.limit}&fromDate=${this.state.fromDate}&toDate=${this.state.toDate}`)
@@ -234,7 +224,6 @@ class SalesReportPage extends React.PureComponent {
         .then(res => {
           if (res.data.status === true) {
             if (res.data.payload.length) {
-              console.log('res.data.payload ', res.data.payload);
               this.setState(() => ({
                 offset: this.state.offset + this.state.limit,
                 loadingState: false,
@@ -278,14 +267,10 @@ class SalesReportPage extends React.PureComponent {
     this.setState(() => ({ toDateCalendarFocused: focused }));
   };
   onInvoiceTypeChange = (event) => {
-    console.dir(this.state);
     const invoiceType = event.target.value;
-    console.log(`invoiceType: ${invoiceType}`);
     this.setState(() => ({ invoiceType, invoices: [] }));
   };
   onSeachClick = () => {
-    console.log('search ....');
-    console.log(JSON.stringify(this.state));
     this.setState(() => ({
       offset: 0,
       invoices: [],
