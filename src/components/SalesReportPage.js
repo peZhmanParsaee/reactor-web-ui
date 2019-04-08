@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { withStyles, MuiThemeProvider, createMuiTheme,  } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import moment from 'moment-jalaali';
 
 import classNames from 'classnames';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 
 import Table from '@material-ui/core/Table';
@@ -74,7 +75,6 @@ import appStyle from '../styles/jss/layouts/appStyle';
 
 
 import { SingleDatePicker } from 'react-dates';
-import { TimePicker, DatePicker, DateTimePicker } from 'material-ui-pickers'
 import Calendar from 'material-ui-pickers/DatePicker/components/Calendar';
 
 
@@ -253,6 +253,11 @@ class SalesReportPage extends React.PureComponent {
       <div>
         <div className={classes.wrapper}>
           <div classes="root">
+            {this.state.open ? 
+                <div style={{ position: "fixed", zIndex: 1, left: 0, right: 0, top: 0, bottom: 0 }} 
+                    onClick={() => this.handleDrawerClose()} /> 
+                : null
+            }
             <CssBaseline />
             <AppBar
               position="fixed"
@@ -274,12 +279,16 @@ class SalesReportPage extends React.PureComponent {
                 </Typography>
               </Toolbar>
             </AppBar>
+            
             <Drawer
               className={classes.drawer}
               anchor="left"
               open={this.state.open}
               classes={{
                 paper: classes.drawerPaper,
+              }}
+              onClose={(open) => {
+                this.setState(() => ({ open: false }));
               }}
             >
               <div className={classes.drawerHeader}>
@@ -417,6 +426,7 @@ class SalesReportPage extends React.PureComponent {
               </List>
             </Drawer>
             
+
               <div className={classes.content}>
                 <div className={classes.container}>
                   <div ref="iScroll" 

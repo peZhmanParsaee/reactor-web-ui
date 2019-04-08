@@ -64,7 +64,16 @@ const appStyle = theme => ({
   },
   selectBox: {
     width: 180
-  }
+  },
+  margin: {
+    margin: theme.spacing.unit,
+  },
+  withoutLabel: {
+    marginTop: theme.spacing.unit * 3,
+  },
+  textField: {
+    flexBasis: 200,
+  },
 });
 
 export default appStyle;

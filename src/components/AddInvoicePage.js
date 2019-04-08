@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment-jalaali';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import classNames from 'classnames';
 
 import { withStyles, MuiThemeProvider } from '@material-ui/core/styles';
 import propTypes from 'prop-types';
@@ -65,6 +66,9 @@ import { separateDigits } from '../helpers/numberHelpers';
 import { startAddInvoice } from '../actions/invoices';
 import { startAddProduct } from '../actions/products';
 
+import persianRex from 'persian-rex';
+
+
 function renderInputComponent(inputProps) {
   const { classes, inputRef = () => {}, ref, ...other } = inputProps;
 
@@ -120,8 +124,8 @@ class AddInvoicePage extends React.Component {
     },
     newProduct: {
       name: '',
-      stock: 0,
-      unitPrice: 0
+      stock: null,
+      unitPrice: null
     },
     single: '',
     popper: '',
@@ -180,7 +184,7 @@ class AddInvoicePage extends React.Component {
     }
   }
   onAddNewProductToInvoice = (event) => {
-    if (!this.state.invoice.newProduct._id || !this.state.invoice.newProduct.count) {
+    if (!this.state.invoice.newProduct._id && !this.state.invoice.newProduct.count) {
       this.showMessage({ type: "warning", text: "خطای اعتبارسنجی، نام محصول و تعداد اجباری است." });
       return;
     }
@@ -208,7 +212,6 @@ class AddInvoicePage extends React.Component {
         totalPrice: this.state.invoice.totalProce + newInvoiceProduct.totalPrice
       }
     }));
-    this.showMessage({ type: "success", text: "محصول به فاکتور اضافه شد." });
   }
   showMessage = ({ text, type }) => {
     this.setState(() => ({
@@ -239,16 +242,29 @@ class AddInvoicePage extends React.Component {
   }
   handleNextStep = () => {
     if (this.state.activeStep === 0) {
-      if (this.state.invoice.products.length && this.state.invoice.customerId) {
-        this.setState(() => ({
-          activeStep: this.state.activeStep + 1
-        }));
-      } else {
+      if (!this.state.invoice.products.length && !this.state.invoice.customerId) {
         this.showMessage({ 
           type: "warning",
           text: "انتخاب مشتری و افزودن حداقل یک محصول اجباری است."
         });
+        return;
+      } else if (!this.state.invoice.products.length) {
+        this.showMessage({ 
+          type: "warning",
+          text: "افزودن حداقل یک محصول اجباری است."
+        });
+        return;
+      } else if (!this.state.invoice.customerId) {
+        this.showMessage({ 
+          type: "warning",
+          text: "انتخاب مشتری اجباری است."
+        });
+        return;
       }
+      
+      this.setState(() => ({
+        activeStep: this.state.activeStep + 1
+      }));      
     } else if (this.state.activeStep === 1) {
       if (this.state.invoice.products.length 
         && this.state.invoice.customerId
@@ -334,8 +350,8 @@ class AddInvoicePage extends React.Component {
       isAddProductDialogOpen: false,
       newProduct: {
         name: '',
-        stock: 0,
-        unitPrice: 0
+        stock: null,
+        unitPrice: null
       }
     }));
   };
@@ -358,12 +374,14 @@ class AddInvoicePage extends React.Component {
   onNameChage = (event) => {
     event.persist();
     const name = event.target.value;
-    this.setState(() => ({ 
-      newProduct: {        
-        ...this.state.newProduct,
-        name
-      }
-    }));
+    if (persianRex.letter.test(name) || !name) {
+      this.setState(() => ({ 
+        newProduct: {        
+          ...this.state.newProduct,
+          name
+        }
+      }));
+    }
   }
   onStockChange = (event) => {
     event.persist();
@@ -414,7 +432,11 @@ class AddInvoicePage extends React.Component {
       });
     } else {
       this.setState({
-        [name]: newValue
+        [name]: newValue,
+        invoice: { 
+          ...this.state.invoice,
+          customerId: null
+        }
       });
     }
     
@@ -628,7 +650,7 @@ class AddInvoicePage extends React.Component {
                 >
                 <DialogTitle>اضافه کردن محصول جدید</DialogTitle>
                 <DialogContent>
-                  <FormControl fullWidth>
+                  <FormControl fullWidth className={classes.textField}>
                     <InputLabel htmlFor="name"
                       className="form-control__input-label"
                     >نام محصول</InputLabel>
@@ -637,7 +659,10 @@ class AddInvoicePage extends React.Component {
                       value={this.state.newProduct.name}
                     />
                   </FormControl>
-                  <FormControl fullWidth>
+                  <FormControl fullWidth
+                    className={classNames(classes.withoutLabel, classes.textField)}
+                  
+                  >
                     <InputLabel htmlFor="stock"
                       className="form-control__input-label"
                     >موجودی</InputLabel>
@@ -645,7 +670,7 @@ class AddInvoicePage extends React.Component {
                       value={this.state.newProduct.stock}
                       onChange={this.onStockChange}
                       type="text"
-                      startAdornment={<InputAdornment position="start">عدد</InputAdornment>}
+                      startAdornment={<InputAdornment position="end">عدد</InputAdornment>}
                     />
                   </FormControl>
                   <FormControl fullWidth
@@ -657,7 +682,10 @@ class AddInvoicePage extends React.Component {
                       value={this.state.newProduct.unitPrice}
                       onChange={this.onUnitPriceChange}
                       type="text"
-                      startAdornment={<InputAdornment position="end">تومان</InputAdornment>}
+                      startAdornment={<InputAdornment position="start">تومان</InputAdornment>}
+                      style={{
+                        textAlign: "right"
+                      }}
                     />
                   </FormControl>
                 </DialogContent>
