@@ -4,6 +4,7 @@ const drawerWidth = 240;
 
 
 const AppTheme = createMuiTheme({
+  direction: 'rtl',
   typography: {
     fontFamily: [
       'VazirFD',
@@ -48,8 +49,7 @@ const AppTheme = createMuiTheme({
     padding: '0 8px',
     // ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
-  },
-  direction: 'rtl'
+  }
 });
 
 

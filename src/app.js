@@ -8,7 +8,7 @@ import { startSetProducts } from './actions/products';
 import { startSetCustomers } from './actions/customers';
 import { startSetInvoices } from './actions/invoices';
 import { create } from 'jss';
-import { StylesProvider, jssPreset } from '@material-ui/styles';
+import { StylesProvider, jssPreset, createGenerateClassName } from '@material-ui/styles';
 import rtl from 'jss-rtl'
 
 // import Header from './components/Header';
@@ -20,10 +20,13 @@ const jss = create({
   plugins: [...jssPreset().plugins, rtl()],
 });
 
+const generateClassName = createGenerateClassName();
+
+
 const store = configureStore();
 
 const jsx = (
-  <StylesProvider jss={jss}>
+  <StylesProvider jss={jss} generateClassName={generateClassName}>
     <Provider store={store}>
       <AppRouter />
     </Provider>

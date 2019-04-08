@@ -6,6 +6,7 @@ import classNames from 'classnames';
 
 import { withStyles, MuiThemeProvider } from '@material-ui/core/styles';
 import propTypes from 'prop-types';
+import uuid from 'uuid/v1';
 
 // @material-ui/core
 import Button from '@material-ui/core/Button';
@@ -40,6 +41,8 @@ import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 
 // @material-ui/icons
 import Icon from '@material-ui/core/Icon';
@@ -140,7 +143,7 @@ class AddInvoicePage extends React.Component {
           no: res.data.payload
         }
       }));
-    }      
+    }
   }
   onOpenAddProductDialog = (e) => {
     this.setState(() => ({ isAddProductDialogOpen: true }));
@@ -167,7 +170,13 @@ class AddInvoicePage extends React.Component {
           totalPrice: product.unitPrice * 1
         }
       }
-    }));
+    }), ()=> {
+      this.addNewProductToInvoice();
+    });
+    
+    
+    // document.getElementById("#newProductCountInput").focus();
+    this.newProductCountInput.focus();
   }
   onNewProductCountChange = (event) => {    
     event.persist();
@@ -182,15 +191,45 @@ class AddInvoicePage extends React.Component {
         }
       }}))
     }
-  }
+  };
+  onNewProductCountKeyPress = (event) => {
+    if(event.key == 'Enter'){
+      console.log('enter press here! ')
+    }
+    // this.addNewProductToInvoice();
+  };
+  onAddedProductCountChange = (event) => {
+    event.persist();
+    const count = event.target.value;
+    if (count.match(/^[1-9]{1}[0-9]{0,2}$/)) {
+      const tempInvoiceProducts = this.state.invoice.products;
+      for (let i = 0; i < this.state.invoice.products.length; i++) {
+        if (this.state.invoice.products[i].id === event.target.id) {
+          tempInvoiceProducts[i].count = count;
+          tempInvoiceProducts[i].totalPrice = count * tempInvoiceProducts[i].unitPrice;
+          this.setState(() => ({
+            invoice: {
+              ...this.state.invoice,
+              products: tempInvoiceProducts
+            }
+          }))
+        }
+      }
+    }
+  };
   onAddNewProductToInvoice = (event) => {
-    if (!this.state.invoice.newProduct._id && !this.state.invoice.newProduct.count) {
+    if (!this.state.invoice.newProduct._id || !this.state.invoice.newProduct.count) {
       this.showMessage({ type: "warning", text: "خطای اعتبارسنجی، نام محصول و تعداد اجباری است." });
       return;
     }
+    this.addNewProductToInvoice();
+  };
+  addNewProductToInvoice = () => {
     const product = this.props.products.find(x => x._id == this.state.invoice.newProduct._id);
+    
     const newInvoiceProduct = {
-      _id: this.state.invoice.newProduct._id,
+      id: uuid(),
+      productId: this.state.invoice.newProduct._id,
       count: this.state.invoice.newProduct.count,
       unitPrice: this.state.invoice.newProduct.unitPrice,
       totalPrice: this.state.invoice.newProduct.totalPrice,
@@ -212,7 +251,7 @@ class AddInvoicePage extends React.Component {
         totalPrice: this.state.invoice.totalProce + newInvoiceProduct.totalPrice
       }
     }));
-  }
+  };
   showMessage = ({ text, type }) => {
     this.setState(() => ({
       message: {
@@ -488,6 +527,51 @@ class AddInvoicePage extends React.Component {
   getSuggestionValue = (suggestion) => {
     return suggestion.fullName;
   }
+
+  renderInvoiceProducts = () => {
+    for (let i = 0; i < this.state.invoice.products.length; i++) {
+      return (
+        <ListItem key={this.state.invoice.products[i]._id}
+          className={ this.props.classes.addFactorProductsListItem }
+          >
+          <List className={ this.props.classes.addFactorProductsNestedList }>
+            <ListItem scope="product" style={{width:'30%'}}
+              className={ this.props.classes.addFactorProductsNestedListItem }
+            >
+              { this.state.invoice.products[i].name }
+            </ListItem>
+            <ListItem style={{width:'20%'}}
+              className={ this.props.classes.addFactorProductsNestedListItem }
+            >
+              <TextField
+                type="number"
+                value={ this.state.invoice.products[i].count }
+              >
+              </TextField>
+            </ListItem>
+            <ListItem style={{width:'20%'}}
+              className={ this.props.classes.addFactorProductsNestedListItem }
+            >{ separateDigits({ number: this.state.invoice.products[i].unitPrice, showCurrency: true }) }</ListItem>
+            <ListItem 
+              style={{width:'20%'}}
+              className={ this.props.classes.addFactorProductsNestedListItem }
+            >{ separateDigits({ number: this.state.invoice.products[i].totalPrice }) }</ListItem>
+            <ListItem style={{width:'10%'}}
+              className={ this.props.classes.addFactorProductsNestedListItem }
+            >
+              <IconButton 
+                onClick={() => { 
+                  this.onRemoveProductFromInvoice(this.state.invoice.products[i]._id);
+                }}
+              >
+                <Icon>remove_circle</Icon>
+              </IconButton>
+            </ListItem>
+          </List>
+        </ListItem>
+      );
+    }    
+  }
   
   render() {
 
@@ -555,43 +639,78 @@ class AddInvoicePage extends React.Component {
           <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
                 
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell style={{width:'30%', textAlign: 'center'}}>نام محصول</TableCell>
-                    <TableCell style={{width:'20%', textAlign: 'center'}}>تعداد</TableCell>
-                    <TableCell style={{width:'20%', textAlign: 'center'}}>قیمت واحد</TableCell>
-                    <TableCell style={{width:'20%', textAlign: 'center'}}>قیمت کل</TableCell>
-                    <TableCell style={{width:'10%', textAlign: 'center'}}></TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  { this.state.invoice.products.map(product => {
-                    return (
-                      <TableRow key={product._id}>
-                        <TableCell component="th" scope="product" style={{textAlign: 'center'}}>
-                          { product.name }
-                        </TableCell>
-                        <TableCell style={{textAlign: 'center'}}>{ product.count }</TableCell>
-                        <TableCell style={{textAlign: 'center'}}>{ separateDigits({ number: product.unitPrice, showCurrency: true }) }</TableCell>
-                        <TableCell className="totalPrice"
-                          style={{textAlign: 'center'}}
-                        >{ separateDigits({ number: product.totalPrice }) }</TableCell>
-                        <TableCell style={{textAlign: 'center'}}>
-                          <IconButton 
-                            onClick={() => { 
-                              this.onRemoveProductFromInvoice(product._id);
-                            }}
+              <List>
+
+                <ListItem className={ classes.addFactorProductsListItemHead } key={ uuid() }>
+                  <List className={ classes.addFactorProductsNestedList }>
+                    <ListItem style={{width:'30%'}}
+                       className={ classes.addFactorProductsNestedListItemHead }
+                    >نام محصول</ListItem>
+                    <ListItem style={{width:'20%'}}
+                      className={ classes.addFactorProductsNestedListItemHead }>تعداد</ListItem>
+                    <ListItem style={{width:'20%'}}
+                      className={ classes.addFactorProductsNestedListItemHead }>قیمت واحد</ListItem>
+                    <ListItem style={{width:'20%'}}
+                      className={ classes.addFactorProductsNestedListItemHead }>قیمت کل</ListItem>
+                    <ListItem style={{width:'10%'}}
+                      className={ classes.addFactorProductsNestedListItemHead }></ListItem>
+                  </List>
+                </ListItem>
+
+                  {/* { this.renderInvoiceProducts() } */}
+                
+                  { 
+                    this.state.invoice.products.map(product => {
+                      return (
+                        <ListItem key={product.id}
+                          className={ classes.addFactorProductsListItem }
                           >
-                            <Icon>remove_circle</Icon>
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                          <List className={ classes.addFactorProductsNestedList }>
+                            <ListItem scope="product" style={{width:'30%'}}
+                              className={ classes.addFactorProductsNestedListItem }
+                            >
+                              { product.name }
+                            </ListItem>
+                            <ListItem style={{width:'20%'}}
+                              className={ classes.addFactorProductsNestedListItem }
+                            >
+                              <TextField
+                                type="number"
+                                value={ product.count }
+                                id={product.id}
+                                onChange={ this.onAddedProductCountChange }
+                              >
+                              </TextField>
+                            </ListItem>
+                            <ListItem style={{width:'20%'}}
+                              className={ classes.addFactorProductsNestedListItem }
+                            >{ separateDigits({ number: product.unitPrice, showCurrency: true }) }</ListItem>
+                            <ListItem 
+                              style={{width:'20%'}}
+                              className={ classes.addFactorProductsNestedListItem }
+                            >{ separateDigits({ number: product.totalPrice }) }</ListItem>
+                            <ListItem style={{width:'10%'}}
+                              className={ classes.addFactorProductsNestedListItem }
+                            >
+                              <IconButton 
+                                onClick={() => { 
+                                  this.onRemoveProductFromInvoice(product._id);
+                                }}
+                              >
+                                <Icon>remove_circle</Icon>
+                              </IconButton>
+                            </ListItem>
+                          </List>
+                        </ListItem>
+                      );
+                    })
+                  }
                   
-                    <TableRow>
-                      <TableCell style={{textAlign: 'center'}}>
+                  <ListItem className={ classes.addFactorProductsListItem } key={ uuid() }>
+                    <List className={ classes.addFactorProductsNestedList }>
+                      <ListItem style={{width:'30%'}}
+                        className={ classes.addFactorProductsNestedListItem }
+                      >
                         <IconButton onClick={this.onOpenAddProductDialog}>
                           <Icon>add_circle</Icon>
                         </IconButton>
@@ -600,45 +719,56 @@ class AddInvoicePage extends React.Component {
                           onChange={this.onNewProductSelectChange}
                           className={classes.selectBox}
                         >
-                        {this.props.products.filter(product => {
-                          const found = this.state.invoice.products.find(invoiceProduct => {
-                            return invoiceProduct._id === product._id;
-                          });
-                          return !found;
-                        }).map(peoduct => {
-                          return (
-                            <MenuItem key={peoduct._id} value={peoduct._id}>
-                              { peoduct.name }
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-                      </TableCell>
-                      <TableCell style={{textAlign: 'center'}}>
+                          {this.props.products.filter(product => {
+                            const found = this.state.invoice.products.find(invoiceProduct => {
+                              return invoiceProduct.productId === product._id;
+                            });
+                            return !found;
+                          }).map(peoduct => {
+                            return (
+                              <MenuItem key={peoduct._id} value={peoduct._id}>
+                                { peoduct.name }
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </ListItem>
+                      <ListItem style={{width:'20%'}}
+                        className={ classes.addFactorProductsNestedListItem }
+                      >
                         <TextField
                           type="number"
                           value={this.state.invoice.newProduct.count}
                           onChange={this.onNewProductCountChange}
+                          onKeyPress={ this.onNewProductCountKeyPress }
+                          ref={(input) => { this.newProductCountInput = input; }} 
                         >
                         </TextField>
-                      </TableCell>
-                      <TableCell style={{textAlign: 'center'}}>
+                      </ListItem>
+                      <ListItem style={{width:'20%'}}
+                        className={ classes.addFactorProductsNestedListItem }
+                      >
                         <Typography>{ separateDigits({ number: this.state.invoice.newProduct.unitPrice, showCurrency: true }) }</Typography>
-                      </TableCell>
-                      <TableCell style={{textAlign: 'center'}}>
+                      </ListItem>
+                      <ListItem style={{width:'20%'}}
+                        className={ classes.addFactorProductsNestedListItem }
+                      >
                         <Typography>{ separateDigits({ number: this.state.invoice.newProduct.totalPrice }) }</Typography>
-                      </TableCell>
-                      <TableCell style={{textAlign: 'center'}}>
+                      </ListItem>
+                      <ListItem style={{width:'10%'}}
+                        className={ classes.addFactorProductsNestedListItem }
+                      >
                         <IconButton 
                           onClick={this.onAddNewProductToInvoice}
                         >
                           <Icon>add_circle</Icon>
                         </IconButton>
-                      </TableCell>
-                    </TableRow>
+                      </ListItem>
+                    </List>
+                  </ListItem>
                   
-                </TableBody>
-              </Table>
+                
+              </List>
 
             </GridItem>
           </GridContainer>
@@ -663,29 +793,32 @@ class AddInvoicePage extends React.Component {
                     className={classNames(classes.withoutLabel, classes.textField)}
                   
                   >
-                    <InputLabel htmlFor="stock"
+                    <InputLabel 
+                      htmlFor="stock"
                       className="form-control__input-label"
                     >موجودی</InputLabel>
                     <Input id="stock"
                       value={this.state.newProduct.stock}
                       onChange={this.onStockChange}
                       type="text"
-                      startAdornment={<InputAdornment position="end">عدد</InputAdornment>}
+                      endAdornment={<InputAdornment position="start">عدد</InputAdornment>}
+                      style={{
+                        textAlign: "right",
+                        direction: "rtl"
+                      }}
                     />
                   </FormControl>
                   <FormControl fullWidth
                   >
                     <InputLabel htmlFor="unit-price"            
-                      className="form-control__input-label"
+                      
                     >قیمت واحد</InputLabel>
                     <Input id="unit-price"
                       value={this.state.newProduct.unitPrice}
                       onChange={this.onUnitPriceChange}
                       type="text"
-                      startAdornment={<InputAdornment position="start">تومان</InputAdornment>}
-                      style={{
-                        textAlign: "right"
-                      }}
+                      endAdornment={<InputAdornment position="start">تومان</InputAdornment>}
+                      
                     />
                   </FormControl>
                 </DialogContent>
@@ -870,14 +1003,6 @@ class AddInvoicePage extends React.Component {
                 <div className={classes.container}>
                   <GridContainer>
                     <GridItem xs={12}>
-
-                      <Typography
-                        style={{ 
-                          marginTop: "18px"
-                        }}
-                      >
-                        ثبت فاکتور جدید
-                      </Typography>
                       <Stepper activeStep={activeStep}>
                         { steps.map((label, index) => {
                           const props = {};
@@ -885,9 +1010,9 @@ class AddInvoicePage extends React.Component {
                           return (
                             <Step key={label} {...props}>
                               <StepLabel 
-                                className={{ // apply this style
-                                  iconContainer: classes.iconContainer
-                                }}
+                                // className={{ // apply this style
+                                //   iconContainer: classes.iconContainer
+                                // }}
                                 {...labelProps}>{label}</StepLabel>
                             </Step>
                           );

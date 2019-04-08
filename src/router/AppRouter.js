@@ -5,8 +5,13 @@ import NotFoundPage from '../components/NotFoundPage';
 // import Header from '../components/Header';
 import AddInvoicePage from '../components/AddInvoicePage';
 import SalesReportPage from '../components/SalesReportPage';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+// import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import AppTheme from '../themes/AppTheme';
+import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
+
+const theme = createMuiTheme({
+  direction: 'rtl',
+});
 
 const AppRouter = () => (
   <MuiThemeProvider theme={AppTheme}>

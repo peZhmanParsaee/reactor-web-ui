@@ -20,7 +20,9 @@ body {
 }
 
 .form-control__input-label {
-  left: 0;
+  direction: rtl;
+  right: 0;
+  transform-origin: top right !important;
 }
 
 .container {
