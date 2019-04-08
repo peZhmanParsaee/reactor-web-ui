@@ -415,7 +415,10 @@ class AddInvoicePage extends React.Component {
   onNameChage = (event) => {
     event.persist();
     const name = event.target.value;
-    if (persianRex.letter.test(name) || !name) {
+    if (persianRex.letter.test(name) 
+      || persianRex.text.test(name)       
+      || !name
+      ) {
       this.setState(() => ({ 
         newProduct: {        
           ...this.state.newProduct,
