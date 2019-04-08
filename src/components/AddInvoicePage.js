@@ -101,7 +101,7 @@ class AddInvoicePage extends React.Component {
     activeStep: 0,    
     isAddProductDialogOpen: false,
     invoice: {
-      no: null,
+      no: '',
       date: moment().format('jYYYY/jMM/jDD'),
       products: [],
       customerId: 0,
@@ -112,8 +112,8 @@ class AddInvoicePage extends React.Component {
         totalPrice: 0
       },
       address: {
-        provinceId: null,
-        cityId: null
+        provinceId: 0,
+        cityId: 0
       },
       mailType: "registered",
       deliverAfter: "",
@@ -127,8 +127,8 @@ class AddInvoicePage extends React.Component {
     },
     newProduct: {
       name: '',
-      stock: null,
-      unitPrice: null
+      stock: '',
+      unitPrice: ''
     },
     single: '',
     popper: '',
@@ -176,7 +176,7 @@ class AddInvoicePage extends React.Component {
     
     
     // document.getElementById("#newProductCountInput").focus();
-    this.newProductCountInput.focus();
+    // this.newProductCountInput.focus();
   }
   onNewProductCountChange = (event) => {    
     event.persist();
@@ -334,14 +334,16 @@ class AddInvoicePage extends React.Component {
   }
   onProvinceChange = (event) => {
     const provinceId = event.target.value;
-    this.setState(() => ({
-      invoice: {
-        ...this.state.invoice,
-        address: {
-          provinceId: provinceId
+    if (provinceId) {
+      this.setState(() => ({
+        invoice: {
+          ...this.state.invoice,
+          address: {
+            provinceId: provinceId
+          }
         }
-      }
-    }));
+      }));
+    }
   }
   onCityChange = (event) => {
     const cityId = event.target.value;
@@ -527,51 +529,6 @@ class AddInvoicePage extends React.Component {
   getSuggestionValue = (suggestion) => {
     return suggestion.fullName;
   }
-
-  renderInvoiceProducts = () => {
-    for (let i = 0; i < this.state.invoice.products.length; i++) {
-      return (
-        <ListItem key={this.state.invoice.products[i]._id}
-          className={ this.props.classes.addFactorProductsListItem }
-          >
-          <List className={ this.props.classes.addFactorProductsNestedList }>
-            <ListItem scope="product" style={{width:'30%'}}
-              className={ this.props.classes.addFactorProductsNestedListItem }
-            >
-              { this.state.invoice.products[i].name }
-            </ListItem>
-            <ListItem style={{width:'20%'}}
-              className={ this.props.classes.addFactorProductsNestedListItem }
-            >
-              <TextField
-                type="number"
-                value={ this.state.invoice.products[i].count }
-              >
-              </TextField>
-            </ListItem>
-            <ListItem style={{width:'20%'}}
-              className={ this.props.classes.addFactorProductsNestedListItem }
-            >{ separateDigits({ number: this.state.invoice.products[i].unitPrice, showCurrency: true }) }</ListItem>
-            <ListItem 
-              style={{width:'20%'}}
-              className={ this.props.classes.addFactorProductsNestedListItem }
-            >{ separateDigits({ number: this.state.invoice.products[i].totalPrice }) }</ListItem>
-            <ListItem style={{width:'10%'}}
-              className={ this.props.classes.addFactorProductsNestedListItem }
-            >
-              <IconButton 
-                onClick={() => { 
-                  this.onRemoveProductFromInvoice(this.state.invoice.products[i]._id);
-                }}
-              >
-                <Icon>remove_circle</Icon>
-              </IconButton>
-            </ListItem>
-          </List>
-        </ListItem>
-      );
-    }    
-  }
   
   render() {
 
@@ -645,34 +602,43 @@ class AddInvoicePage extends React.Component {
                   <List className={ classes.addFactorProductsNestedList }>
                     <ListItem style={{width:'30%'}}
                        className={ classes.addFactorProductsNestedListItemHead }
+                       key={ uuid() }
                     >نام محصول</ListItem>
                     <ListItem style={{width:'20%'}}
-                      className={ classes.addFactorProductsNestedListItemHead }>تعداد</ListItem>
+                      className={ classes.addFactorProductsNestedListItemHead }
+                      key={ uuid() }
+                      >تعداد</ListItem>
                     <ListItem style={{width:'20%'}}
-                      className={ classes.addFactorProductsNestedListItemHead }>قیمت واحد</ListItem>
+                      className={ classes.addFactorProductsNestedListItemHead }
+                      key={ uuid() }>قیمت واحد</ListItem>
                     <ListItem style={{width:'20%'}}
-                      className={ classes.addFactorProductsNestedListItemHead }>قیمت کل</ListItem>
+                      className={ classes.addFactorProductsNestedListItemHead }
+                      key={ uuid() }>قیمت کل</ListItem>
                     <ListItem style={{width:'10%'}}
-                      className={ classes.addFactorProductsNestedListItemHead }></ListItem>
+                      className={ classes.addFactorProductsNestedListItemHead }
+                      key={ uuid() }></ListItem>
                   </List>
                 </ListItem>
 
-                  {/* { this.renderInvoiceProducts() } */}
+                  
                 
                   { 
                     this.state.invoice.products.map(product => {
                       return (
                         <ListItem key={product.id}
                           className={ classes.addFactorProductsListItem }
+                          key={ uuid() }
                           >
                           <List className={ classes.addFactorProductsNestedList }>
                             <ListItem scope="product" style={{width:'30%'}}
                               className={ classes.addFactorProductsNestedListItem }
+                              key={ uuid() }
                             >
                               { product.name }
                             </ListItem>
                             <ListItem style={{width:'20%'}}
                               className={ classes.addFactorProductsNestedListItem }
+                              key={ uuid() }
                             >
                               <TextField
                                 type="number"
@@ -684,13 +650,16 @@ class AddInvoicePage extends React.Component {
                             </ListItem>
                             <ListItem style={{width:'20%'}}
                               className={ classes.addFactorProductsNestedListItem }
+                              key={ uuid() }
                             >{ separateDigits({ number: product.unitPrice, showCurrency: true }) }</ListItem>
                             <ListItem 
                               style={{width:'20%'}}
                               className={ classes.addFactorProductsNestedListItem }
+                              key={ uuid() }
                             >{ separateDigits({ number: product.totalPrice }) }</ListItem>
                             <ListItem style={{width:'10%'}}
                               className={ classes.addFactorProductsNestedListItem }
+                              key={ uuid() }
                             >
                               <IconButton 
                                 onClick={() => { 
@@ -710,6 +679,7 @@ class AddInvoicePage extends React.Component {
                     <List className={ classes.addFactorProductsNestedList }>
                       <ListItem style={{width:'30%'}}
                         className={ classes.addFactorProductsNestedListItem }
+                        key={ uuid() }
                       >
                         <IconButton onClick={this.onOpenAddProductDialog}>
                           <Icon>add_circle</Icon>
@@ -735,6 +705,7 @@ class AddInvoicePage extends React.Component {
                       </ListItem>
                       <ListItem style={{width:'20%'}}
                         className={ classes.addFactorProductsNestedListItem }
+                        key={ uuid() }
                       >
                         <TextField
                           type="number"
@@ -747,16 +718,19 @@ class AddInvoicePage extends React.Component {
                       </ListItem>
                       <ListItem style={{width:'20%'}}
                         className={ classes.addFactorProductsNestedListItem }
+                        key={ uuid() }
                       >
                         <Typography>{ separateDigits({ number: this.state.invoice.newProduct.unitPrice, showCurrency: true }) }</Typography>
                       </ListItem>
                       <ListItem style={{width:'20%'}}
                         className={ classes.addFactorProductsNestedListItem }
+                        key={ uuid() }
                       >
                         <Typography>{ separateDigits({ number: this.state.invoice.newProduct.totalPrice }) }</Typography>
                       </ListItem>
                       <ListItem style={{width:'10%'}}
                         className={ classes.addFactorProductsNestedListItem }
+                        key={ uuid() }
                       >
                         <IconButton 
                           onClick={this.onAddNewProductToInvoice}
@@ -787,6 +761,7 @@ class AddInvoicePage extends React.Component {
                     <Input id="name"
                       onChange={this.onNameChage}
                       value={this.state.newProduct.name}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormControl fullWidth
@@ -802,23 +777,20 @@ class AddInvoicePage extends React.Component {
                       onChange={this.onStockChange}
                       type="text"
                       endAdornment={<InputAdornment position="start">عدد</InputAdornment>}
-                      style={{
-                        textAlign: "right",
-                        direction: "rtl"
-                      }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormControl fullWidth
                   >
                     <InputLabel htmlFor="unit-price"            
-                      
+                      className="form-control__input-label"
                     >قیمت واحد</InputLabel>
                     <Input id="unit-price"
                       value={this.state.newProduct.unitPrice}
                       onChange={this.onUnitPriceChange}
                       type="text"
                       endAdornment={<InputAdornment position="start">تومان</InputAdornment>}
-                      
+                      autoComplete='off'
                     />
                   </FormControl>
                 </DialogContent>
@@ -993,7 +965,7 @@ class AddInvoicePage extends React.Component {
     }
     
     return (
-      <MuiThemeProvider theme={theme}>
+      <React.Fragment>
         <div className={classes.wrapper}>
           <div className={classes.root}>
             <CssBaseline />
@@ -1049,7 +1021,7 @@ class AddInvoicePage extends React.Component {
           </div>
         </div>        
         <Footer />
-      </MuiThemeProvider>
+      </React.Fragment>
     );
   }
 }

@@ -3,6 +3,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import moment from 'moment-jalaali';
+import uuid from 'uuid/v1';
 
 import classNames from 'classnames';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
@@ -157,7 +158,7 @@ class SalesReportPage extends React.PureComponent {
       }
       if (this.state.invoiceType === "INVOICE_ITEMS") {
         const jsx = (
-          <ListItem key={invoice.invoiceId} className={ this.props.classes.reportListItemRow }>
+          <ListItem key={uuid()} className={ this.props.classes.reportListItemRow }>
             <List className={ this.props.classes.reportNestedListItemRow }>
               <ListItem className={ this.props.classes.reportNestedListItem }>
                 { invoice.customerName }
@@ -522,8 +523,7 @@ class SalesReportPage extends React.PureComponent {
 } 
 
 SalesReportPage.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(appStyle)(SalesReportPage);
