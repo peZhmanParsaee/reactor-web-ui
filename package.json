@@ -9,7 +9,7 @@
     "build:prod": "webpack -p --env production",
     "dev-server": "webpack-dev-server --open",
     "start": "node server/server.js",
-    "test": "jest --watch"
+    "test": "jest"
   },
   "dependencies": {
     "@date-io/jalaali": "^1.0.4",
