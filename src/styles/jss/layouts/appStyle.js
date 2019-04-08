@@ -74,6 +74,45 @@ const appStyle = theme => ({
   textField: {
     flexBasis: 200,
   },
+  reportListItemRow: {
+    justifyContent: "center"
+  },
+  reportListItemHeadRow: {
+    justifyContent: "center"
+  },
+  reportNestedListItemHeadRow: {
+    display: 'flex', 
+    flexDirection: 'row'
+  },  
+  reportNestedListItemRow: {
+    display: 'flex', 
+    flexDirection: 'row'
+  },  
+  reportNestedListItemHead: {
+    textAlign: "center", 
+    fontWeight: "bold",
+    justifyContent: "center",    
+    borderBottom: "1px solid #0e0e0e",
+    marginLeft: 15,
+    width: 150
+  },
+  reportNestedListItem: {
+    textAlign: "center",
+    width: 150,
+    justifyContent: "center",
+    marginLeft: 15
+  },
+  '@media screen and (max-width: 800px)': {
+    reportListItemRow: {
+      borderBottom: "1px solid #0e0e0e"
+    },
+    reportListItemHeadRow: {
+      display: 'none'
+    },
+    reportNestedListItemRow: {
+      flexDirection: 'column'
+    },
+  },
 });
 
 export default appStyle;

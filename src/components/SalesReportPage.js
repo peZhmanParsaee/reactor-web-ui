@@ -41,6 +41,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CommentIcon from '@material-ui/icons/Comment';
+import Paper from '@material-ui/core/Paper';
 
 
 import PropTypes from 'prop-types';
@@ -132,44 +133,47 @@ class SalesReportPage extends React.PureComponent {
     for (var invoice of this.state.invoices) {
       if (this.state.invoiceType === "INVOICES") {
         const jsx = (
-          <TableRow key={invoice._id}>
-           <TableCell style={{ textAlign: "center" }}>
-             { invoice.customerName }
-           </TableCell>
-           <TableCell style={{ textAlign: "center" }}>
-             { separateDigits({ number: invoice.totalPrice, showCurrency: true }) }
-           </TableCell>
-           <TableCell style={{ textAlign: "center" }}>{ invoice.no }</TableCell>
-           <TableCell style={{ textAlign: "center" }}>
-            { invoice.products.map(invoiceProduct => {
-                 return (
-                   <p>                  
-                     <span>{invoiceProduct.name}</span>
-                     <span> {invoiceProduct.count} عدد</span>
-                   </p>
-                 );
-               })
-             }
-           </TableCell>
-           <TableCell style={{ textAlign: "center" }}>{ invoice.deliverAtFormatted }</TableCell>
-         </TableRow>
+          <ListItem key={invoice._id} className={ this.props.classes.reportListItemRow }>
+            <List className={ this.props.classes.reportNestedListItemRow }>
+              <ListItem className={ this.props.classes.reportNestedListItem }>
+                { invoice.customerName }
+              </ListItem>
+              <ListItem className={ this.props.classes.reportNestedListItem }>
+                { separateDigits({ number: invoice.totalPrice, showCurrency: true }) }
+              </ListItem>
+              <ListItem className={ this.props.classes.reportNestedListItem }
+                style={{
+                  width: 120
+                }}
+              >{ invoice.no }</ListItem>
+              <ListItem className={ this.props.classes.reportNestedListItem }
+                style={{ width: 225 }}
+              >{ invoice.deliverAtFormatted }</ListItem>
+            </List>
+         </ListItem>
        );
        
        jsxItems.push(jsx);
       }
       if (this.state.invoiceType === "INVOICE_ITEMS") {
         const jsx = (
-          <TableRow key={invoice.invoiceId}>
-           <TableCell style={{ textAlign: "center" }}>
-             { invoice.customerName }
-           </TableCell>           
-           <TableCell style={{ textAlign: "center" }}>
-             { invoice.productName }
-           </TableCell>
-           <TableCell style={{ textAlign: "center" }}>
-             { invoice.invoiceNo }
-           </TableCell>
-         </TableRow>
+          <ListItem key={invoice.invoiceId} className={ this.props.classes.reportListItemRow }>
+            <List className={ this.props.classes.reportNestedListItemRow }>
+              <ListItem className={ this.props.classes.reportNestedListItem }>
+                { invoice.customerName }
+              </ListItem>
+              <ListItem className={ this.props.classes.reportNestedListItem }>
+                { invoice.productName }
+              </ListItem>
+              <ListItem className={ this.props.classes.reportNestedListItem }
+                style={{
+                  width: 120
+                }}
+              >
+                { invoice.invoiceNo }
+              </ListItem>
+            </List>           
+         </ListItem>
        );
        
        jsxItems.push(jsx);
@@ -245,7 +249,8 @@ class SalesReportPage extends React.PureComponent {
     this.setState({ selectedDate: date })
   };
   render() {
-    const { classes, theme } = this.props;    
+    const { classes, theme } = this.props;
+
     moment.locale('fa-IR');
     moment.loadPersian();
     
@@ -429,45 +434,59 @@ class SalesReportPage extends React.PureComponent {
 
               <div className={classes.content}>
                 <div className={classes.container}>
-                  <div ref="iScroll" 
+                  <div
                     style={{ 
-                      height: "auto", 
+                      maxHeight: 400, 
                       overflow: "auto",
-                      marginBottom: "100px"
-                    }}>
+                      marginBottom: "100px",
+                      justifyContent: "center",
+                      textAlign: "center"
+                    }}
+                    ref="iScroll" >
+
                     {
                       this.state.invoiceType === 'INVOICES' && (
-                        <Table>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell style={{ textAlign: "center", width: "20%", fontWeight: "bold" }}>نام خریدار</TableCell>
-                              <TableCell style={{ textAlign: "center", width: "20%", fontWeight: "bold" }}>مبلغ</TableCell>
-                              <TableCell style={{ textAlign: "center", width: "20%", fontWeight: "bold" }}>شماره فاکتور</TableCell>
-                              <TableCell style={{ textAlign: "center", width: "20%", fontWeight: "bold" }}>محصولات</TableCell>
-                              <TableCell style={{ textAlign: "center", width: "20%", fontWeight: "bold" }}>زمان تحویل</TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            { this.displayInvoices() }
-                          </TableBody>
-                        </Table>
+                        <List>
+                          <ListItem className={ classes.reportListItemHeadRow }>
+                            <List className={ classes.reportNestedListItemHeadRow }>
+                              <ListItem className={ classes.reportNestedListItemHead }>نام خریدار</ListItem>
+                              <ListItem className={ classes.reportNestedListItemHead }>مبلغ</ListItem>
+                              <ListItem className={ classes.reportNestedListItemHead }
+                                style={{
+                                  width: 120
+                                }}
+                              >شماره فاکتور</ListItem>
+                              <ListItem 
+                                className={ classes.reportNestedListItemHead }
+                                style={{ width: 220 }}
+                              >زمان تحویل</ListItem>
+                            </List>
+                          </ListItem>
+                          
+                          { this.displayInvoices() }
+                          
+                        </List>
                       )
                     }
 
                     {
                       this.state.invoiceType === 'INVOICE_ITEMS' && (
-                        <Table>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell style={{ textAlign: "center", fontWeight: "bold" }}>نام خریدار</TableCell>
-                              <TableCell style={{ textAlign: "center", fontWeight: "bold" }}>نام محصول</TableCell>
-                              <TableCell style={{ textAlign: "center", fontWeight: "bold" }}>شماره فاکتور</TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            { this.displayInvoices() }
-                          </TableBody>
-                        </Table>
+                        <List>
+                          <ListItem className={ classes.reportListItemHeadRow }>
+                            <List className={ classes.reportNestedListItemHeadRow }>
+                              <ListItem className={ classes.reportNestedListItemHead }>نام خریدار</ListItem>
+                              <ListItem className={ classes.reportNestedListItemHead }>نام محصول</ListItem>
+                              <ListItem className={ classes.reportNestedListItemHead }
+                                style={{
+                                  width: 120
+                                }}
+                              >شماره فاکتور</ListItem>
+                            </List>
+                          </ListItem>
+                          
+                          { this.displayInvoices() }
+                          
+                        </List>
                       )
                     }
                     
@@ -475,6 +494,7 @@ class SalesReportPage extends React.PureComponent {
                     {this.state.loadingState ? <p className="loading"> در حال بارگزاری ادامه داده ها ...</p> : ""}
             
                   </div>
+                  
                   {
 
                     // <GridContainer className={classes.grid} justify="space-around">
