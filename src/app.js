@@ -37,8 +37,8 @@ ReactDOM.render(<p>Loading ...</p>, document.getElementById('app'));
 
 store.dispatch(startSetProvinces()).then(() => {
   store.dispatch(startSetProducts()).then(() => {
-    store.dispatch(startSetCustomers()).then(() => {
+    // store.dispatch(startSetCustomers()).then(() => {
       ReactDOM.render(jsx, document.getElementById('app'));
-    });
+    // });
   });
 });

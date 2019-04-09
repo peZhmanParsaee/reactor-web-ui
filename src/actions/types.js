@@ -4,6 +4,7 @@ export const SET_PRODUCTS = "SET_PRODUCTS";
 export const SET_PROVINCES = "SET_PROVINCES";
 
 export const SET_CUSTOMERS = "SET_CUSTOMERS";
+export const SEARCH_CUSTOMERS = "SEARCH_CUSTOMERS";
 
 export const ADD_INVOICE = "ADD_INVOICE";
 export const SET_INVOICES = "SET_INVOICES";

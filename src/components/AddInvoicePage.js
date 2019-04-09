@@ -51,7 +51,6 @@ import GridItem from './Grid/GridItem';
 import Footer from "./Footer";
 
 import Autosuggest from 'react-autosuggest';
-import deburr from 'lodash/deburr';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 
@@ -62,6 +61,7 @@ import appStyle from '../styles/jss/layouts/appStyle';
 import { separateDigits } from '../helpers/numberHelpers';
 import { startAddInvoice } from '../actions/invoices';
 import { startAddProduct } from '../actions/products';
+import { startSearchCustomers } from '../actions/customers';
 
 import persianRex from 'persian-rex';
 
@@ -437,7 +437,7 @@ class AddInvoicePage extends React.Component {
   };
   onShowAddProductLoading = () => {
     return new Promise((resolve, reject) => {
-      return this.setState(() => ({ showAddProductLoading: true }), () => {
+      this.setState(() => ({ showAddProductLoading: true }), () => {
         resolve('done')
       });
     });
@@ -485,9 +485,12 @@ class AddInvoicePage extends React.Component {
     }
   };
   handleSuggestionsFetchRequested = ({ value }) => {
-    this.setState({
-      suggestions: this.getSuggestions(value),
-    });
+    this.getSuggestions(value)
+      .then(suggestions => {
+        this.setState({
+          suggestions
+        });
+      });    
   };
   handleSuggestionsClearRequested = () => {
     this.setState({
@@ -539,23 +542,36 @@ class AddInvoicePage extends React.Component {
     );
   };
   getSuggestions = (value) => {
-    const inputValue = deburr(value.trim()).toLowerCase();
+    const inputValue = value;
     const inputLength = inputValue.length;
     let count = 0;
+    console.log(inputValue);
 
-    return inputLength === 0
-      ? []
-      : this.props.customers.filter(suggestion => {
-          const keep =
-            count < 5 && suggestion.fullName.slice(0, inputLength).toLowerCase() === inputValue;
+    if (inputLength === 0)
+      return [];
+    else {
+      return this.props.startSearchCustomers(inputValue)
+        .then(opStatus => {
+          console.log(`opStatus`);
+          console.log(opStatus);
+          return opStatus.payload;
+        })
+        .catch(err => console.error);
+    }
+
+    // return inputLength === 0
+    //   ? []
+    //   : this.props.customers.filter(suggestion => {
+    //       const keep =
+    //         count < 5 && suggestion.fullName.slice(0, inputLength).toLowerCase() === inputValue;
           
 
-          if (keep) {
-            count += 1;
-          }
+    //       if (keep) {
+    //         count += 1;
+    //       }
 
-          return keep;
-        });
+    //       return keep;
+    //     });
   };
   getSuggestionValue = (suggestion) => {
     return suggestion.fullName;
@@ -613,7 +629,7 @@ class AddInvoicePage extends React.Component {
                   {...autosuggestProps}
                   inputProps={{
                     classes,
-                    placeholder: 'جست و جو',
+                    placeholder: 'نام و نام خانوادگی',
                     value: this.state.single,
                     onChange: this.handleChange('single'),
                   }}
@@ -839,17 +855,13 @@ class AddInvoicePage extends React.Component {
                   </form>
                 </DialogContent>
                 <DialogActions>
-                  <Fade
-                    in={this.state.showAddProductLoading}
-                    style={{
-                      transitionDelay: this.state.showAddProductLoading ? '800ms' : '0ms',
-                    }}
-                  >
-                    <CircularProgress
-                      size={24}
-                      thickness={4}
-                    />
-                  </Fade>
+                  { this.state.showAddProductLoading && (
+                      <CircularProgress
+                        size={24}
+                        thickness={4}
+                      />
+                    )
+                  }
                   
                   <Button onClick={this.onAddProduct}
                     color="primary"
@@ -864,6 +876,7 @@ class AddInvoicePage extends React.Component {
                   </Button>
                 </DialogActions>
               </Dialog>
+              {/* <AddProductDialog /> */}
             </GridItem>
           </GridContainer>
         </div>
@@ -1096,7 +1109,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   startAddInvoice: (invoice) => dispatch(startAddInvoice(invoice)),
-  startAddProduct: (product) => dispatch(startAddProduct(product))
+  startAddProduct: (product) => dispatch(startAddProduct(product)),
+  startSearchCustomers: (customerName) => dispatch(startSearchCustomers(customerName))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(appStyle)(AddInvoicePage));
