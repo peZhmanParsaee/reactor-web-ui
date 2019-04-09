@@ -82,48 +82,129 @@ class AddProductDialog extends React.Component {
   }
   render() {
     return (
-      <Dialog open={this.props.show}>
+      // <Dialog open={this.props.show}>
+      //   <DialogTitle>اضافه کردن محصول جدید</DialogTitle>
+      //   <DialogContent>
+      //     <ToastMessage
+      //       variant={this.state.messageType}
+      //       message={this.state.message}
+      //       open={this.state.showMessage}
+      //     />
+      //     <FormControl fullWidth>
+      //       <InputLabel htmlFor="name"
+      //         className="form-control__input-label"
+      //       >نام محصول</InputLabel>
+      //       <Input id="name"
+      //         onChange={this.onNameChage}
+      //         value={this.state.name}
+      //       />
+      //     </FormControl>
+      //     <FormControl fullWidth>
+      //       <InputLabel htmlFor="stock"
+      //         className="form-control__input-label"
+      //       >موجودی</InputLabel>
+      //       <Input id="stock"
+      //         value={this.state.stock}
+      //         onChange={this.onStockChange}
+      //         type="text"
+      //         startAdornment={<InputAdornment position="start">عدد</InputAdornment>}
+      //       />
+      //     </FormControl>
+      //     <FormControl fullWidth
+      //     >
+      //       <InputLabel htmlFor="unit-price"            
+      //         className="form-control__input-label"
+      //       >قیمت واحد</InputLabel>
+      //       <Input id="unit-price"
+      //         value={this.state.unitPrice}
+      //         onChange={this.onUnitPriceChange}
+      //         type="text"
+      //         startAdornment={<InputAdornment position="end">تومان</InputAdornment>}
+      //       />
+      //     </FormControl>
+      //   </DialogContent>
+      //   <DialogActions>
+      //     <Button onClick={this.onAddProduct}
+      //       color="primary"
+      //       variant="contained"
+      //     >
+      //       ذخیره
+      //     </Button>
+      //     <Button onClick={this.onCloseDialog}
+      //       variant="contained"
+      //     >
+      //       انصراف
+      //     </Button>
+      //   </DialogActions>
+      // </Dialog>
+
+      <Dialog 
+        open={this.props.show}
+        onClose={this.onCloseDialog}
+        >
         <DialogTitle>اضافه کردن محصول جدید</DialogTitle>
         <DialogContent>
-          <ToastMessage
-            variant={this.state.messageType}
-            message={this.state.message}
-            open={this.state.showMessage}
-          />
-          <FormControl fullWidth>
-            <InputLabel htmlFor="name"
-              className="form-control__input-label"
-            >نام محصول</InputLabel>
-            <Input id="name"
-              onChange={this.onNameChage}
-              value={this.state.name}
-            />
-          </FormControl>
-          <FormControl fullWidth>
-            <InputLabel htmlFor="stock"
-              className="form-control__input-label"
-            >موجودی</InputLabel>
-            <Input id="stock"
-              value={this.state.stock}
-              onChange={this.onStockChange}
-              type="text"
-              startAdornment={<InputAdornment position="start">عدد</InputAdornment>}
-            />
-          </FormControl>
-          <FormControl fullWidth
-          >
-            <InputLabel htmlFor="unit-price"            
-              className="form-control__input-label"
-            >قیمت واحد</InputLabel>
-            <Input id="unit-price"
-              value={this.state.unitPrice}
-              onChange={this.onUnitPriceChange}
-              type="text"
-              startAdornment={<InputAdornment position="end">تومان</InputAdornment>}
-            />
-          </FormControl>
+          <form>
+            <FormControl fullWidth className={classes.textField}>
+              <InputLabel htmlFor="name"
+                className="form-control__input-label"
+              >نام محصول</InputLabel>
+              <Input id="name"
+                onChange={this.onNameChage}
+                value={this.state.name}
+                autoComplete='off'
+                onKeyDown={ this.moveNextElementInForm }
+                ref={this.focusInput}
+              />
+            </FormControl>
+            <FormControl fullWidth
+              className={classNames(classes.withoutLabel, classes.textField)} >
+              <InputLabel 
+                htmlFor="stock"
+                className="form-control__input-label"
+              >موجودی</InputLabel>
+              <Input id="stock"
+                value={this.state.stock}
+                onChange={this.onStockChange}
+                type="text"
+                endAdornment={<InputAdornment position="start">عدد</InputAdornment>}
+                autoComplete='off'
+                onKeyDown={ this.moveNextElementInForm }
+              />
+            </FormControl>
+            <FormControl fullWidth
+            >
+              <InputLabel htmlFor="unit-price"            
+                className="form-control__input-label"
+              >قیمت واحد</InputLabel>
+              <Input id="unit-price"
+                value={this.state.unitPrice}
+                onChange={this.onUnitPriceChange}
+                type="text"
+                endAdornment={<InputAdornment position="start">تومان</InputAdornment>}
+                autoComplete='off'
+                onKeyDown={(event) => {
+                  if (event.keyCode == 13) {
+                    this.onAddProduct();
+                  }
+                }}
+              />
+            </FormControl>
+          </form>
         </DialogContent>
         <DialogActions>
+          <Fade
+            in={this.state.showAddProductLoading}
+            style={{
+              transitionDelay: this.state.showAddProductLoading ? '800ms' : '0ms',
+            }}
+          >
+            <CircularProgress
+              size={24}
+              thickness={4}
+            />
+          </Fade>
+          
           <Button onClick={this.onAddProduct}
             color="primary"
             variant="contained"
