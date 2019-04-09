@@ -1,9 +1,10 @@
-import { ADD_INVOICE, SET_INVOICES } from './types';
+import * as TYPES from './types';
+import { showLoading, hideLoading } from './loading';
 import axios from 'axios';
 
 export const addInvoice = (invoice) => {
   return {
-    type: ADD_INVOICE,
+    type: TYPES.ADD_INVOICE,
     invoice
   };
 };
@@ -34,19 +35,25 @@ export const startAddInvoice = (invoiceData = {}) => {
       totalPrice
     };
 
-    return axios.post(`${API_ENDPOINT}/api/v1/invoice`, invoice)
-      .then(insertedInvoiceRes => {
-        const opStatus = insertedInvoiceRes;
+    dispatch(showLoading())
+      
+        axios.post(`${API_ENDPOINT}/api/v1/invoice`, invoice)
+          .then(insertedInvoiceRes => {
+            const opStatus = insertedInvoiceRes.data;
+            dispatch(addInvoice(opStatus.payload))
+            dispatch(hideLoading());
+          });
 
-        dispatch(addInvoice(opStatus.payload));
-      });
+        
+      
+    
 
   };
 };
 
 export const setInvoices = (invoices) => {
   return {
-    type: SET_INVOICES,
+    type: TYPES.SET_INVOICES,
     invoices
   };
 };

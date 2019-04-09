@@ -439,7 +439,6 @@ class SalesReportPage extends React.PureComponent {
                     style={{ 
                       maxHeight: 400, 
                       overflow: "auto",
-                      marginBottom: "100px",
                       justifyContent: "center",
                       textAlign: "center"
                     }}

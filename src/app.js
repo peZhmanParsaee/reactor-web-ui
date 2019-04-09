@@ -8,6 +8,7 @@ import { startSetProducts } from './actions/products';
 import { startSetCustomers } from './actions/customers';
 import { startSetInvoices } from './actions/invoices';
 import { create } from 'jss';
+import Loading from './components/Loading';
 import { StylesProvider, jssPreset, createGenerateClassName } from '@material-ui/styles';
 import rtl from 'jss-rtl'
 
@@ -33,7 +34,7 @@ const jsx = (
   </StylesProvider>  
 );
 
-ReactDOM.render(<p>Loading ...</p>, document.getElementById('app'));
+ReactDOM.render(<Loading />, document.getElementById('app'));
 
 store.dispatch(startSetProvinces()).then(() => {
   store.dispatch(startSetProducts()).then(() => {
@@ -41,4 +42,14 @@ store.dispatch(startSetProvinces()).then(() => {
       ReactDOM.render(jsx, document.getElementById('app'));
     // });
   });
+});
+
+store.subscribe(() => {
+  const state = store.getState();
+  if (state.loading === true) {
+    ReactDOM.render(<Loading />, document.getElementById('app'));
+  } else {
+    ReactDOM.render(jsx, document.getElementById('app'));
+  }
+  console.log(state);
 });
