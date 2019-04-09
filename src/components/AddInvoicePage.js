@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import classNames from 'classnames';
 
-import { withStyles, MuiThemeProvider } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import propTypes from 'prop-types';
 import uuid from 'uuid/v1';
 
@@ -13,23 +13,15 @@ import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Stepper from '@material-ui/core/Stepper';;
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import Dialog from '@material-ui/core/Dialog';
@@ -43,6 +35,8 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Fade from '@material-ui/core/Fade';
 
 // @material-ui/icons
 import Icon from '@material-ui/core/Icon';
@@ -132,6 +126,7 @@ class AddInvoicePage extends React.Component {
     single: '',
     popper: '',
     suggestions: [],
+    showAddProductLoading: false
   };
   
   async componentDidMount() {
@@ -144,7 +139,7 @@ class AddInvoicePage extends React.Component {
         }
       }));
     }
-    this.focus();
+    // this.focus();
   }
   focusInput = (component) => {
     if (component) {
@@ -153,15 +148,15 @@ class AddInvoicePage extends React.Component {
   };
   onOpenAddProductDialog = (e) => {
     this.setState(() => ({ isAddProductDialogOpen: true }));
-  }
+  };
   closeAddProductDialog = () => {
     this.setState(() => ({ isAddProductDialogOpen: false }));
-  }
+  };
   onCustomerChange = (event) => {
     event.persist();
     const selectedCustomerId = event.target.value ;
     this.setState(() => ({ invoice: { ...this.state.invoice, customerId: selectedCustomerId } }));
-  }
+  };
   onNewProductSelectChange = (event) => {
     event.persist();
     const _id = event.target.value;
@@ -183,7 +178,7 @@ class AddInvoicePage extends React.Component {
     
     // document.getElementById("#newProductCountInput").focus();
     // this.newProductCountInput.focus();
-  }
+  };
   onNewProductCountChange = (event) => {    
     event.persist();
     const count = event.target.value;
@@ -284,7 +279,7 @@ class AddInvoicePage extends React.Component {
         products: this.state.invoice.products.filter(invoiceProduct => invoiceProduct._id != _id)
       }
     });
-  }
+  };
   handleNextStep = () => {
     if (this.state.activeStep === 0) {
       if (!this.state.invoice.products.length && !this.state.invoice.customerId) {
@@ -330,14 +325,14 @@ class AddInvoicePage extends React.Component {
     } else {
       console.log('Error, Unrecognized step in add new invoice form');
     }
-  }
+  };
   handleBackStep = () => {
     if (this.state.activeStep === 1) {
       this.setState(() => ({
         activeStep: this.state.activeStep - 1
       }));
     }
-  }
+  };
   onProvinceChange = (event) => {
     const provinceId = event.target.value;
     if (provinceId) {
@@ -350,7 +345,7 @@ class AddInvoicePage extends React.Component {
         }
       }));
     }
-  }
+  };
   onCityChange = (event) => {
     const cityId = event.target.value;
     this.setState(() => ({
@@ -382,7 +377,7 @@ class AddInvoicePage extends React.Component {
         }
       }));
     }    
-  }
+  };
   onDeliverAfterTimeUnit = (event) => {
     const deliverAfterTimeUnit = event.target.value;
     this.setState(() => ({
@@ -411,13 +406,45 @@ class AddInvoicePage extends React.Component {
       return;
     }
     
-    this.props.startAddProduct(this.state.newProduct);
-    this.showMessage({ 
-      type: "success",
-      text: "محصول اضافه شد."
+    this.onShowAddProductLoading()
+      .then(ack => {
+        this.props.startAddProduct(this.state.newProduct).then(res => {
+          console.log('all things done');
+          console.log(res);
+          if (res.status == true) {
+            this.showMessage({ 
+              type: "success",
+              text: "محصول اضافه شد."
+            });
+            
+            this.onCloseDialog();
+          } else {
+            // todo
+            // show errors
+          }
+        })
+        .catch(err => {
+          this.showMessage({ 
+            type: "error",
+            text: "خطا در انجام عملیات!"
+          });
+        })
+        .finally(() =>{
+          this.onHideAddProductLoading();
+        });
+    
+      });
+  };
+  onShowAddProductLoading = () => {
+    return new Promise((resolve, reject) => {
+      return this.setState(() => ({ showAddProductLoading: true }), () => {
+        resolve('done')
+      });
     });
-    this.onCloseDialog();
-  }
+  };
+  onHideAddProductLoading = () => {
+    this.setState(() => ({ showAddProductLoading: false }));
+  };
   onNameChage = (event) => {
     event.persist();
     const name = event.target.value;
@@ -432,7 +459,7 @@ class AddInvoicePage extends React.Component {
         }
       }));
     }
-  }
+  };
   onStockChange = (event) => {
     event.persist();
     const stock = event.target.value;
@@ -444,7 +471,7 @@ class AddInvoicePage extends React.Component {
         }
       }));
     }
-  }
+  };
   onUnitPriceChange = (event) => {
     event.persist();
     const unitPrice = event.target.value;
@@ -456,19 +483,17 @@ class AddInvoicePage extends React.Component {
         }
       }));
     }
-  }
+  };
   handleSuggestionsFetchRequested = ({ value }) => {
     this.setState({
       suggestions: this.getSuggestions(value),
     });
   };
-
   handleSuggestionsClearRequested = () => {
     this.setState({
       suggestions: [],
     });
   };
-
   handleChange = name => (event, { newValue }) => {
     const selectedCustomer = this.props.customers.find(x => x.fullName === newValue);
         
@@ -491,7 +516,6 @@ class AddInvoicePage extends React.Component {
     }
     
   };
-  
   renderSuggestion = (suggestion, { query, isHighlighted }) => {
     const matches = match(suggestion.fullName, query);
     const parts = parse(suggestion.fullName, matches);
@@ -513,8 +537,7 @@ class AddInvoicePage extends React.Component {
         </div>
       </MenuItem>
     );
-  }
-
+  };
   getSuggestions = (value) => {
     const inputValue = deburr(value.trim()).toLowerCase();
     const inputLength = inputValue.length;
@@ -533,12 +556,10 @@ class AddInvoicePage extends React.Component {
 
           return keep;
         });
-  }
-
+  };
   getSuggestionValue = (suggestion) => {
     return suggestion.fullName;
-  }
-  
+  };  
   moveNextElementInForm = (event) => {
     event.persist();
     if (event.keyCode == 13) {
@@ -547,8 +568,7 @@ class AddInvoicePage extends React.Component {
       form.elements[index + 1].focus();
       event.preventDefault();
     }
-  }
-  
+  };
   render() {
 
     const { classes } = this.props;
@@ -809,12 +829,28 @@ class AddInvoicePage extends React.Component {
                         type="text"
                         endAdornment={<InputAdornment position="start">تومان</InputAdornment>}
                         autoComplete='off'
-                        onKeyDown={ this.onAddProduct }
+                        onKeyDown={(event) => {
+                          if (event.keyCode == 13) {
+                            this.onAddProduct();
+                          }
+                        }}
                       />
                     </FormControl>
                   </form>
                 </DialogContent>
                 <DialogActions>
+                  <Fade
+                    in={this.state.showAddProductLoading}
+                    style={{
+                      transitionDelay: this.state.showAddProductLoading ? '800ms' : '0ms',
+                    }}
+                  >
+                    <CircularProgress
+                      size={24}
+                      thickness={4}
+                    />
+                  </Fade>
+                  
                   <Button onClick={this.onAddProduct}
                     color="primary"
                     variant="contained"

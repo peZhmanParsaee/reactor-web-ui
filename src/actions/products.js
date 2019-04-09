@@ -23,6 +23,8 @@ export const startAddProduct = (productData = {}) => {
                 const opStatus = insertedProductRes.data;
 
                 dispatch(addProduct(opStatus.payload));
+
+                return opStatus;
               });
   };
 };
