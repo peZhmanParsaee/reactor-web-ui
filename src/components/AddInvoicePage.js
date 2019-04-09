@@ -71,7 +71,6 @@ import { startAddProduct } from '../actions/products';
 
 import persianRex from 'persian-rex';
 
-
 function renderInputComponent(inputProps) {
   const { classes, inputRef = () => {}, ref, ...other } = inputProps;
 
@@ -134,17 +133,24 @@ class AddInvoicePage extends React.Component {
     popper: '',
     suggestions: [],
   };
+  
   async componentDidMount() {
     const res = await axios.get(`${API_ENDPOINT}/api/v1/invoice/new-invoice-no`);
     if (res.data.status === true) {
       this.setState(() => ({            
         invoice: {
-          ...this.state.invoice,              
+          ...this.state.invoice,
           no: res.data.payload
         }
       }));
     }
+    this.focus();
   }
+  focusInput = (component) => {
+    if (component) {
+      // component.focus();
+    }
+  };
   onOpenAddProductDialog = (e) => {
     this.setState(() => ({ isAddProductDialogOpen: true }));
   }
@@ -533,6 +539,16 @@ class AddInvoicePage extends React.Component {
     return suggestion.fullName;
   }
   
+  moveNextElementInForm = (event) => {
+    event.persist();
+    if (event.keyCode == 13) {
+      const form = event.target.form;
+      const index = Array.prototype.indexOf.call(form, event.target);
+      form.elements[index + 1].focus();
+      event.preventDefault();
+    }
+  }
+  
   render() {
 
     const { classes } = this.props;
@@ -743,10 +759,7 @@ class AddInvoicePage extends React.Component {
                       </ListItem>
                     </List>
                   </ListItem>
-                  
-                
               </List>
-
             </GridItem>
           </GridContainer>
           <GridContainer>
@@ -757,45 +770,49 @@ class AddInvoicePage extends React.Component {
                 >
                 <DialogTitle>اضافه کردن محصول جدید</DialogTitle>
                 <DialogContent>
-                  <FormControl fullWidth className={classes.textField}>
-                    <InputLabel htmlFor="name"
-                      className="form-control__input-label"
-                    >نام محصول</InputLabel>
-                    <Input id="name"
-                      onChange={this.onNameChage}
-                      value={this.state.newProduct.name}
-                      autoComplete='off'
-                    />
-                  </FormControl>
-                  <FormControl fullWidth
-                    className={classNames(classes.withoutLabel, classes.textField)}
-                  
-                  >
-                    <InputLabel 
-                      htmlFor="stock"
-                      className="form-control__input-label"
-                    >موجودی</InputLabel>
-                    <Input id="stock"
-                      value={this.state.newProduct.stock}
-                      onChange={this.onStockChange}
-                      type="text"
-                      endAdornment={<InputAdornment position="start">عدد</InputAdornment>}
-                      autoComplete='off'
-                    />
-                  </FormControl>
-                  <FormControl fullWidth
-                  >
-                    <InputLabel htmlFor="unit-price"            
-                      className="form-control__input-label"
-                    >قیمت واحد</InputLabel>
-                    <Input id="unit-price"
-                      value={this.state.newProduct.unitPrice}
-                      onChange={this.onUnitPriceChange}
-                      type="text"
-                      endAdornment={<InputAdornment position="start">تومان</InputAdornment>}
-                      autoComplete='off'
-                    />
-                  </FormControl>
+                  <form>
+                    <FormControl fullWidth className={classes.textField}>
+                      <InputLabel htmlFor="name"
+                        className="form-control__input-label"
+                      >نام محصول</InputLabel>
+                      <Input id="name"
+                        onChange={this.onNameChage}
+                        value={this.state.newProduct.name}
+                        autoComplete='off'
+                        onKeyDown={ this.moveNextElementInForm }
+                        ref={this.focusInput}
+                      />
+                    </FormControl>
+                    <FormControl fullWidth
+                      className={classNames(classes.withoutLabel, classes.textField)} >
+                      <InputLabel 
+                        htmlFor="stock"
+                        className="form-control__input-label"
+                      >موجودی</InputLabel>
+                      <Input id="stock"
+                        value={this.state.newProduct.stock}
+                        onChange={this.onStockChange}
+                        type="text"
+                        endAdornment={<InputAdornment position="start">عدد</InputAdornment>}
+                        autoComplete='off'
+                        onKeyDown={ this.moveNextElementInForm }
+                      />
+                    </FormControl>
+                    <FormControl fullWidth
+                    >
+                      <InputLabel htmlFor="unit-price"            
+                        className="form-control__input-label"
+                      >قیمت واحد</InputLabel>
+                      <Input id="unit-price"
+                        value={this.state.newProduct.unitPrice}
+                        onChange={this.onUnitPriceChange}
+                        type="text"
+                        endAdornment={<InputAdornment position="start">تومان</InputAdornment>}
+                        autoComplete='off'
+                        onKeyDown={ this.onAddProduct }
+                      />
+                    </FormControl>
+                  </form>
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={this.onAddProduct}
