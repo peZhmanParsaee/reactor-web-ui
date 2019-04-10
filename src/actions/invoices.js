@@ -44,10 +44,6 @@ export const startAddInvoice = (invoiceData = {}) => {
             dispatch(hideLoading());
           });
 
-        
-      
-    
-
   };
 };
 

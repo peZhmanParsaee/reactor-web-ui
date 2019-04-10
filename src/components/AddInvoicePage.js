@@ -118,11 +118,11 @@ class AddInvoicePage extends React.Component {
       show: false,
       type: "warning"
     },
-    newProduct: {
-      name: '',
-      stock: '',
-      unitPrice: ''
-    },
+    // newProduct: {
+    //   name: '',
+    //   stock: '',
+    //   unitPrice: ''
+    // },
     single: '',
     popper: '',
     suggestions: [],
@@ -139,18 +139,18 @@ class AddInvoicePage extends React.Component {
         }
       }));
     }
-    // this.focus();
   }
-  focusInput = (component) => {
-    if (component) {
-      // component.focus();
-    }
-  };
   onOpenAddProductDialog = (e) => {
     this.setState(() => ({ isAddProductDialogOpen: true }));
   };
-  closeAddProductDialog = () => {
+  closeAddProductDialog = ({ opStatus = {} } = {}) => {    
     this.setState(() => ({ isAddProductDialogOpen: false }));
+    if (opStatus.status === true) {
+      this.showMessage({
+        type: "success",
+        text: opStatus.message || "محصول اضافه شد."
+      });
+    }
   };
   onCustomerChange = (event) => {
     event.persist();
@@ -174,10 +174,6 @@ class AddInvoicePage extends React.Component {
     }), ()=> {
       this.addNewProductToInvoice();
     });
-    
-    
-    // document.getElementById("#newProductCountInput").focus();
-    // this.newProductCountInput.focus();
   };
   onNewProductCountChange = (event) => {    
     event.persist();
@@ -314,7 +310,20 @@ class AddInvoicePage extends React.Component {
         && this.state.invoice.deliverAfterTimeUnit
         ) {
           let { newProduct, ...invoice } = this.state.invoice;
-          this.props.startAddInvoice(invoice);
+          const invoiceData = {
+            no: invoice.no,
+            date: invoice.date,
+            products: invoice.products,
+            customerId: invoice.customerId,
+            address: invoice.address,
+            mailType: invoice.mailType,
+            deliverAfter: invoice.deliverAfter,
+            deliverAfterTimeUnit: invoice.deliverAfterTimeUnit,
+            totalProce: invoice.totalProce
+          };
+          console.log(`invoice`);
+          console.log(invoiceData);
+          this.props.startAddInvoice(invoiceData);
           this.props.history.push('/');
         } else {
           this.showMessage({ 
@@ -387,103 +396,103 @@ class AddInvoicePage extends React.Component {
       }
     }));
   };
-  onCloseDialog = () => {
-    this.setState(() => ({ 
-      isAddProductDialogOpen: false,
-      newProduct: {
-        name: '',
-        stock: null,
-        unitPrice: null
-      }
-    }));
-  };
-  onAddProduct = () => {
-    if (!this.state.newProduct.name || !this.state.newProduct.stock || !this.state.newProduct.unitPrice) {
-      this.showMessage({ 
-        type: "warning",
-        text: "خطای اعتبارسنجی، ورودیها را بررسی کنید."
-      });
-      return;
-    }
+  // onCloseDialog = () => {    
+  //   this.setState(() => ({ 
+  //     isAddProductDialogOpen: false,
+  //     newProduct: {
+  //       name: '',
+  //       stock: null,
+  //       unitPrice: null
+  //     }
+  //   }));
+  // };
+  // onAddProduct = () => {
+  //   if (!this.state.newProduct.name || !this.state.newProduct.stock || !this.state.newProduct.unitPrice) {
+  //     this.showMessage({ 
+  //       type: "warning",
+  //       text: "خطای اعتبارسنجی، ورودیها را بررسی کنید."
+  //     });
+  //     return;
+  //   }
     
-    this.onShowAddProductLoading()
-      .then(ack => {
-        this.props.startAddProduct(this.state.newProduct).then(res => {
-          console.log('all things done');
-          console.log(res);
-          if (res.status == true) {
-            this.showMessage({ 
-              type: "success",
-              text: "محصول اضافه شد."
-            });
+  //   this.onShowAddProductLoading()
+  //     .then(ack => {
+  //       this.props.startAddProduct(this.state.newProduct).then(res => {
+  //         console.log('all things done');
+  //         console.log(res);
+  //         if (res.status == true) {
+  //           this.showMessage({ 
+  //             type: "success",
+  //             text: "محصول اضافه شد."
+  //           });
             
-            this.onCloseDialog();
-          } else {
-            // todo
-            // show errors
-          }
-        })
-        .catch(err => {
-          this.showMessage({ 
-            type: "error",
-            text: "خطا در انجام عملیات!"
-          });
-        })
-        .finally(() =>{
-          this.onHideAddProductLoading();
-        });
+  //           this.onCloseDialog();
+  //         } else {
+  //           // todo
+  //           // show errors
+  //         }
+  //       })
+  //       .catch(err => {
+  //         this.showMessage({ 
+  //           type: "error",
+  //           text: "خطا در انجام عملیات!"
+  //         });
+  //       })
+  //       .finally(() =>{
+  //         this.onHideAddProductLoading();
+  //       });
     
-      });
-  };
-  onShowAddProductLoading = () => {
-    return new Promise((resolve, reject) => {
-      this.setState(() => ({ showAddProductLoading: true }), () => {
-        resolve('done')
-      });
-    });
-  };
-  onHideAddProductLoading = () => {
-    this.setState(() => ({ showAddProductLoading: false }));
-  };
-  onNameChage = (event) => {
-    event.persist();
-    const name = event.target.value;
-    if (persianRex.letter.test(name) 
-      || persianRex.text.test(name)       
-      || !name
-      ) {
-      this.setState(() => ({ 
-        newProduct: {        
-          ...this.state.newProduct,
-          name
-        }
-      }));
-    }
-  };
-  onStockChange = (event) => {
-    event.persist();
-    const stock = event.target.value;
-    if (stock.match(/^[1-9]{1}[0-9]{0,6}$/) || !stock) {
-      this.setState(() => ({
-        newProduct: {
-          ...this.state.newProduct,
-          stock
-        }
-      }));
-    }
-  };
-  onUnitPriceChange = (event) => {
-    event.persist();
-    const unitPrice = event.target.value;
-    if (unitPrice.match(/^[1-9]{1}[0-9]{0,5}$/) || !unitPrice) {
-      this.setState(() => ({
-        newProduct: {
-          ...this.state.newProduct,
-          unitPrice
-        }
-      }));
-    }
-  };
+  //     });
+  // };
+  // onShowAddProductLoading = () => {
+  //   return new Promise((resolve, reject) => {
+  //     this.setState(() => ({ showAddProductLoading: true }), () => {
+  //       resolve('done')
+  //     });
+  //   });
+  // };
+  // onHideAddProductLoading = () => {
+  //   this.setState(() => ({ showAddProductLoading: false }));
+  // };
+  // onNameChage = (event) => {
+  //   event.persist();
+  //   const name = event.target.value;
+  //   if (persianRex.letter.test(name) 
+  //     || persianRex.text.test(name)       
+  //     || !name
+  //     ) {
+  //     this.setState(() => ({ 
+  //       newProduct: {        
+  //         ...this.state.newProduct,
+  //         name
+  //       }
+  //     }));
+  //   }
+  // };
+  // onStockChange = (event) => {
+  //   event.persist();
+  //   const stock = event.target.value;
+  //   if (stock.match(/^[1-9]{1}[0-9]{0,6}$/) || !stock) {
+  //     this.setState(() => ({
+  //       newProduct: {
+  //         ...this.state.newProduct,
+  //         stock
+  //       }
+  //     }));
+  //   }
+  // };
+  // onUnitPriceChange = (event) => {
+  //   event.persist();
+  //   const unitPrice = event.target.value;
+  //   if (unitPrice.match(/^[1-9]{1}[0-9]{0,5}$/) || !unitPrice) {
+  //     this.setState(() => ({
+  //       newProduct: {
+  //         ...this.state.newProduct,
+  //         unitPrice
+  //       }
+  //     }));
+  //   }
+  // };
   handleSuggestionsFetchRequested = ({ value }) => {
     this.getSuggestions(value)
       .then(suggestions => {
@@ -576,15 +585,15 @@ class AddInvoicePage extends React.Component {
   getSuggestionValue = (suggestion) => {
     return suggestion.fullName;
   };  
-  moveNextElementInForm = (event) => {
-    event.persist();
-    if (event.keyCode == 13) {
-      const form = event.target.form;
-      const index = Array.prototype.indexOf.call(form, event.target);
-      form.elements[index + 1].focus();
-      event.preventDefault();
-    }
-  };
+  // moveNextElementInForm = (event) => {
+  //   event.persist();
+  //   if (event.keyCode == 13) {
+  //     const form = event.target.form;
+  //     const index = Array.prototype.indexOf.call(form, event.target);
+  //     form.elements[index + 1].focus();
+  //     event.preventDefault();
+  //   }
+  // };
   render() {
 
     const { classes } = this.props;
@@ -800,7 +809,7 @@ class AddInvoicePage extends React.Component {
           </GridContainer>
           <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
-              <Dialog 
+              {/* <Dialog 
                 open={this.state.isAddProductDialogOpen}
                 onClose={this.onCloseDialog}
                 >
@@ -875,8 +884,11 @@ class AddInvoicePage extends React.Component {
                     انصراف
                   </Button>
                 </DialogActions>
-              </Dialog>
-              {/* <AddProductDialog /> */}
+              </Dialog> */}
+              <AddProductDialog 
+                show={this.state.isAddProductDialogOpen} 
+                onClose={this.closeAddProductDialog}
+              />
             </GridItem>
           </GridContainer>
         </div>
