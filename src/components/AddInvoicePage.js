@@ -48,6 +48,7 @@ import { generateKey } from '../helpers/keyHelper';
 import { startAddInvoice } from '../actions/invoices';
 import { startAddProduct } from '../actions/products';
 import { startSearchCustomers } from '../actions/customers';
+import { showGlobalMessage } from '../actions/message';
 
 
 function renderInputComponent(inputProps) {
@@ -120,6 +121,13 @@ class AddInvoicePage extends React.Component {
       }));
     }
   }
+  componentWillMount() {
+    console.log('AddInvoicePage componentWillMount');
+
+  }
+  componentWillUnmount() {
+    console.log('AddInvoicePage componentWillUnmount');
+  }
   onOpenAddProductDialog = (e) => {
     this.setState(() => ({ isAddProductDialogOpen: true }));
   };
@@ -172,7 +180,9 @@ class AddInvoicePage extends React.Component {
   onAddedProductCountChange = (event) => {
     event.persist();
     const count = event.target.value;
+    console.log(count);
     if (count.match(/^[1-9]{1}[0-9]{0,2}$/)) {
+      console.log('matched');
       const tempInvoiceProducts = this.state.invoice.products;
       for (let i = 0; i < this.state.invoice.products.length; i++) {
         if (this.state.invoice.products[i].id === event.target.id) {
@@ -199,6 +209,7 @@ class AddInvoicePage extends React.Component {
     const product = this.props.products.find(x => x._id == this.state.invoice.newProduct._id);
     
     const newInvoiceProduct = {
+      id: generateKey(),
       productId: this.state.invoice.newProduct._id,
       count: this.state.invoice.newProduct.count,
       unitPrice: this.state.invoice.newProduct.unitPrice,
@@ -250,6 +261,8 @@ class AddInvoicePage extends React.Component {
     });
   };
   handleNextStep = () => {
+    // return this.props.history.push('/');;
+    // return  setTimeout(() => {console.log('--------'); this.props.history.push('/');}, 2000);
     if (this.state.activeStep === 0) {
       if (!this.state.invoice.products.length && !this.state.invoice.customerId) {
         this.showMessage({ 
@@ -294,8 +307,30 @@ class AddInvoicePage extends React.Component {
             deliverAfterTimeUnit: invoice.deliverAfterTimeUnit,
             totalPrice: invoice.totalPrice
           };
-          this.props.startAddInvoice(invoiceData);
+          this.props.startAddInvoice(invoiceData)
           this.props.history.push('/');
+            // .then(opStatus => {
+            //   console.log(`opStatus`);
+            //   console.log(opStatus);
+            //   console.log(opStatus.status === true);
+            //   if (opStatus.status === true) {
+            //     this.props.history.push('/');
+                
+            //     // this.props.showGlobalMessage({
+            //     //   type: "success",
+            //     //   text: "فاکتور با موفقیت ثبت شد"
+            //     // });
+            //   } else {
+            //     this.showMessage({ 
+            //       type: "error",
+            //       text: opStatus.message || "خطا در انجام عملیات"
+            //     });
+            //   }
+            // })
+            // .catch(err => {
+
+            // });
+          
         } else {
           this.showMessage({ 
             type: "warning",
@@ -557,6 +592,7 @@ class AddInvoicePage extends React.Component {
                                 value={ product.count }
                                 id={product.id}
                                 onChange={ this.onAddedProductCountChange }
+                                className="text-center"
                               >
                               </TextField>
                             </ListItem>
@@ -624,6 +660,7 @@ class AddInvoicePage extends React.Component {
                           value={this.state.invoice.newProduct.count}
                           onChange={this.onNewProductCountChange}
                           ref={(input) => { this.newProductCountInput = input; }} 
+                          className="text-center"
                         >
                         </TextField>
                       </ListItem>
@@ -890,7 +927,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   startAddInvoice: (invoice) => dispatch(startAddInvoice(invoice)),
   startAddProduct: (product) => dispatch(startAddProduct(product)),
-  startSearchCustomers: (customerName) => dispatch(startSearchCustomers(customerName))
+  startSearchCustomers: (customerName) => dispatch(startSearchCustomers(customerName)),
+  showGlobalMessage: (message) => dispatch(showGlobalMessage(message))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(appStyle)(AddInvoicePage));

@@ -1,5 +1,6 @@
 import * as TYPES from './types';
 import { showLoading, hideLoading } from './loading';
+import { showGlobalMessage } from './message';
 import axios from 'axios';
 
 export const addInvoice = (invoice) => {
@@ -37,12 +38,14 @@ export const startAddInvoice = (invoiceData = {}) => {
 
     dispatch(showLoading())
       
-        axios.post(`${API_ENDPOINT}/api/v1/invoice`, invoice)
-          .then(insertedInvoiceRes => {
-            const opStatus = insertedInvoiceRes.data;
-            dispatch(addInvoice(opStatus.payload))
-            dispatch(hideLoading());
-          });
+    return axios.post(`${API_ENDPOINT}/api/v1/invoice`, invoice)
+      .then(insertedInvoiceRes => {
+        const opStatus = insertedInvoiceRes.data;
+        dispatch(addInvoice(opStatus.payload));
+        dispatch(hideLoading());
+        // dispatch(showGlobalMessage(opStatus));
+        return opStatus;
+      });
 
   };
 };

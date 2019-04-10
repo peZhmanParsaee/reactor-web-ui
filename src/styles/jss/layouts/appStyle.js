@@ -137,6 +137,10 @@ const appStyle = theme => ({
     justifyContent: "center",    
     borderBottom: "1px solid #0e0e0e",
     marginLeft: 15,
+  },
+  textCenter: {
+    textAlign: "center",
+    justifyContent: "center"
   }
 });
 

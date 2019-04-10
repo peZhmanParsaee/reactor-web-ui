@@ -13,7 +13,12 @@ export default class HomePage extends React.Component {
   constructor(props) {
     super(props);
   }
-
+  componentWillMount() {
+    console.log('HomePage componentWillMount');
+  }
+  componentWillUnmount() {
+    console.log('HomePage componentWillUnmount');
+  }
   render() {
     return (
       <React.Fragment>
