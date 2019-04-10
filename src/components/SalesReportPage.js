@@ -3,7 +3,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import moment from 'moment-jalaali';
-import uuid from 'uuid/v1';
+import { generateKey } from '../helpers/keyHelper';
+
 
 import classNames from 'classnames';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
@@ -158,7 +159,7 @@ class SalesReportPage extends React.PureComponent {
       }
       if (this.state.invoiceType === "INVOICE_ITEMS") {
         const jsx = (
-          <ListItem key={uuid()} className={ this.props.classes.reportListItemRow }>
+          <ListItem key={generateKey()} className={ this.props.classes.reportListItemRow }>
             <List className={ this.props.classes.reportNestedListItemRow }>
               <ListItem className={ this.props.classes.reportNestedListItem }>
                 { invoice.customerName }
@@ -187,7 +188,6 @@ class SalesReportPage extends React.PureComponent {
     if (this.state.finished === false) {
       this.setState({ loadingState: true });
 
-      // axios.get(`${API_ENDPOINT}/api/v1/invoice?invoiceType=${this.state.invoiceType}&offset=${this.state.offset}&limit=${this.state.limit}&fromDate=${this.state.fromDate}&toDate=${this.state.toDate}`)
       const startDateTimeStamp = this.state.startDate && moment(this.state.startDate).valueOf();
       const endDateTimeStamp = this.state.endDate && moment(this.state.endDate).valueOf();
       axios.get(`${API_ENDPOINT}/api/v1/invoice?invoiceType=${this.state.invoiceType}&offset=${this.state.offset}&limit=${this.state.limit}&fromDate=${startDateTimeStamp}&toDate=${endDateTimeStamp}`)
