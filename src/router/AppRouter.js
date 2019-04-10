@@ -8,7 +8,7 @@ import SalesReportPage from '../components/SalesReportPage';
 // import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import AppTheme from '../themes/AppTheme';
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
-import createBrowserHistory from "history/createBrowserHistory";
+import { createBrowserHistory } from "history";
 
 const history = createBrowserHistory()
 
@@ -22,8 +22,8 @@ const AppRouter = () => (
       <div>
         <Switch>
           <Route path="/" component={HomePage} exact={true} />
-          <Route path="/add-invoice" component={AddInvoicePage} exact />
-          <Route path="/sales-report" component={SalesReportPage} exact />
+          <Route path="/add-invoice" component={AddInvoicePage} />
+          <Route path="/sales-report" component={SalesReportPage} />
           <Route component={NotFoundPage} />
         </Switch>
       </div>
