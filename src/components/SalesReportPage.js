@@ -95,7 +95,7 @@ class SalesReportPage extends React.PureComponent {
                 }}
               >{ invoice.no }</ListItem>
               <ListItem className={ this.props.classes.reportNestedListItem }
-                style={{ width: 225 }}
+                style={{ width: 228 }}
               >{ invoice.deliverAtFormatted }</ListItem>
             </List>
          </ListItem>
