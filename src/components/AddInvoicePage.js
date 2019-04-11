@@ -120,14 +120,24 @@ class AddInvoicePage extends React.Component {
         }
       }));
     }
+
+    history.pushState(null, null, location.href);
+    window.onpopstate = (event) => {
+      if (this.state.activeStep === 1) {
+        history.pushState(null, null, location.href);
+        this.handleBackStep();
+      } else if (this.state.activeStep === 0) {
+        history.go(-1);
+      }
+    };
   }
   componentWillMount() {
     console.log('AddInvoicePage componentWillMount');
-
   }
   componentWillUnmount() {
+    window.onpopstate = () => {};
     console.log('AddInvoicePage componentWillUnmount');
-  }
+  }  
   onOpenAddProductDialog = (e) => {
     this.setState(() => ({ isAddProductDialogOpen: true }));
   };
