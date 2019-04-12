@@ -11,11 +11,11 @@ export const startSetProvinces = () => {
   return (dispatch) => {
 
     return axios.get(`${API_ENDPOINT}/api/v1/province`)
-              .then(res => {
-                if (res.data.status === true) {
-                  dispatch(setProvinces(res.data.payload));
-                }
-              });
+      .then(res => {
+        if (res.data.status === true) {
+          dispatch(setProvinces(res.data.payload));
+        }
+      });
 
   };
 };

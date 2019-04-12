@@ -177,12 +177,12 @@ class AddInvoicePage extends React.Component {
     if (count.match(/^[1-9]{1}[0-9]{0,2}$/)) {
       this.setState(() => ({
         invoice: { ...this.state.invoice, 
-        newProduct:{ 
-          ...this.state.invoice.newProduct, 
-          count: parseInt(event.target.value, 10),
-          totalPrice: parseInt(event.target.value * this.state.invoice.newProduct.unitPrice)
-        }
-      }}))
+          newProduct:{ 
+            ...this.state.invoice.newProduct, 
+            count: parseInt(event.target.value, 10),
+            totalPrice: parseInt(event.target.value * this.state.invoice.newProduct.unitPrice)
+          }
+        }}))
     }
   };
   onAddedProductCountChange = (event) => {
@@ -302,49 +302,49 @@ class AddInvoicePage extends React.Component {
         && this.state.invoice.address.cityId
         && this.state.invoice.deliverAfter
         && this.state.invoice.deliverAfterTimeUnit
-        ) {
-          let { newProduct, ...invoice } = this.state.invoice;
-          const invoiceData = {
-            no: invoice.no,
-            date: invoice.date,
-            products: invoice.products,
-            customerId: invoice.customerId,
-            address: invoice.address,
-            mailType: invoice.mailType,
-            deliverAfter: invoice.deliverAfter,
-            deliverAfterTimeUnit: invoice.deliverAfterTimeUnit,
-            totalPrice: invoice.totalPrice
-          };
-          this.props.startAddInvoice(invoiceData)
-          this.props.history.push('/');
-            // .then(opStatus => {
-            //   console.log(`opStatus`);
-            //   console.log(opStatus);
-            //   console.log(opStatus.status === true);
-            //   if (opStatus.status === true) {
-            //     this.props.history.push('/');
+      ) {
+        let { newProduct, ...invoice } = this.state.invoice;
+        const invoiceData = {
+          no: invoice.no,
+          date: invoice.date,
+          products: invoice.products,
+          customerId: invoice.customerId,
+          address: invoice.address,
+          mailType: invoice.mailType,
+          deliverAfter: invoice.deliverAfter,
+          deliverAfterTimeUnit: invoice.deliverAfterTimeUnit,
+          totalPrice: invoice.totalPrice
+        };
+        this.props.startAddInvoice(invoiceData)
+        this.props.history.push('/');
+        // .then(opStatus => {
+        //   console.log(`opStatus`);
+        //   console.log(opStatus);
+        //   console.log(opStatus.status === true);
+        //   if (opStatus.status === true) {
+        //     this.props.history.push('/');
                 
-            //     // this.props.showGlobalMessage({
-            //     //   type: "success",
-            //     //   text: "فاکتور با موفقیت ثبت شد"
-            //     // });
-            //   } else {
-            //     this.showMessage({ 
-            //       type: "error",
-            //       text: opStatus.message || "خطا در انجام عملیات"
-            //     });
-            //   }
-            // })
-            // .catch(err => {
+        //     // this.props.showGlobalMessage({
+        //     //   type: "success",
+        //     //   text: "فاکتور با موفقیت ثبت شد"
+        //     // });
+        //   } else {
+        //     this.showMessage({ 
+        //       type: "error",
+        //       text: opStatus.message || "خطا در انجام عملیات"
+        //     });
+        //   }
+        // })
+        // .catch(err => {
 
-            // });
+        // });
           
-        } else {
-          this.showMessage({ 
-            type: "warning",
-            text: "اطلاعات فاکتور را جهت ثبت کامل نمایید."
-          });
-        }
+      } else {
+        this.showMessage({ 
+          type: "warning",
+          text: "اطلاعات فاکتور را جهت ثبت کامل نمایید."
+        });
+      }
     } else {
       console.log('Error, Unrecognized step in add new invoice form');
     }
@@ -556,13 +556,13 @@ class AddInvoicePage extends React.Component {
                 <ListItem className={ classes.addFactorProductsListItemHead } key={ generateKey() }>
                   <List className={ classes.addFactorProductsNestedList }>
                     <ListItem style={{width:'30%'}}
-                       className={ classes.addFactorProductsNestedListItemHead }
-                       key={ generateKey() }
+                      className={ classes.addFactorProductsNestedListItemHead }
+                      key={ generateKey() }
                     >نام محصول</ListItem>
                     <ListItem style={{width:'20%'}}
                       className={ classes.addFactorProductsNestedListItemHead }
                       key={ generateKey() }
-                      >تعداد</ListItem>
+                    >تعداد</ListItem>
                     <ListItem style={{width:'20%'}}
                       className={ classes.addFactorProductsNestedListItemHead }
                       key={ generateKey() }>قیمت واحد</ListItem>
@@ -577,125 +577,125 @@ class AddInvoicePage extends React.Component {
 
                   
                 
-                  { 
-                    this.state.invoice.products.map((product, index) => {
-                      return (
-                        <ListItem key={product.id}
-                          className={ classes.addFactorProductsListItem }
-                          key={ generateKey(index) }
+                { 
+                  this.state.invoice.products.map((product, index) => {
+                    return (
+                      <ListItem key={product.id}
+                        className={ classes.addFactorProductsListItem }
+                        key={ generateKey(index) }
+                      >
+                        <List className={ classes.addFactorProductsNestedList }>
+                          <ListItem scope="product" style={{width:'30%'}}
+                            className={ classes.addFactorProductsNestedListItem }
+                            key={ generateKey(index) }
                           >
-                          <List className={ classes.addFactorProductsNestedList }>
-                            <ListItem scope="product" style={{width:'30%'}}
-                              className={ classes.addFactorProductsNestedListItem }
-                              key={ generateKey(index) }
+                            { product.name }
+                          </ListItem>
+                          <ListItem style={{width:'20%'}}
+                            className={ classes.addFactorProductsNestedListItem }
+                            key={ generateKey(index) }
+                          >
+                            <TextField
+                              type="number"
+                              value={ product.count }
+                              id={product.id}
+                              onChange={ this.onAddedProductCountChange }
+                              className="text-center"
                             >
-                              { product.name }
-                            </ListItem>
-                            <ListItem style={{width:'20%'}}
-                              className={ classes.addFactorProductsNestedListItem }
-                              key={ generateKey(index) }
+                            </TextField>
+                          </ListItem>
+                          <ListItem style={{width:'20%'}}
+                            className={ classes.addFactorProductsNestedListItem }
+                            key={ generateKey(index) }
+                          >{ separateDigits({ number: product.unitPrice, showCurrency: true }) }</ListItem>
+                          <ListItem 
+                            style={{width:'20%'}}
+                            className={ classes.addFactorProductsNestedListItem }
+                            key={ generateKey(index) }
+                          >{ separateDigits({ number: product.totalPrice }) }</ListItem>
+                          <ListItem style={{width:'10%'}}
+                            className={ classes.addFactorProductsNestedListItem }
+                            key={ generateKey(index) }
+                          >
+                            <IconButton 
+                              onClick={() => { 
+                                this.onRemoveProductFromInvoice(product._id);
+                              }}
                             >
-                              <TextField
-                                type="number"
-                                value={ product.count }
-                                id={product.id}
-                                onChange={ this.onAddedProductCountChange }
-                                className="text-center"
-                              >
-                              </TextField>
-                            </ListItem>
-                            <ListItem style={{width:'20%'}}
-                              className={ classes.addFactorProductsNestedListItem }
-                              key={ generateKey(index) }
-                            >{ separateDigits({ number: product.unitPrice, showCurrency: true }) }</ListItem>
-                            <ListItem 
-                              style={{width:'20%'}}
-                              className={ classes.addFactorProductsNestedListItem }
-                              key={ generateKey(index) }
-                            >{ separateDigits({ number: product.totalPrice }) }</ListItem>
-                            <ListItem style={{width:'10%'}}
-                              className={ classes.addFactorProductsNestedListItem }
-                              key={ generateKey(index) }
-                            >
-                              <IconButton 
-                                onClick={() => { 
-                                  this.onRemoveProductFromInvoice(product._id);
-                                }}
-                              >
-                                <Icon>remove_circle</Icon>
-                              </IconButton>
-                            </ListItem>
-                          </List>
-                        </ListItem>
-                      );
-                    })
-                  }
+                              <Icon>remove_circle</Icon>
+                            </IconButton>
+                          </ListItem>
+                        </List>
+                      </ListItem>
+                    );
+                  })
+                }
                   
-                  <ListItem className={ classes.addFactorProductsListItem } key={ generateKey() }>
-                    <List className={ classes.addFactorProductsNestedList }>
-                      <ListItem style={{width:'30%'}}
-                        className={ classes.addFactorProductsNestedListItem }
-                        key={ generateKey() }
+                <ListItem className={ classes.addFactorProductsListItem } key={ generateKey() }>
+                  <List className={ classes.addFactorProductsNestedList }>
+                    <ListItem style={{width:'30%'}}
+                      className={ classes.addFactorProductsNestedListItem }
+                      key={ generateKey() }
+                    >
+                      <IconButton onClick={this.onOpenAddProductDialog}>
+                        <Icon>add_circle</Icon>
+                      </IconButton>
+                      <Select
+                        value={this.state.invoice.newProduct._id}
+                        onChange={this.onNewProductSelectChange}
+                        className={classes.selectBox}
                       >
-                        <IconButton onClick={this.onOpenAddProductDialog}>
-                          <Icon>add_circle</Icon>
-                        </IconButton>
-                        <Select
-                          value={this.state.invoice.newProduct._id}
-                          onChange={this.onNewProductSelectChange}
-                          className={classes.selectBox}
-                        >
-                          {this.props.products.filter(product => {
-                            const found = this.state.invoice.products.find(invoiceProduct => {
-                              return invoiceProduct.productId === product._id;
-                            });
-                            return !found;
-                          }).map(peoduct => {
-                            return (
-                              <MenuItem key={peoduct._id} value={peoduct._id}>
-                                { peoduct.name }
-                              </MenuItem>
-                            );
-                          })}
-                        </Select>
-                      </ListItem>
-                      <ListItem style={{width:'20%'}}
-                        className={ classes.addFactorProductsNestedListItem }
-                        key={ generateKey() }
+                        {this.props.products.filter(product => {
+                          const found = this.state.invoice.products.find(invoiceProduct => {
+                            return invoiceProduct.productId === product._id;
+                          });
+                          return !found;
+                        }).map(peoduct => {
+                          return (
+                            <MenuItem key={peoduct._id} value={peoduct._id}>
+                              { peoduct.name }
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </ListItem>
+                    <ListItem style={{width:'20%'}}
+                      className={ classes.addFactorProductsNestedListItem }
+                      key={ generateKey() }
+                    >
+                      <TextField
+                        type="number"
+                        value={this.state.invoice.newProduct.count}
+                        onChange={this.onNewProductCountChange}
+                        ref={(input) => { this.newProductCountInput = input; }} 
+                        className="text-center"
                       >
-                        <TextField
-                          type="number"
-                          value={this.state.invoice.newProduct.count}
-                          onChange={this.onNewProductCountChange}
-                          ref={(input) => { this.newProductCountInput = input; }} 
-                          className="text-center"
-                        >
-                        </TextField>
-                      </ListItem>
-                      <ListItem style={{width:'20%'}}
-                        className={ classes.addFactorProductsNestedListItem }
-                        key={ generateKey() }
+                      </TextField>
+                    </ListItem>
+                    <ListItem style={{width:'20%'}}
+                      className={ classes.addFactorProductsNestedListItem }
+                      key={ generateKey() }
+                    >
+                      <Typography>{ separateDigits({ number: this.state.invoice.newProduct.unitPrice, showCurrency: true }) }</Typography>
+                    </ListItem>
+                    <ListItem style={{width:'20%'}}
+                      className={ classes.addFactorProductsNestedListItem }
+                      key={ generateKey() }
+                    >
+                      <Typography>{ separateDigits({ number: this.state.invoice.newProduct.totalPrice }) }</Typography>
+                    </ListItem>
+                    <ListItem style={{width:'10%'}}
+                      className={ classes.addFactorProductsNestedListItem }
+                      key={ generateKey() }
+                    >
+                      <IconButton 
+                        onClick={this.onAddNewProductToInvoice}
                       >
-                        <Typography>{ separateDigits({ number: this.state.invoice.newProduct.unitPrice, showCurrency: true }) }</Typography>
-                      </ListItem>
-                      <ListItem style={{width:'20%'}}
-                        className={ classes.addFactorProductsNestedListItem }
-                        key={ generateKey() }
-                      >
-                        <Typography>{ separateDigits({ number: this.state.invoice.newProduct.totalPrice }) }</Typography>
-                      </ListItem>
-                      <ListItem style={{width:'10%'}}
-                        className={ classes.addFactorProductsNestedListItem }
-                        key={ generateKey() }
-                      >
-                        <IconButton 
-                          onClick={this.onAddNewProductToInvoice}
-                        >
-                          <Icon>add_circle</Icon>
-                        </IconButton>
-                      </ListItem>
-                    </List>
-                  </ListItem>
+                        <Icon>add_circle</Icon>
+                      </IconButton>
+                    </ListItem>
+                  </List>
+                </ListItem>
               </List>
             </GridItem>
           </GridContainer>
@@ -761,19 +761,19 @@ class AddInvoicePage extends React.Component {
                     return province._id === this.state.invoice.address.provinceId;
                   }) ?
                   this.props.provinces
-                  .find(province => {
-                    return province._id === this.state.invoice.address.provinceId;
-                  })
-                  .cities
-                  .map(cityInProvince => {
-                    return (
-                      <MenuItem key={cityInProvince._id} value={cityInProvince._id}>
-                        { cityInProvince.name }
-                      </MenuItem>
-                    );
-                  }                  
-                ): null
-              }
+                    .find(province => {
+                      return province._id === this.state.invoice.address.provinceId;
+                    })
+                    .cities
+                    .map(cityInProvince => {
+                      return (
+                        <MenuItem key={cityInProvince._id} value={cityInProvince._id}>
+                          { cityInProvince.name }
+                        </MenuItem>
+                      );
+                    }                  
+                    ): null
+                }
               </Select>
             </GridItem>
             <GridItem xs={12} sm={12} md={12}
@@ -903,10 +903,10 @@ class AddInvoicePage extends React.Component {
             
             
             <ToastMessage
-                variant={this.state.message.type}
-                message={this.state.message.text}
-                open={this.state.message.show}
-              />
+              variant={this.state.message.type}
+              message={this.state.message.text}
+              open={this.state.message.show}
+            />
           </div>
         </div>
       

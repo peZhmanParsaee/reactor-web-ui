@@ -2,24 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';    
     
 class MainApp extends React.Component {      
-    constructor(props) {    
-      super(props);            
-      this.state = {    
-         city: "Alwar",    
-      }    
-   }   
+  constructor(props) {    
+    super(props);            
+    this.state = {    
+      city: "Alwar",    
+    }    
+  }   
      
-   componentDidMount(){  
-       setInterval(()=>{  
-           this.setState(()=>{  
-               return { city: "Alwar"}  
-           })  
-       },1000)  
+  componentDidMount(){  
+    setInterval(()=>{  
+      this.setState(()=>{  
+        return { city: "Alwar"}  
+      })  
+    },1000)  
   
-       setInterval(()=>{  
-        this.setState(()=>{  
-            return { city: "Jaipur"}  
-        })  
+    setInterval(()=>{  
+      this.setState(()=>{  
+        return { city: "Jaipur"}  
+      })  
     },6000)  
     // setInterval(()=>{  
     //     this.setState(()=>{  
@@ -27,29 +27,29 @@ class MainApp extends React.Component {
     //     })  
     //     console.log('---------')
     // },2000)  
-   }  
+  }  
   
-   shouldComponentUpdate(nextProps,nextState){  
-       return nextState.city!=this.state.city?true:false;  
+  shouldComponentUpdate(nextProps,nextState){  
+    return nextState.city!=this.state.city?true:false;  
     //    return true;
-   }  
-   render() {    
-       console.log('Main Component render '+Date.now());    
-      return (    
-          <div>      
-         <h2>      
-            {this.state.title}     
-         </h2>      
-         <p>User Name: {this.props.name}</p>    
-         <p>User Age: {this.props.age}</p>    
-         </div>    
-      );      
-   }    
+  }  
+  render() {    
+    console.log('Main Component render '+Date.now());    
+    return (    
+      <div>      
+        <h2>      
+          {this.state.title}     
+        </h2>      
+        <p>User Name: {this.props.name}</p>    
+        <p>User Age: {this.props.age}</p>    
+      </div>    
+    );      
+  }    
        
 }      
 MainApp.propTypes ={    
-    name:PropTypes.string.isRequired,
-    age:PropTypes.number.isRequired
+  name:PropTypes.string.isRequired,
+  age:PropTypes.number.isRequired
 }    
     
 MainApp.defaultProps = {    

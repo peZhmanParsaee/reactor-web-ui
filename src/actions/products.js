@@ -19,13 +19,13 @@ export const startAddProduct = (productData = {}) => {
     const product = { name, stock, unitPrice };
 
     return axios.post(`${API_ENDPOINT}/api/v1/product`, product)
-              .then(insertedProductRes => {
-                const opStatus = insertedProductRes.data;
+      .then(insertedProductRes => {
+        const opStatus = insertedProductRes.data;
 
-                dispatch(addProduct(opStatus.payload));
+        dispatch(addProduct(opStatus.payload));
 
-                return opStatus;
-              });
+        return opStatus;
+      });
   };
 };
 

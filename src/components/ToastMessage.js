@@ -62,14 +62,14 @@ class ToastMessage extends React.Component {
     const Icon = variantIcon[variant];
     return (
       <Snackbar
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
-          open={this.state.open}
-          autoHideDuration={6000}
-          onClose={this.handleClose}
-        >
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={this.state.open}
+        autoHideDuration={6000}
+        onClose={this.handleClose}
+      >
         <SnackbarContent
           className={classNames(classes[variant], className)}
           aria-describedby="client-snackbar"

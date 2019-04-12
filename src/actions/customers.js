@@ -33,14 +33,14 @@ export const startSearchCustomers = (customerName) => {
         q: customerName
       }
     })
-    .then(res => {
-      const opStatus = res.data;
+      .then(res => {
+        const opStatus = res.data;
 
-      if (opStatus.status === true) {
-        dispatch(setCustomers(res.data.payload));        
-      }
+        if (opStatus.status === true) {
+          dispatch(setCustomers(res.data.payload));        
+        }
 
-      return opStatus;
-    });
+        return opStatus;
+      });
   };
 };

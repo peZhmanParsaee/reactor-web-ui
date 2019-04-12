@@ -57,7 +57,7 @@ class SalesReportPage extends React.PureComponent {
       selectedDate2: moment(),
       startDate: null,
       endDate: null
-     };
+    };
   }
   componentWillMount () {
     const { openDrawer } = this.props.location.state;
@@ -103,10 +103,10 @@ class SalesReportPage extends React.PureComponent {
                 style={{ width: 228 }}
               >{ invoice.deliverAtFormatted }</ListItem>
             </List>
-         </ListItem>
-       );
+          </ListItem>
+        );
        
-       jsxItems.push(jsx);
+        jsxItems.push(jsx);
       }
       if (this.state.invoiceType === "INVOICE_ITEMS") {
         const jsx = (
@@ -126,14 +126,14 @@ class SalesReportPage extends React.PureComponent {
                 { invoice.invoiceNo }
               </ListItem>
             </List>           
-         </ListItem>
-       );
+          </ListItem>
+        );
        
-       jsxItems.push(jsx);
+        jsxItems.push(jsx);
       }
     }
 
-     return jsxItems;
+    return jsxItems;
   };
   loadMoreItems() {
     if (this.state.finished === false) {
@@ -210,9 +210,9 @@ class SalesReportPage extends React.PureComponent {
       <Fragment>
         
         {this.state.open ? 
-            <div style={{ position: "fixed", zIndex: 1, left: 0, right: 0, top: 0, bottom: 0 }} 
-                onClick={() => this.handleDrawerClose()} /> 
-            : null
+          <div style={{ position: "fixed", zIndex: 1, left: 0, right: 0, top: 0, bottom: 0 }} 
+            onClick={() => this.handleDrawerClose()} /> 
+          : null
         }
         
         <AppBar

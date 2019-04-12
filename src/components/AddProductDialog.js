@@ -114,7 +114,7 @@ class AddProductDialog extends React.Component {
       (persianRex.letter.test(name) 
       || persianRex.text.test(name)             
       || !name) && name.length <= 50
-      ) {
+    ) {
       this.setState(() => ({ name }));
     }
   };
@@ -150,12 +150,12 @@ class AddProductDialog extends React.Component {
         <Dialog 
           open={this.props.show}
           onClose={this.onCloseDialog}
-          >
+        >
           <DialogTitle>اضافه کردن محصول جدید</DialogTitle>
           <DialogContent>
             <form>
               <FormControl fullWidth 
-              className={classes.textField}>
+                className={classes.textField}>
                 <InputLabel htmlFor="name"
                   className="form-control__input-label"
                 >نام محصول</InputLabel>
@@ -205,11 +205,11 @@ class AddProductDialog extends React.Component {
           </DialogContent>
           <DialogActions>
             { this.state.showAddProductLoading && (
-                <CircularProgress
-                  size={24}
-                  thickness={4}
-                />
-              )
+              <CircularProgress
+                size={24}
+                thickness={4}
+              />
+            )
             }
             
             <Button onClick={this.onAddProduct}
