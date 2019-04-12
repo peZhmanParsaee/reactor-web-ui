@@ -5,29 +5,9 @@ import {
 } from "../styles";
 
 const appStyle = theme => ({
-  wrapper: {
-    position: "relative",
-    top: "0",
-    // height: "100vh",
-    direction: "rtl",
-    paddingBottom: 100
-  },
-  mainPanel: {
-    [theme.breakpoints.up("md")]: {
-      width: `calc(100% - ${drawerWidth}px)`
-    },
-    overflow: "auto",
-    position: "relative",
-    float: "left",
-    ...transition,
-    maxHeight: "100%",
-    width: "100%",
-    overflowScrolling: "touch"
-  },
-  content: {
-    marginTop: "70px",
-    padding: "30px 15px",
-    // minHeight: "calc(100vh - 123px)"
+  mainContent: {
+    // marginTop: "70px",
+    padding: "0px 15px"
   },
   container,
   map: {
@@ -102,6 +82,13 @@ const appStyle = theme => ({
     width: 150,
     justifyContent: "center",
     marginLeft: 15
+  },
+  reportInfiniteScrollContainer: {
+    maxHeight: 400, 
+    overflow: "auto",
+    justifyContent: "center",
+    textAlign: "center",
+    marginTop: 50
   },
   '@media screen and (max-width: 800px)': {
     reportListItemRow: {
