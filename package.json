@@ -10,7 +10,8 @@
     "dev-server": "webpack-dev-server --open",
     "start": "node server/server.js",
     "test": "set NODE_ENV=test && npm run lint && jest",
-    "lint": "eslint src/**/*.js"
+    "lint": "eslint src/**/*.js",
+    "fix-indents": "eslint --fix --parser babel-eslint --ext js --no-eslintrc  --rule 'indent: [1,2,{SwitchCase: 1}]' src/"
   },
   "dependencies": {
     "@date-io/jalaali": "^1.0.4",
@@ -55,6 +56,7 @@
     "webpack-dev-server": "^3.2.1"
   },
   "devDependencies": {
+    "babel-eslint": "^10.0.1",
     "babel-plugin-transform-regenerator": "^6.26.0",
     "eslint": "5.16.0",
     "eslint-plugin-jest": "^22.4.1",
