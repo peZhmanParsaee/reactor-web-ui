@@ -14,7 +14,7 @@ const Header = (props) => {
   const { classes } = props;
 
   return (
-    <header>
+    <header className={classes.header}>
       <AppBar position="static">
         <Toolbar>
           <TypoGraphy variant="h6" color="inherit" noWrap>
