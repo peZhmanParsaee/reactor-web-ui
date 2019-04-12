@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import moment from 'moment-jalaali';
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -12,7 +12,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Stepper from '@material-ui/core/Stepper';;
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -37,7 +36,6 @@ import AddProductDialog from './AddProductDialog';
 import ToastMessage from './ToastMessage';
 import GridContainer from './Grid/GridContainer';
 import GridItem from './Grid/GridItem';
-import Footer from "./Footer";
 
 // local dependencies
 import appStyle from '../styles/jss/layouts/appStyle';
@@ -864,60 +862,55 @@ class AddInvoicePage extends React.Component {
     }
     
     return (
-      <React.Fragment>
-        <div className={classes.wrapper}>
-          <div className={classes.root}>
-            <CssBaseline />
-            <Header/>
-            
-              <div className={classes.mainContent}>
-                <div className={classes.container}>
-                  <GridContainer>
-                    <GridItem xs={12}>
-                      <Stepper activeStep={activeStep}>
-                        { steps.map((label, index) => {
-                          const props = {};
-                          const labelProps = {};
-                          return (
-                            <Step key={label} {...props}>
-                              <StepLabel 
-                                {...labelProps}>{label}</StepLabel>
-                            </Step>
-                          );
-                        })}
-                      </Stepper>        
-                      { stepContent }
-                      <div className="stepper_actions">
-                        <Button disabled={activeStep === 0}
-                          onClick={this.handleBackStep}
-                          className={classes.button}
-                        >
-                          بازگشت
-                        </Button>
-                        <Button variant="contained"
-                          color="primary"
-                          onClick={this.handleNextStep}
-                          className={classes.button}
-                        >
-                          { this.state.activeStep === 1 ? "ثبت" : "مرحله بعد" }
-                        </Button>
-                      </div>
-                    </GridItem>
-                  </GridContainer>
-                  
-                  
-                  <ToastMessage
-                      variant={this.state.message.type}
-                      message={this.state.message.text}
-                      open={this.state.message.show}
-                    />
+      <Fragment>
+        
+        <Header/>
+        
+        <div className={classes.mainContent}>
+          <div className={classes.container}>
+            <GridContainer>
+              <GridItem xs={12}>
+                <Stepper activeStep={activeStep}>
+                  { steps.map((label, index) => {
+                    const props = {};
+                    const labelProps = {};
+                    return (
+                      <Step key={label} {...props}>
+                        <StepLabel 
+                          {...labelProps}>{label}</StepLabel>
+                      </Step>
+                    );
+                  })}
+                </Stepper>        
+                { stepContent }
+                <div className={classes.stepperActions}>
+                  <Button disabled={activeStep === 0}
+                    onClick={this.handleBackStep}
+                    className={classes.button}
+                  >
+                    بازگشت
+                  </Button>
+                  <Button variant="contained"
+                    color="primary"
+                    onClick={this.handleNextStep}
+                    className={classes.button}
+                  >
+                    { this.state.activeStep === 1 ? "ثبت" : "مرحله بعد" }
+                  </Button>
                 </div>
-              </div>
+              </GridItem>
+            </GridContainer>
             
+            
+            <ToastMessage
+                variant={this.state.message.type}
+                message={this.state.message.text}
+                open={this.state.message.show}
+              />
           </div>
-        </div>        
-        <Footer />
-      </React.Fragment>
+        </div>
+      
+      </Fragment>
     );
   }
 }

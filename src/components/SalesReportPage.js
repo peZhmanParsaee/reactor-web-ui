@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import axios from 'axios';
 import moment from 'moment-jalaali';
 import PropTypes from 'prop-types';
@@ -202,213 +202,200 @@ class SalesReportPage extends React.PureComponent {
     moment.loadPersian();
     
     return (
-      <div>
-        <div className={classes.wrapper}>
-          <div classes="root">
-            {this.state.open ? 
-                <div style={{ position: "fixed", zIndex: 1, left: 0, right: 0, top: 0, bottom: 0 }} 
-                    onClick={() => this.handleDrawerClose()} /> 
-                : null
-            }
-            <CssBaseline />
-            <AppBar
-              position="fixed"
-              className={classNames(classes.appBar, {
-                [classes.appBarShift]: open,
-              })}
+      <Fragment>
+        
+        {this.state.open ? 
+            <div style={{ position: "fixed", zIndex: 1, left: 0, right: 0, top: 0, bottom: 0 }} 
+                onClick={() => this.handleDrawerClose()} /> 
+            : null
+        }
+        
+        <AppBar
+          position="fixed"
+          className={classNames(classes.appBar, {
+            [classes.appBarShift]: open,
+          })}
+        >
+          <Toolbar disableGutters={!open}>
+            <IconButton
+              color="inherit"
+              aria-label="Open drawer"
+              onClick={this.handleDrawerOpen}
+              className={classNames(classes.menuButton, open && classes.hide)}
             >
-              <Toolbar disableGutters={!open}>
-                <IconButton
-                  color="inherit"
-                  aria-label="Open drawer"
-                  onClick={this.handleDrawerOpen}
-                  className={classNames(classes.menuButton, open && classes.hide)}
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Typography variant="h6" color="inherit" noWrap>
-                  گزارش فروش
-                </Typography>
-              </Toolbar>
-            </AppBar>
-            
-            <Drawer
-              className={classes.drawer}
-              anchor="left"
-              open={this.state.open}
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-              onClose={(open) => {
-                this.setState(() => ({ open: false }));
-              }}
-            >
-              <div className={classes.drawerHeader}>
-                <IconButton onClick={this.handleDrawerClose}>
-                  { <ChevronRightIcon /> }
-                </IconButton>
-              </div>
-              <Divider />
-              <List>
-                <ListItem key={1}>
-                  <ListItemText primary="انتخاب بازه زمانی"
-                    style={{
-                      textAlign: "right"
-                    }}
-                  />
-                </ListItem>
-                
-                <ListItem key={5}>
-                  <MuiPickersUtilsProvider utils={JalaliUtils} locale="fa">
-                    <div className="picker">
-                      <DatePicker
-                        clearable
-                        okLabel="تأیید"
-                        cancelLabel="لغو"
-                        clearLabel="پاک کردن"
-                        labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "از تاریخ")}
-                        value={this.state.startDate}
-                        onChange={this.handleStartDateChange}
-                        animateYearScrolling={false}                        
-                      />
-                    </div>
-                  </MuiPickersUtilsProvider>
-
-                </ListItem>
-                <ListItem key={6}>
-                  <MuiPickersUtilsProvider utils={JalaliUtils} locale="fa">
-                    <div className="picker">
-                      <DatePicker
-                        clearable
-                        okLabel="تأیید"
-                        cancelLabel="لغو"
-                        clearLabel="پاک کردن"
-                        labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "تا تاریخ")}
-                        value={this.state.endDate}
-                        onChange={this.handleEndDateChange}
-                        animateYearScrolling={false}
-                      />
-                    </div>
-                  </MuiPickersUtilsProvider>
-                </ListItem>
-              </List>
-              <Divider />
-              <List>
-                <ListItem key={11}>
-                  <ListItemText
-                    style={{
-                      textAlign: "right"
-                    }}
-                  >نوع فاکتور</ListItemText>  
-                </ListItem>
-                <ListItem key={12}>
-                  <FormControl component="fieldset" className={classes.formControl}>
-                    <RadioGroup
-                      aria-label="gender"
-                      name="invoiceType"
-                      className={classes.group}
-                      value={this.state.invoiceType}
-                      onChange={this.onInvoiceTypeChange}
-                    >
-                      <FormControlLabel
-                        value="INVOICE_ITEMS"
-                        control={<Radio color="primary" />}
-                        label="آیتم های فاکتور"
-                        labelPlacement="end"
-                      />
-                      <FormControlLabel
-                        value="INVOICES"
-                        control={<Radio color="primary" />}
-                        label="فاکتور"
-                        labelPlacement="end"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </ListItem>
-                <ListItem key={13}>
-                  <ListItemSecondaryAction>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={this.onSeachClick}
-                    >
-                      <SearchIcon></SearchIcon>
-                      جستجو
-                    </Button>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              </List>
-            </Drawer>
-            
-
-              <div className={classes.content}>
-                <div className={classes.container}>
-                  <div
-                    style={{ 
-                      maxHeight: 400, 
-                      overflow: "auto",
-                      justifyContent: "center",
-                      textAlign: "center"
-                    }}
-                    ref="iScroll" >
-
-                    {
-                      this.state.invoiceType === 'INVOICES' && (
-                        <List>
-                          <ListItem className={ classes.reportListItemHeadRow }>
-                            <List className={ classes.reportNestedListItemHeadRow }>
-                              <ListItem className={ classes.reportNestedListItemHead }>نام خریدار</ListItem>
-                              <ListItem className={ classes.reportNestedListItemHead }>مبلغ</ListItem>
-                              <ListItem className={ classes.reportNestedListItemHead }
-                                style={{
-                                  width: 120
-                                }}
-                              >شماره فاکتور</ListItem>
-                              <ListItem 
-                                className={ classes.reportNestedListItemHead }
-                                style={{ width: 220 }}
-                              >زمان تحویل</ListItem>
-                            </List>
-                          </ListItem>
-                          
-                          { this.displayInvoices() }
-                          
-                        </List>
-                      )
-                    }
-
-                    {
-                      this.state.invoiceType === 'INVOICE_ITEMS' && (
-                        <List>
-                          <ListItem className={ classes.reportListItemHeadRow }>
-                            <List className={ classes.reportNestedListItemHeadRow }>
-                              <ListItem className={ classes.reportNestedListItemHead }>نام خریدار</ListItem>
-                              <ListItem className={ classes.reportNestedListItemHead }>نام محصول</ListItem>
-                              <ListItem className={ classes.reportNestedListItemHead }
-                                style={{
-                                  width: 120
-                                }}
-                              >شماره فاکتور</ListItem>
-                            </List>
-                          </ListItem>
-                          
-                          { this.displayInvoices() }
-                          
-                        </List>
-                      )
-                    }
-                    
-                    
-                    {this.state.loadingState ? <p className="loading"> در حال بارگزاری ادامه داده ها ...</p> : ""}
-            
-                  </div>
-                </div>              
-              </div>
-            
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" color="inherit" noWrap>
+              گزارش فروش
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        
+        <Drawer
+          className={classes.drawer}
+          anchor="left"
+          open={this.state.open}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          onClose={(open) => {
+            this.setState(() => ({ open: false }));
+          }}
+        >
+          <div className={classes.drawerHeader}>
+            <IconButton onClick={this.handleDrawerClose}>
+              { <ChevronRightIcon /> }
+            </IconButton>
           </div>
-        </div>        
-        <Footer />
-      </div>
+          <Divider />
+          <List>
+            <ListItem key={1}>
+              <ListItemText primary="انتخاب بازه زمانی"
+                style={{
+                  textAlign: "right"
+                }}
+              />
+            </ListItem>
+            
+            <ListItem key={5}>
+              <MuiPickersUtilsProvider utils={JalaliUtils} locale="fa">
+                <div className="picker">
+                  <DatePicker
+                    clearable
+                    okLabel="تأیید"
+                    cancelLabel="لغو"
+                    clearLabel="پاک کردن"
+                    labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "از تاریخ")}
+                    value={this.state.startDate}
+                    onChange={this.handleStartDateChange}
+                    animateYearScrolling={false}                        
+                  />
+                </div>
+              </MuiPickersUtilsProvider>
+
+            </ListItem>
+            <ListItem key={6}>
+              <MuiPickersUtilsProvider utils={JalaliUtils} locale="fa">
+                <div className="picker">
+                  <DatePicker
+                    clearable
+                    okLabel="تأیید"
+                    cancelLabel="لغو"
+                    clearLabel="پاک کردن"
+                    labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "تا تاریخ")}
+                    value={this.state.endDate}
+                    onChange={this.handleEndDateChange}
+                    animateYearScrolling={false}
+                  />
+                </div>
+              </MuiPickersUtilsProvider>
+            </ListItem>
+          </List>
+          <Divider />
+          <List>
+            <ListItem key={11}>
+              <ListItemText
+                style={{
+                  textAlign: "right"
+                }}
+              >نوع فاکتور</ListItemText>  
+            </ListItem>
+            <ListItem key={12}>
+              <FormControl component="fieldset" className={classes.formControl}>
+                <RadioGroup
+                  aria-label="gender"
+                  name="invoiceType"
+                  className={classes.group}
+                  value={this.state.invoiceType}
+                  onChange={this.onInvoiceTypeChange}
+                >
+                  <FormControlLabel
+                    value="INVOICE_ITEMS"
+                    control={<Radio color="primary" />}
+                    label="آیتم های فاکتور"
+                    labelPlacement="end"
+                  />
+                  <FormControlLabel
+                    value="INVOICES"
+                    control={<Radio color="primary" />}
+                    label="فاکتور"
+                    labelPlacement="end"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </ListItem>
+            <ListItem key={13}>
+              <ListItemSecondaryAction>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={this.onSeachClick}
+                >
+                  <SearchIcon></SearchIcon>
+                  جستجو
+                </Button>
+              </ListItemSecondaryAction>
+            </ListItem>
+          </List>
+        </Drawer>
+        
+        <div className={classes.mainContent}>
+          <div className={classes.reportInfiniteScrollContainer}
+            ref="iScroll" >
+
+            {
+              this.state.invoiceType === 'INVOICES' && (
+                <List>
+                  <ListItem className={ classes.reportListItemHeadRow }>
+                    <List className={ classes.reportNestedListItemHeadRow }>
+                      <ListItem className={ classes.reportNestedListItemHead }>نام خریدار</ListItem>
+                      <ListItem className={ classes.reportNestedListItemHead }>مبلغ</ListItem>
+                      <ListItem className={ classes.reportNestedListItemHead }
+                        style={{
+                          width: 120
+                        }}
+                      >شماره فاکتور</ListItem>
+                      <ListItem 
+                        className={ classes.reportNestedListItemHead }
+                        style={{ width: 220 }}
+                      >زمان تحویل</ListItem>
+                    </List>
+                  </ListItem>
+                  
+                  { this.displayInvoices() }
+                  
+                </List>
+              )
+            }
+
+            {
+              this.state.invoiceType === 'INVOICE_ITEMS' && (
+                <List>
+                  <ListItem className={ classes.reportListItemHeadRow }>
+                    <List className={ classes.reportNestedListItemHeadRow }>
+                      <ListItem className={ classes.reportNestedListItemHead }>نام خریدار</ListItem>
+                      <ListItem className={ classes.reportNestedListItemHead }>نام محصول</ListItem>
+                      <ListItem className={ classes.reportNestedListItemHead }
+                        style={{
+                          width: 120
+                        }}
+                      >شماره فاکتور</ListItem>
+                    </List>
+                  </ListItem>
+                  
+                  { this.displayInvoices() }
+                  
+                </List>
+              )
+            }
+            
+            
+            {this.state.loadingState ? <p className="loading"> در حال بارگزاری ادامه داده ها ...</p> : ""}
+    
+          </div>
+        </div>
+        
+      </Fragment>
     );
   }
 } 
