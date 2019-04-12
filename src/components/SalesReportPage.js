@@ -59,7 +59,12 @@ class SalesReportPage extends React.PureComponent {
       endDate: null
      };
   }
-
+  componentWillMount () {
+    const { openDrawer } = this.props.location.state;
+    if (openDrawer !== undefined && openDrawer !== null) {
+      this.setState(() => ({ open: openDrawer }));
+    }
+  }
   handleStartDateChange = date => {
     this.setState(() => ({ startDate: date }));
   };

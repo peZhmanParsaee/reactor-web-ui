@@ -24,7 +24,12 @@ function Footer(props) {
             <ListItem className={classes.inlineBlock} component={Link} to="/add-invoice">
               <ListItemText primary="ثبت فاکتور جدید" className={classes.block} />
             </ListItem>
-            <ListItem className={classes.inlineBlock} component={Link} to="/sales-report">
+            <ListItem className={classes.inlineBlock} component={Link} to={{
+              pathname: '/sales-report',
+              state: {
+                openDrawer: true
+              }
+            }} >
               <ListItemText primary="گزارش فروش" className={classes.block} />
             </ListItem>
           </List>
