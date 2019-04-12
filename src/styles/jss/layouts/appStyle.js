@@ -141,6 +141,10 @@ const appStyle = theme => ({
   textCenter: {
     textAlign: "center",
     justifyContent: "center"
+  },
+  stepperActions: {
+    textAlign: "left",
+    marginTop: 10
   }
 });
 
