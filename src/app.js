@@ -2,19 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { create } from 'jss';
+import rtl from 'jss-rtl';
 import { StylesProvider, jssPreset, createGenerateClassName } from '@material-ui/styles';
-import rtl from 'jss-rtl'
-import App from './playground/App';
-import MainApp from './playground/MainApp';
-import MainAppPureComponent from './playground/MainAppPureComponent';
+
 
 import configureStore from './store/configureStore';
-import AppRouter from './router/AppRouter';
 import { startSetProvinces } from './actions/provinces';
 import { startSetProducts } from './actions/products';
 import Loading from './components/Loading';
+import AppRouter from './router/AppRouter';
 
 import './styles/styles.scss';
+
 
 const jss = create({
   plugins: [...jssPreset().plugins, rtl()],
@@ -42,7 +41,7 @@ const jsx = (
 // ReactDOM.render(<MainAppPureComponent />, document.getElementById('app'));
 
 
-ReactDOM.render(<Loading />, document.getElementById('app'));
+ReactDOM.render(jsx, document.getElementById('app'));
 
 store.dispatch(startSetProvinces()).then(() => {
   store.dispatch(startSetProducts()).then(() => {
