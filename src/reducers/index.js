@@ -5,6 +5,7 @@ import productsReducer from './productsReducer';
 import provincesReducer from './provincesReducer';
 import loadingReducer from './loadingReducer';
 import messageReducer from './messageReducer';
+import addInvoiceFormReducer from './addInvoiceFormReducer';
 
 export default combineReducers({
   customers: customersReducer,
@@ -12,5 +13,6 @@ export default combineReducers({
   products: productsReducer,
   provinces: provincesReducer,
   loading: loadingReducer,
-  message: messageReducer
+  message: messageReducer,
+  addInvoiceForm: addInvoiceFormReducer
 });
