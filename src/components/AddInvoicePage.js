@@ -122,13 +122,10 @@ class AddInvoicePage extends React.Component {
     history.pushState(null, null, location.href);
     window.onpopstate = (event) => {
       if (this.state.activeStep === 1) {
-        // history.pushState(null, null, location.href);
+        history.pushState(null, null, location.href);
         this.handleBackStep();
       } else if (this.state.activeStep === 0) {
         history.go(-1);
-      } else if (this.state.activeStep === 2) {
-        // history.pushState(null, null, location.href);
-        this.handleBackStep();
       }
     };
     console.log('AddInvoicePage Component DID MOUNT!')
@@ -281,8 +278,6 @@ class AddInvoicePage extends React.Component {
     }.bind(this), 2000);
   }
   onRemoveProductFromInvoice = (_id) => {
-    console.log(_id);
-
     this.setState({
       invoice: {
         ...this.state.invoice,
@@ -318,11 +313,6 @@ class AddInvoicePage extends React.Component {
         activeStep: this.state.activeStep + 1
       }));      
     } else if (this.state.activeStep === 1) {
-      return this.setState(() => ({
-        activeStep: this.state.activeStep + 1
-      }));
-
-
       if (this.state.invoice.products.length 
         && this.state.invoice.customerId
         && this.state.invoice.address.provinceId
@@ -380,10 +370,6 @@ class AddInvoicePage extends React.Component {
   };
   handleBackStep = () => {
     if (this.state.activeStep === 1) {
-      this.setState(() => ({
-        activeStep: this.state.activeStep - 1
-      }));
-    } else if (this.state.activeStep === 2) {
       this.setState(() => ({
         activeStep: this.state.activeStep - 1
       }));
