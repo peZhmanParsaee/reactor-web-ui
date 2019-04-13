@@ -47,7 +47,7 @@ const styles1 = theme => ({
   },
 });
 
-class ToastMessage extends React.Component {
+class ToastMessage extends React.PureComponent {
   state = {
     open: this.props.open
   };

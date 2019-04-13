@@ -16,7 +16,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Header from './Header';
 import homePageStyle from '../styles/jss/components/homePageStyle';
 
-class HomePage extends React.Component {
+class HomePage extends React.PureComponent {
   constructor(props) {
     super(props);
   }
