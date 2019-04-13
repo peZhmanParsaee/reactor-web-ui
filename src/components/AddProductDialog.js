@@ -23,7 +23,7 @@ import ToastMessage from './ToastMessage';
 import appStyle from '../styles/jss/layouts/appStyle';
 
 
-class AddProductDialog extends React.Component {  
+class AddProductDialog extends React.PureComponent {  
   state = {
     name: '',
     stock: '',
