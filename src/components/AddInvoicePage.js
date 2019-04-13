@@ -47,6 +47,13 @@ import { startAddInvoice } from '../actions/invoices';
 import { startAddProduct } from '../actions/products';
 import { startSearchCustomers } from '../actions/customers';
 import { showGlobalMessage } from '../actions/message';
+import { 
+  invoiceFormSetAddProductDialogOpenState,
+  invoiceFormSetCustomerId,
+  invoiceFormSetSuggestions,
+  invoiceFormSetSuggestion
+} 
+from '../actions/addInvoiceForm';
 
 
 function renderInputComponent(inputProps) {
@@ -113,7 +120,7 @@ class AddInvoicePage extends React.Component {
     if (res.data.status === true) {
       this.setState(() => ({            
         invoice: {
-          ...this.state.invoice,
+          ...this.props.addInvoiceForm.invoice,
           no: res.data.payload
         }
       }));
@@ -121,43 +128,44 @@ class AddInvoicePage extends React.Component {
 
     history.pushState(null, null, location.href);
     window.onpopstate = (event) => {
-      if (this.state.activeStep === 1) {
+      if (this.props.addInvoiceForm.activeStep === 1) {
         history.pushState(null, null, location.href);
         this.handleBackStep();
-      } else if (this.state.activeStep === 0) {
+      } else if (this.props.addInvoiceForm.activeStep === 0) {
         history.go(-1);
       }
     };
-    console.log('AddInvoicePage Component DID MOUNT!')
-  }
-  componentWillMount() {
-    console.log('AddInvoicePage componentWillMount');
+    // console.log('AddInvoicePage Component DID MOUNT!')
   }
   componentWillUnmount() {
     window.onpopstate = () => {};
-    console.log('AddInvoicePage componentWillUnmount');
+    // console.log('AddInvoicePage componentWillUnmount');
   }  
-  componentWillMount() {
-    console.log('Component WILL MOUNT!')
-  }
-  componentWillReceiveProps(newProps) {    
-    console.log('Component WILL RECIEVE PROPS!');
-  }
-  shouldComponentUpdate(newProps, newState) {
-    console.log('shouldComponentUpdate')
-    return true;
-  }
-  componentWillUpdate(nextProps, nextState) {
-    console.log('Component WILL UPDATE!');
-  }
-  componentDidUpdate(prevProps, prevState) {
-    console.log('Component DID UPDATE!')
-  }
+  // componentWillMount() {    
+  //   console.log(`this.props.addInvoiceForm`);
+  //   console.log(this.props.addInvoiceForm);
+  //   console.log('Component WILL MOUNT!')
+  // }
+  // componentWillReceiveProps(newProps) {    
+  //   console.log('Component WILL RECIEVE PROPS!');
+  // }
+  // shouldComponentUpdate(newProps, newState) {
+  //   console.log('shouldComponentUpdate')
+  //   return true;
+  // }
+  // componentWillUpdate(nextProps, nextState) {
+  //   console.log('Component WILL UPDATE!');
+  // }
+  // componentDidUpdate(prevProps, prevState) {
+  //   console.log('Component DID UPDATE!')
+  // }
   onOpenAddProductDialog = (e) => {
-    this.setState(() => ({ isAddProductDialogOpen: true }));
+    // this.setState(() => ({ isAddProductDialogOpen: true }));
+    this.props.invoiceFormSetAddProductDialogOpenState(true);
   };
   closeAddProductDialog = ({ opStatus = {} } = {}) => {    
-    this.setState(() => ({ isAddProductDialogOpen: false }));
+    // this.setState(() => ({ isAddProductDialogOpen: false }));
+    this.props.invoiceFormSetAddProductDialogOpenState(false);
     if (opStatus.status === true) {
       this.showMessage({
         type: "success",
@@ -165,18 +173,20 @@ class AddInvoicePage extends React.Component {
       });
     }
   };
-  onCustomerChange = (event) => {
-    event.persist();
-    const selectedCustomerId = event.target.value ;
-    this.setState(() => ({ invoice: { ...this.state.invoice, customerId: selectedCustomerId } }));
-  };
+  // onCustomerChange = (event) => {
+  //   event.persist();
+  //   const selectedCustomerId = event.target.value ;
+  //   console.log(`selectedCustomerId: ${selectedCustomerId}`);
+  //   // this.setState(() => ({ invoice: { ...this.props.addInvoiceForm.invoice, customerId: selectedCustomerId } }));
+  //   this.props.invoiceFormSetCustomerId(selectedCustomerId);
+  // };
   onNewProductSelectChange = (event) => {
     event.persist();
     const _id = event.target.value;
     const product = this.props.products.find(x => x._id == _id);
     this.setState(() => ({ 
       invoice: { 
-        ...this.state.invoice,
+        ...this.props.addInvoiceForm.invoice,
         newProduct: { 
           _id: event.target.value,
           count: 1,
@@ -193,11 +203,11 @@ class AddInvoicePage extends React.Component {
     const count = event.target.value;
     if (count.match(/^[1-9]{1}[0-9]{0,2}$/)) {
       this.setState(() => ({
-        invoice: { ...this.state.invoice, 
+        invoice: { ...this.props.addInvoiceForm.invoice, 
           newProduct:{ 
-            ...this.state.invoice.newProduct, 
+            ...this.props.addInvoiceForm.invoice.newProduct, 
             count: parseInt(event.target.value, 10),
-            totalPrice: parseInt(event.target.value * this.state.invoice.newProduct.unitPrice)
+            totalPrice: parseInt(event.target.value * this.props.addInvoiceForm.invoice.newProduct.unitPrice)
           }
         }}))
     }
@@ -208,14 +218,14 @@ class AddInvoicePage extends React.Component {
     console.log(count);
     if (count.match(/^[1-9]{1}[0-9]{0,2}$/)) {
       console.log('matched');
-      const tempInvoiceProducts = this.state.invoice.products;
-      for (let i = 0; i < this.state.invoice.products.length; i++) {
-        if (this.state.invoice.products[i].id === event.target.id) {
+      const tempInvoiceProducts = this.props.addInvoiceForm.invoice.products;
+      for (let i = 0; i < this.props.addInvoiceForm.invoice.products.length; i++) {
+        if (this.props.addInvoiceForm.invoice.products[i].id === event.target.id) {
           tempInvoiceProducts[i].count = count;
           tempInvoiceProducts[i].totalPrice = count * tempInvoiceProducts[i].unitPrice;
           this.setState(() => ({
             invoice: {
-              ...this.state.invoice,
+              ...this.props.addInvoiceForm.invoice,
               products: tempInvoiceProducts
             }
           }))
@@ -224,28 +234,28 @@ class AddInvoicePage extends React.Component {
     }
   };
   onAddNewProductToInvoice = (event) => {
-    if (!this.state.invoice.newProduct._id || !this.state.invoice.newProduct.count) {
+    if (!this.props.addInvoiceForm.invoice.newProduct._id || !this.props.addInvoiceForm.invoice.newProduct.count) {
       this.showMessage({ type: "warning", text: "خطای اعتبارسنجی، نام محصول و تعداد اجباری است." });
       return;
     }
     this.addNewProductToInvoice();
   };
   addNewProductToInvoice = () => {
-    const product = this.props.products.find(x => x._id == this.state.invoice.newProduct._id);
+    const product = this.props.products.find(x => x._id == this.props.addInvoiceForm.invoice.newProduct._id);
     
     const newInvoiceProduct = {
       id: generateKey(),
-      productId: this.state.invoice.newProduct._id,
-      count: this.state.invoice.newProduct.count,
-      unitPrice: this.state.invoice.newProduct.unitPrice,
-      totalPrice: this.state.invoice.newProduct.totalPrice,
+      productId: this.props.addInvoiceForm.invoice.newProduct._id,
+      count: this.props.addInvoiceForm.invoice.newProduct.count,
+      unitPrice: this.props.addInvoiceForm.invoice.newProduct.unitPrice,
+      totalPrice: this.props.addInvoiceForm.invoice.newProduct.totalPrice,
       name: product.name
     };
     this.setState(() => ({
       invoice: {
-        ...this.state.invoice,
+        ...this.props.addInvoiceForm.invoice,
         products: [
-          ...this.state.invoice.products, 
+          ...this.props.addInvoiceForm.invoice.products, 
           newInvoiceProduct
         ], 
         newProduct: {
@@ -254,7 +264,7 @@ class AddInvoicePage extends React.Component {
           unitPrice: 0,
           totalPrice: 0
         },
-        totalPrice: this.state.invoice.totalPrice + newInvoiceProduct.totalPrice
+        totalPrice: this.props.addInvoiceForm.invoice.totalPrice + newInvoiceProduct.totalPrice
       }
     }));
   };
@@ -280,28 +290,28 @@ class AddInvoicePage extends React.Component {
   onRemoveProductFromInvoice = (_id) => {
     this.setState({
       invoice: {
-        ...this.state.invoice,
-        products: this.state.invoice.products.filter(invoiceProduct => invoiceProduct.id != _id)
+        ...this.props.addInvoiceForm.invoice,
+        products: this.props.addInvoiceForm.invoice.products.filter(invoiceProduct => invoiceProduct.id != _id)
       }
     });
   };
   handleNextStep = () => {
     // return this.props.history.push('/');;
     // return  setTimeout(() => {console.log('--------'); this.props.history.push('/');}, 2000);
-    if (this.state.activeStep === 0) {
-      if (!this.state.invoice.products.length && !this.state.invoice.customerId) {
+    if (this.props.addInvoiceForm.activeStep === 0) {
+      if (!this.props.addInvoiceForm.invoice.products.length && !this.props.addInvoiceForm.invoice.customerId) {
         this.showMessage({ 
           type: "warning",
           text: "انتخاب مشتری و افزودن حداقل یک محصول اجباری است."
         });
         return;
-      } else if (!this.state.invoice.products.length) {
+      } else if (!this.props.addInvoiceForm.invoice.products.length) {
         this.showMessage({ 
           type: "warning",
           text: "افزودن حداقل یک محصول اجباری است."
         });
         return;
-      } else if (!this.state.invoice.customerId) {
+      } else if (!this.props.addInvoiceForm.invoice.customerId) {
         this.showMessage({ 
           type: "warning",
           text: "انتخاب مشتری اجباری است."
@@ -310,17 +320,17 @@ class AddInvoicePage extends React.Component {
       }
       
       this.setState(() => ({
-        activeStep: this.state.activeStep + 1
+        activeStep: this.props.addInvoiceForm.activeStep + 1
       }));      
-    } else if (this.state.activeStep === 1) {
-      if (this.state.invoice.products.length 
-        && this.state.invoice.customerId
-        && this.state.invoice.address.provinceId
-        && this.state.invoice.address.cityId
-        && this.state.invoice.deliverAfter
-        && this.state.invoice.deliverAfterTimeUnit
+    } else if (this.props.addInvoiceForm.activeStep === 1) {
+      if (this.props.addInvoiceForm.invoice.products.length 
+        && this.props.addInvoiceForm.invoice.customerId
+        && this.props.addInvoiceForm.invoice.address.provinceId
+        && this.props.addInvoiceForm.invoice.address.cityId
+        && this.props.addInvoiceForm.invoice.deliverAfter
+        && this.props.addInvoiceForm.invoice.deliverAfterTimeUnit
       ) {
-        let { newProduct, ...invoice } = this.state.invoice;
+        let { newProduct, ...invoice } = this.props.addInvoiceForm.invoice;
         const invoiceData = {
           no: invoice.no,
           date: invoice.date,
@@ -369,9 +379,9 @@ class AddInvoicePage extends React.Component {
     }
   };
   handleBackStep = () => {
-    if (this.state.activeStep === 1) {
+    if (this.props.addInvoiceForm.activeStep === 1) {
       this.setState(() => ({
-        activeStep: this.state.activeStep - 1
+        activeStep: this.props.addInvoiceForm.activeStep - 1
       }));
     }
   };
@@ -380,7 +390,7 @@ class AddInvoicePage extends React.Component {
     if (provinceId) {
       this.setState(() => ({
         invoice: {
-          ...this.state.invoice,
+          ...this.props.addInvoiceForm.invoice,
           address: {
             provinceId: provinceId
           }
@@ -392,9 +402,9 @@ class AddInvoicePage extends React.Component {
     const cityId = event.target.value;
     this.setState(() => ({
       invoice: {
-        ...this.state.invoice,
+        ...this.props.addInvoiceForm.invoice,
         address: {
-          ...this.state.invoice.address,
+          ...this.props.addInvoiceForm.invoice.address,
           cityId
         }
       }
@@ -404,7 +414,7 @@ class AddInvoicePage extends React.Component {
     const mailType = event.target.value;
     this.setState(() => ({
       invoice: {
-        ...this.state.invoice,
+        ...this.props.addInvoiceForm.invoice,
         mailType
       }
     }));
@@ -414,7 +424,7 @@ class AddInvoicePage extends React.Component {
     if (deliverAfter.match(/^[1-9]{1}[0-9]{0,1}$/)) {
       this.setState(() => ({
         invoice: {
-          ...this.state.invoice,
+          ...this.props.addInvoiceForm.invoice,
           deliverAfter
         }
       }));
@@ -424,47 +434,61 @@ class AddInvoicePage extends React.Component {
     const deliverAfterTimeUnit = event.target.value;
     this.setState(() => ({
       invoice: {
-        ...this.state.invoice,
+        ...this.props.addInvoiceForm.invoice,
         deliverAfterTimeUnit
       }
     }));
   };
   handleSuggestionsFetchRequested = ({ value }) => {
+    console.log(`handleSuggestionsFetchRequested`);
     this.getSuggestions(value)
       .then(suggestions => {
-        this.setState({
-          suggestions
-        });
+        this.props.invoiceFormSetSuggestions(suggestions);
+        console.log(`suggestions`);
+        console.log(suggestions);
+        // this.setState({
+        //   suggestions
+        // });
       });    
   };
   handleSuggestionsClearRequested = () => {
-    this.setState({
-      suggestions: [],
-    });
+    this.props.invoiceFormSetSuggestions([]);
+    // this.setState({
+    //   suggestions: [],
+    // });
   };
   handleChange = name => (event, { newValue }) => {
+    console.log(`handleChange`);
+    console.log(newValue);
     const selectedCustomer = this.props.customers.find(x => x.fullName === newValue);
         
     if (selectedCustomer) {
-      this.setState({
-        [name]: newValue,
-        invoice: { 
-          ...this.state.invoice,
-          customerId: selectedCustomer._id
-        }
-      });
+      this.props.invoiceFormSetSuggestion({ [name]: newValue, customerId: selectedCustomer._id });
+
+      // this.setState({
+      //   [name]: newValue,
+      //   invoice: { 
+      //     ...this.props.addInvoiceForm.invoice,
+      //     customerId: selectedCustomer._id
+      //   }
+      // });
     } else {
-      this.setState({
-        [name]: newValue,
-        invoice: { 
-          ...this.state.invoice,
-          customerId: null
-        }
-      });
+      this.props.invoiceFormSetSuggestion({ [name]: newValue, customerId: null });
+
+      // this.setState({
+      //   [name]: newValue,
+      //   invoice: { 
+      //     ...this.props.addInvoiceForm.invoice,
+      //     customerId: null
+      //   }
+      // });
     }
     
   };
   renderSuggestion = (suggestion, { query, isHighlighted }) => {
+    console.log('renderSuggestion');
+    console.log('suggestion');
+    console.log(suggestion);
     const matches = match(suggestion.fullName, query);
     const parts = parse(suggestion.fullName, matches);
 
@@ -502,8 +526,11 @@ class AddInvoicePage extends React.Component {
     }
   };
   getSuggestionValue = (suggestion) => {
+    console.log(`getSuggestionValue`);
+    console.log(suggestion);
+    
     return suggestion.fullName;
-  };  
+  };
   render() {
     console.log('render');
 
@@ -514,7 +541,7 @@ class AddInvoicePage extends React.Component {
 
     const autosuggestProps = {
       renderInputComponent,
-      suggestions: this.state.suggestions,
+      suggestions: this.props.addInvoiceForm.suggestions,
       onSuggestionsFetchRequested: this.handleSuggestionsFetchRequested,
       onSuggestionsClearRequested: this.handleSuggestionsClearRequested,
       getSuggestionValue: this.getSuggestionValue,
@@ -529,13 +556,13 @@ class AddInvoicePage extends React.Component {
               <Typography style={{fontWeight: 'bold'}}>
                 شماره فاکتور
               </Typography>
-              <span>{ this.state.invoice.no }</span>
+              <span>{ this.props.addInvoiceForm.invoice.no }</span>
             </GridItem>
             <GridItem xs={12} sm={12} md={6} style={{marginBottom: '15px'}}>
               <Typography style={{fontWeight: 'bold'}}>
                 تاریخ امروز
               </Typography>
-              <span>{ this.state.invoice.date }</span>
+              <span>{ this.props.addInvoiceForm.invoice.date }</span>
             </GridItem>          
             <GridItem xs={12} sm={12} md={6}
               className="autosuggest"
@@ -550,7 +577,7 @@ class AddInvoicePage extends React.Component {
                   inputProps={{
                     classes,
                     placeholder: 'نام و نام خانوادگی',
-                    value: this.state.single,
+                    value: this.props.addInvoiceForm.single,
                     onChange: this.handleChange('single'),
                   }}
                   theme={{
@@ -570,7 +597,11 @@ class AddInvoicePage extends React.Component {
           </GridContainer>
           <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
-                
+              <div>
+                {
+                  JSON.stringify(this.props.addInvoiceForm.suggestions)
+                }
+              </div>
               <List>
 
                 <ListItem className={ classes.addFactorProductsListItemHead } key={ generateKey() }>
@@ -598,7 +629,7 @@ class AddInvoicePage extends React.Component {
                   
                 
                 { 
-                  this.state.invoice.products.map((product, index) => {
+                  this.props.addInvoiceForm.invoice.products.map((product, index) => {
                     return (
                       <ListItem key={product.id}
                         className={ classes.addFactorProductsListItem }
@@ -661,12 +692,12 @@ class AddInvoicePage extends React.Component {
                         <Icon>add_circle</Icon>
                       </IconButton>
                       <Select
-                        value={this.state.invoice.newProduct._id}
+                        value={this.props.addInvoiceForm.invoice.newProduct._id}
                         onChange={this.onNewProductSelectChange}
                         className={classes.selectBox}
                       >
                         {this.props.products.filter(product => {
-                          const found = this.state.invoice.products.find(invoiceProduct => {
+                          const found = this.props.addInvoiceForm.invoice.products.find(invoiceProduct => {
                             return invoiceProduct.productId === product._id;
                           });
                           return !found;
@@ -685,7 +716,7 @@ class AddInvoicePage extends React.Component {
                     >
                       <TextField
                         type="number"
-                        value={this.state.invoice.newProduct.count}
+                        value={this.props.addInvoiceForm.invoice.newProduct.count}
                         onChange={this.onNewProductCountChange}
                         ref={(input) => { this.newProductCountInput = input; }} 
                         className="text-center"
@@ -696,13 +727,13 @@ class AddInvoicePage extends React.Component {
                       className={ classes.addFactorProductsNestedListItem }
                       key={ generateKey() }
                     >
-                      <Typography>{ separateDigits({ number: this.state.invoice.newProduct.unitPrice, showCurrency: true }) }</Typography>
+                      <Typography>{ separateDigits({ number: this.props.addInvoiceForm.invoice.newProduct.unitPrice, showCurrency: true }) }</Typography>
                     </ListItem>
                     <ListItem style={{width:'20%'}}
                       className={ classes.addFactorProductsNestedListItem }
                       key={ generateKey() }
                     >
-                      <Typography>{ separateDigits({ number: this.state.invoice.newProduct.totalPrice }) }</Typography>
+                      <Typography>{ separateDigits({ number: this.props.addInvoiceForm.invoice.newProduct.totalPrice }) }</Typography>
                     </ListItem>
                     <ListItem style={{width:'10%'}}
                       className={ classes.addFactorProductsNestedListItem }
@@ -722,7 +753,7 @@ class AddInvoicePage extends React.Component {
           <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
               <AddProductDialog 
-                show={this.state.isAddProductDialogOpen} 
+                show={this.props.addInvoiceForm.isAddProductDialogOpen} 
                 onClose={this.closeAddProductDialog}
               />
             </GridItem>
@@ -746,7 +777,7 @@ class AddInvoicePage extends React.Component {
                 استان
               </Typography>
               <Select
-                value={this.state.invoice.address.provinceId}
+                value={this.props.addInvoiceForm.invoice.address.provinceId}
                 onChange={this.onProvinceChange}
                 className={classes.selectBox}
               >
@@ -772,17 +803,17 @@ class AddInvoicePage extends React.Component {
                 شهر
               </Typography>
               <Select
-                value={this.state.invoice.address.cityId}
+                value={this.props.addInvoiceForm.invoice.address.cityId}
                 onChange={this.onCityChange}
                 className={classes.selectBox}
               >
                 {this.props.provinces
                   .find(province => {
-                    return province._id === this.state.invoice.address.provinceId;
+                    return province._id === this.props.addInvoiceForm.invoice.address.provinceId;
                   }) ?
                   this.props.provinces
                     .find(province => {
-                      return province._id === this.state.invoice.address.provinceId;
+                      return province._id === this.props.addInvoiceForm.invoice.address.provinceId;
                     })
                     .cities
                     .map(cityInProvince => {
@@ -811,7 +842,7 @@ class AddInvoicePage extends React.Component {
                   aria-label="MailType"
                   name="mailType"
                   className={classes.group}
-                  value={this.state.invoice.mailType}
+                  value={this.props.addInvoiceForm.invoice.mailType}
                   onChange={this.onMailTypeChange}
                   style={{display: 'flex', flexDirection: 'row'}}
                 >
@@ -835,7 +866,7 @@ class AddInvoicePage extends React.Component {
                 <div style={{display: 'flex', flexDirection: 'row'}}>
                   <TextField
                     type="number"
-                    value={this.state.invoice.deliverAfter}
+                    value={this.props.addInvoiceForm.invoice.deliverAfter}
                     onChange={this.ondeliverAfterChange}
                     style={{
                       display: "inline-block",
@@ -844,7 +875,7 @@ class AddInvoicePage extends React.Component {
                   />
 
                   <Select
-                    value={this.state.invoice.deliverAfterTimeUnit}
+                    value={this.props.addInvoiceForm.invoice.deliverAfterTimeUnit}
                     onChange={this.onDeliverAfterTimeUnit}
                     className={classes.selectBox}
                     style={{
@@ -915,7 +946,7 @@ class AddInvoicePage extends React.Component {
                     onClick={this.handleNextStep}
                     className={classes.button}
                   >
-                    { this.state.activeStep === 1 ? "ثبت" : "مرحله بعد" }
+                    { this.props.addInvoiceForm.activeStep === 1 ? "ثبت" : "مرحله بعد" }
                   </Button>
                 </div>
               </GridItem>
@@ -923,9 +954,9 @@ class AddInvoicePage extends React.Component {
             
             
             <ToastMessage
-              variant={this.state.message.type}
-              message={this.state.message.text}
-              open={this.state.message.show}
+              variant={this.props.addInvoiceForm.message.type}
+              message={this.props.addInvoiceForm.message.text}
+              open={this.props.addInvoiceForm.message.show}
             />
           </div>
         </div>
@@ -943,7 +974,8 @@ const mapStateToProps = (state) => {
   return {
     products: state.products,
     customers: state.customers,
-    provinces: state.provinces
+    provinces: state.provinces,
+    addInvoiceForm: state.addInvoiceForm
   };
 };
 
@@ -951,7 +983,12 @@ const mapDispatchToProps = (dispatch) => ({
   startAddInvoice: (invoice) => dispatch(startAddInvoice(invoice)),
   startAddProduct: (product) => dispatch(startAddProduct(product)),
   startSearchCustomers: (customerName) => dispatch(startSearchCustomers(customerName)),
-  showGlobalMessage: (message) => dispatch(showGlobalMessage(message))
+  showGlobalMessage: (message) => dispatch(showGlobalMessage(message)),
+  
+  invoiceFormSetAddProductDialogOpenState: (openState) => dispatch(invoiceFormSetAddProductDialogOpenState(openState)),
+  invoiceFormSetCustomerId: (customerId) => dispatch(invoiceFormSetCustomerId(customerId)),
+  invoiceFormSetSuggestions: (suggestions) => dispatch(invoiceFormSetSuggestions(suggestions)),
+  invoiceFormSetSuggestion: (suggestion) => dispatch(invoiceFormSetSuggestion(suggestion))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(appStyle)(AddInvoicePage));
