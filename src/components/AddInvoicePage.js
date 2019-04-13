@@ -122,12 +122,16 @@ class AddInvoicePage extends React.Component {
     history.pushState(null, null, location.href);
     window.onpopstate = (event) => {
       if (this.state.activeStep === 1) {
-        history.pushState(null, null, location.href);
+        // history.pushState(null, null, location.href);
         this.handleBackStep();
       } else if (this.state.activeStep === 0) {
         history.go(-1);
+      } else if (this.state.activeStep === 2) {
+        // history.pushState(null, null, location.href);
+        this.handleBackStep();
       }
     };
+    console.log('AddInvoicePage Component DID MOUNT!')
   }
   componentWillMount() {
     console.log('AddInvoicePage componentWillMount');
@@ -136,6 +140,22 @@ class AddInvoicePage extends React.Component {
     window.onpopstate = () => {};
     console.log('AddInvoicePage componentWillUnmount');
   }  
+  componentWillMount() {
+    console.log('Component WILL MOUNT!')
+  }
+  componentWillReceiveProps(newProps) {    
+    console.log('Component WILL RECIEVE PROPS!');
+  }
+  shouldComponentUpdate(newProps, newState) {
+    console.log('shouldComponentUpdate')
+    return true;
+  }
+  componentWillUpdate(nextProps, nextState) {
+    console.log('Component WILL UPDATE!');
+  }
+  componentDidUpdate(prevProps, prevState) {
+    console.log('Component DID UPDATE!')
+  }
   onOpenAddProductDialog = (e) => {
     this.setState(() => ({ isAddProductDialogOpen: true }));
   };
@@ -261,10 +281,12 @@ class AddInvoicePage extends React.Component {
     }.bind(this), 2000);
   }
   onRemoveProductFromInvoice = (_id) => {
+    console.log(_id);
+
     this.setState({
       invoice: {
         ...this.state.invoice,
-        products: this.state.invoice.products.filter(invoiceProduct => invoiceProduct._id != _id)
+        products: this.state.invoice.products.filter(invoiceProduct => invoiceProduct.id != _id)
       }
     });
   };
@@ -296,6 +318,11 @@ class AddInvoicePage extends React.Component {
         activeStep: this.state.activeStep + 1
       }));      
     } else if (this.state.activeStep === 1) {
+      return this.setState(() => ({
+        activeStep: this.state.activeStep + 1
+      }));
+
+
       if (this.state.invoice.products.length 
         && this.state.invoice.customerId
         && this.state.invoice.address.provinceId
@@ -345,12 +372,18 @@ class AddInvoicePage extends React.Component {
           text: "اطلاعات فاکتور را جهت ثبت کامل نمایید."
         });
       }
-    } else {
+    } 
+    
+    else {
       console.log('Error, Unrecognized step in add new invoice form');
     }
   };
   handleBackStep = () => {
     if (this.state.activeStep === 1) {
+      this.setState(() => ({
+        activeStep: this.state.activeStep - 1
+      }));
+    } else if (this.state.activeStep === 2) {
       this.setState(() => ({
         activeStep: this.state.activeStep - 1
       }));
@@ -484,8 +517,9 @@ class AddInvoicePage extends React.Component {
   };
   getSuggestionValue = (suggestion) => {
     return suggestion.fullName;
-  };
+  };  
   render() {
+    console.log('render');
 
     const { classes } = this.props;
     const steps = getSteps();
@@ -619,7 +653,7 @@ class AddInvoicePage extends React.Component {
                           >
                             <IconButton 
                               onClick={() => { 
-                                this.onRemoveProductFromInvoice(product._id);
+                                this.onRemoveProductFromInvoice(product.id);
                               }}
                             >
                               <Icon>remove_circle</Icon>
