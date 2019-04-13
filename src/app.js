@@ -4,7 +4,8 @@ import { Provider } from 'react-redux';
 import { create } from 'jss';
 import rtl from 'jss-rtl';
 import { StylesProvider, jssPreset, createGenerateClassName } from '@material-ui/styles';
-
+import App1 from './playground/context/app1';
+import App from './playground/App';
 
 import configureStore from './store/configureStore';
 import { startSetProvinces } from './actions/provinces';
