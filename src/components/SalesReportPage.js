@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import moment from 'moment-jalaali';
 import PropTypes from 'prop-types';
@@ -37,39 +38,53 @@ import { separateDigits } from '../helpers/numberHelpers';
 import { generateKey } from '../helpers/keyHelper';
 import appStyle from '../styles/jss/layouts/appStyle';
 
+// actions
+import { 
+  salesReportFormSetOpenDrawerState,
+  salesReportFormSetStartDate,
+  salesReportFormSetEndDate,
+  salesReportFormSetInvoiceType,
+  salesReportFormSetLoadingState,
+  salesReportFormSetListPage,
+  salesReportFormSetFinishListPages,
+  salesReportFormSearch
+} from '../actions/salesReportForm';
 
 class SalesReportPage extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      loadingState: false,
-      invoices: [],
-      offset: 0,
-      limit: 10,
-      finished: false,
-      open: false,
-      fromDate: null,
-      toDate: null,
-      fromDateCalendarFocused: false,
-      toDateCalendarFocused: false,
-      invoiceType: "INVOICE_ITEMS",
-      selectedDate: new Date('2014-08-18T21:11:54'),
-      selectedDate2: moment(),
-      startDate: null,
-      endDate: null
-    };
+    // this.state = {
+    //   loadingState: false,
+    //   invoices: [],
+    //   offset: 0,
+    //   limit: 10,
+    //   finished: false,
+    //   open: false,
+    //   fromDate: null,
+    //   toDate: null,
+    //   fromDateCalendarFocused: false,
+    //   toDateCalendarFocused: false,
+    //   invoiceType: "INVOICE_ITEMS",
+    //   selectedDate: new Date('2014-08-18T21:11:54'),
+    //   selectedDate2: moment(),
+    //   startDate: null,
+    //   endDate: null
+    // };
   }
   componentWillMount () {
     const { openDrawer } = this.props.location.state;
     if (openDrawer !== undefined && openDrawer !== null) {
-      this.setState(() => ({ open: openDrawer }));
+      // this.setState(() => ({ open: openDrawer }));
+      this.props.salesReportFormSetOpenDrawerState(openDrawer);
     }
   }
   handleStartDateChange = date => {
-    this.setState(() => ({ startDate: date }));
+    // this.setState(() => ({ startDate: date }));
+    this.props.salesReportFormSetStartDate(date);
   };
   handleEndDateChange = date => {
-    this.setState(() => ({ endDate: date }));
+    // this.setState(() => ({ endDate: date }));
+    this.props.salesReportFormSetEndDate(date);
   };
   componentDidMount() {
     this.loadMoreItems();
@@ -83,8 +98,8 @@ class SalesReportPage extends React.PureComponent {
   displayInvoices() {
     let jsxItems = [];
 
-    for (var invoice of this.state.invoices) {
-      if (this.state.invoiceType === "INVOICES") {
+    for (var invoice of this.props.salesReportForm.invoices) {
+      if (this.props.salesReportForm.invoiceType === "INVOICES") {
         const jsx = (
           <ListItem key={invoice._id} className={ this.props.classes.reportListItemRow }>
             <List className={ this.props.classes.reportNestedListItemRow }>
@@ -108,7 +123,7 @@ class SalesReportPage extends React.PureComponent {
        
         jsxItems.push(jsx);
       }
-      if (this.state.invoiceType === "INVOICE_ITEMS") {
+      if (this.props.salesReportForm.invoiceType === "INVOICE_ITEMS") {
         const jsx = (
           <ListItem key={generateKey()} className={ this.props.classes.reportListItemRow }>
             <List className={ this.props.classes.reportNestedListItemRow }>
@@ -136,28 +151,40 @@ class SalesReportPage extends React.PureComponent {
     return jsxItems;
   };
   loadMoreItems() {
-    if (this.state.finished === false) {
-      this.setState({ loadingState: true });
+    if (this.props.salesReportForm.finished === false) {
+      // this.setState({ loadingState: true });
+      this.props.salesReportFormSetLoadingState(true);
 
-      const startDateTimeStamp = this.state.startDate && moment(this.state.startDate).valueOf();
-      const endDateTimeStamp = this.state.endDate && moment(this.state.endDate).valueOf();
-      axios.get(`${API_ENDPOINT}/api/v1/invoice?invoiceType=${this.state.invoiceType}&offset=${this.state.offset}&limit=${this.state.limit}&fromDate=${startDateTimeStamp}&toDate=${endDateTimeStamp}`)
+      const startDateTimeStamp = this.props.salesReportForm.startDate && moment(this.props.salesReportForm.startDate).valueOf();
+      const endDateTimeStamp = this.props.salesReportForm.endDate && moment(this.props.salesReportForm.endDate).valueOf();
+      axios.get(`${API_ENDPOINT}/api/v1/invoice?invoiceType=${this.props.salesReportForm.invoiceType}&offset=${this.props.salesReportForm.offset}&limit=${this.props.salesReportForm.limit}&fromDate=${startDateTimeStamp}&toDate=${endDateTimeStamp}`)
         .then(res => {
           if (res.data.status === true) {
             if (res.data.payload.length) {
-              this.setState(() => ({
-                offset: this.state.offset + this.state.limit,
+              console.log(`res.data.payload`);
+              console.log(res.data.payload);
+              this.props.salesReportFormSetListPage({
+                offset: this.props.salesReportForm.offset + this.props.salesReportForm.limit,
                 loadingState: false,
-                invoices: [
-                  ...this.state.invoices,
-                  ...res.data.payload
-                ]
-              }));
+                listPage: res.data.payload
+              });
+              // this.setState(() => ({
+              //   offset: this.props.salesReportForm.offset + this.props.salesReportForm.limit,
+              //   loadingState: false,
+              //   invoices: [
+              //     ...this.props.salesReportForm.invoices,
+              //     ...res.data.payload
+              //   ]
+              // }));
             } else {
-              this.setState(() => ({
+              this.props.salesReportFormSetFinishListPages({
                 finished: true,
                 loadingState: false
-              }));
+              });
+              // this.setState(() => ({
+              //   finished: true,
+              //   loadingState: false
+              // }));
             }
           }
         });
@@ -166,36 +193,30 @@ class SalesReportPage extends React.PureComponent {
     }
   };
   handleDrawerOpen = () => {
-    this.setState(() => ({ open: true }));
+    // this.setState(() => ({ open: true }));
+    this.props.salesReportFormSetOpenDrawerState(true);
   };
   handleDrawerClose = () => {
-    this.setState(() => ({ open: false }));
-  };
-  onFromDateChange = (date) => {    
-    this.setState(() => ({ fromDate: date }));    
-  };
-  onFromDateFocusChange = ({ focused }) => {
-    this.setState(() => ({ fromDateCalendarFocused: focused }));
-  };
-  onToDateChange = (date) => {    
-    this.setState(() => ({ toDate: date }));
-  };
-  onToDateFocusChange = ({ focused }) => {
-    this.setState(() => ({ toDateCalendarFocused: focused }));
+    // this.setState(() => ({ open: false }));
+    this.props.salesReportFormSetOpenDrawerState(false);
   };
   onInvoiceTypeChange = (event) => {
     const invoiceType = event.target.value;
-    this.setState(() => ({ invoiceType, invoices: [] }));
+    // this.setState(() => ({ invoiceType, invoices: [] }));
+    this.props.salesReportFormSetInvoiceType(invoiceType);
   };
-  onSeachClick = () => {
-    this.setState(() => ({
-      offset: 0,
-      invoices: [],
-      open: false,
-      finished: false
-    }), () => {
-      this.loadMoreItems();
-    });
+  onSearchClick = () => {
+    this.props.salesReportFormSearch();
+    this.loadMoreItems();
+
+    // this.setState(() => ({
+    //   offset: 0,
+    //   invoices: [],
+    //   open: false,
+    //   finished: false
+    // }), () => {
+    //   this.loadMoreItems();
+    // });
   };
   handleDateChange = date => {
     this.setState({ selectedDate: date })
@@ -209,7 +230,7 @@ class SalesReportPage extends React.PureComponent {
     return (
       <Fragment>
         
-        {this.state.open ? 
+        {this.props.salesReportForm.open ? 
           <div style={{ position: "fixed", zIndex: 1, left: 0, right: 0, top: 0, bottom: 0 }} 
             onClick={() => this.handleDrawerClose()} /> 
           : null
@@ -239,12 +260,13 @@ class SalesReportPage extends React.PureComponent {
         <Drawer
           className={classes.drawer}
           anchor="left"
-          open={this.state.open}
+          open={this.props.salesReportForm.open}
           classes={{
             paper: classes.drawerPaper,
           }}
           onClose={(open) => {
-            this.setState(() => ({ open: false }));
+            // this.setState(() => ({ open: false }));
+            this.props.salesReportFormSetOpenDrawerState(false);
           }}
         >
           <div className={classes.drawerHeader}>
@@ -271,7 +293,7 @@ class SalesReportPage extends React.PureComponent {
                     cancelLabel="لغو"
                     clearLabel="پاک کردن"
                     labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "از تاریخ")}
-                    value={this.state.startDate}
+                    value={this.props.salesReportForm.startDate}
                     onChange={this.handleStartDateChange}
                     animateYearScrolling={false}                        
                   />
@@ -288,7 +310,7 @@ class SalesReportPage extends React.PureComponent {
                     cancelLabel="لغو"
                     clearLabel="پاک کردن"
                     labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "تا تاریخ")}
-                    value={this.state.endDate}
+                    value={this.props.salesReportForm.endDate}
                     onChange={this.handleEndDateChange}
                     animateYearScrolling={false}
                   />
@@ -311,7 +333,7 @@ class SalesReportPage extends React.PureComponent {
                   aria-label="gender"
                   name="invoiceType"
                   className={classes.group}
-                  value={this.state.invoiceType}
+                  value={this.props.salesReportForm.invoiceType}
                   onChange={this.onInvoiceTypeChange}
                 >
                   <FormControlLabel
@@ -334,7 +356,7 @@ class SalesReportPage extends React.PureComponent {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={this.onSeachClick}
+                  onClick={this.onSearchClick}
                 >
                   <SearchIcon></SearchIcon>
                   جستجو
@@ -345,11 +367,12 @@ class SalesReportPage extends React.PureComponent {
         </Drawer>
         
         <div className={classes.mainContent}>
+        
           <div className={classes.reportInfiniteScrollContainer}
             ref="iScroll" >
 
             {
-              this.state.invoiceType === 'INVOICES' && (
+              this.props.salesReportForm.invoiceType === 'INVOICES' && (
                 <List>
                   <ListItem className={ classes.reportListItemHeadRow }>
                     <List className={ classes.reportNestedListItemHeadRow }>
@@ -374,7 +397,7 @@ class SalesReportPage extends React.PureComponent {
             }
 
             {
-              this.state.invoiceType === 'INVOICE_ITEMS' && (
+              this.props.salesReportForm.invoiceType === 'INVOICE_ITEMS' && (
                 <List>
                   <ListItem className={ classes.reportListItemHeadRow }>
                     <List className={ classes.reportNestedListItemHeadRow }>
@@ -395,7 +418,7 @@ class SalesReportPage extends React.PureComponent {
             }
             
             
-            {this.state.loadingState ? <p className="loading"> در حال بارگزاری ادامه داده ها ...</p> : ""}
+            {this.props.salesReportForm.loadingState ? <p className="loading"> در حال بارگزاری ادامه داده ها ...</p> : ""}
     
           </div>
         </div>
@@ -409,4 +432,23 @@ SalesReportPage.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(appStyle)(SalesReportPage);
+
+const mapStateToProps = (state) => {
+  return {
+    salesReportForm: state.salesReportForm
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  // salesReportFormSetSuggestion: (suggestion) => dispatch(invoiceFormSetSuggestion(suggestion))
+  salesReportFormSetOpenDrawerState: (openDrawerState) => dispatch(salesReportFormSetOpenDrawerState(openDrawerState)),
+  salesReportFormSetStartDate: (startDate) => dispatch(salesReportFormSetStartDate(startDate)),
+  salesReportFormSetEndDate: (endDate) => dispatch(salesReportFormSetEndDate(endDate)),
+  salesReportFormSetInvoiceType: (invoiceType) => dispatch(salesReportFormSetInvoiceType(invoiceType)),
+  salesReportFormSetLoadingState: (loadingState) => dispatch(salesReportFormSetLoadingState(loadingState)),
+  salesReportFormSetListPage: ({ offset, loadingState, listPage }) => dispatch(salesReportFormSetListPage({ offset, loadingState, listPage })),
+  salesReportFormSetFinishListPages: ({ finished, loadingState }) => dispatch(salesReportFormSetFinishListPages({ finished, loadingState })),
+  salesReportFormSearch: () => dispatch(salesReportFormSearch())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(appStyle)(SalesReportPage));
