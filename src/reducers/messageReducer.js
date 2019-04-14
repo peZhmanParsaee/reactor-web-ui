@@ -1,11 +1,19 @@
 import * as TYPES from '../actions/types';
 
-const INITIAL_STATE = '';
+const INITIAL_STATE = {
+  type:'info',
+  text: '',
+  open: false
+};
 
-export default (state = INITIAL_STATE, actoin) => {
-  switch(actoin.type) {
+export default (state = INITIAL_STATE, action) => {
+  switch(action.type) {
     case TYPES.SHOW_MESSAGE:
-      return actoin.message;
+      return {
+        open: true,
+        type: action.payload.type,
+        text: action.payload.text
+      };
     default:
       return state;
   }
