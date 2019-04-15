@@ -378,6 +378,7 @@ class AddInvoicePage extends React.Component {
         newProductUnitPrice={this.props.addInvoiceForm.invoice.newProduct.unitPrice}
         newProductTotalPrice={this.props.addInvoiceForm.invoice.newProduct.totalPrice}
         onNewProductSelectChange={this.onNewProductSelectChange}
+        onRemoveProductFromInvoice={this.onRemoveProductFromInvoice}
         products={this.props.products}
         isAddProductDialogOpen={this.props.addInvoiceForm.isAddProductDialogOpen}
         onCloseAddProductDialog={this.closeAddProductDialog}
