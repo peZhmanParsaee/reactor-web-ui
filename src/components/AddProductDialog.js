@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import persianRex from 'persian-rex';
 
@@ -19,9 +19,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 // local dependencies
 import { startAddProduct } from '../actions/products';
-import ToastMessage from './ToastMessage';
 import appStyle from '../styles/jss/layouts/appStyle';
-
+import { showGlobalMessage } from '../actions/message';
 
 // actions
 import {
@@ -30,29 +29,11 @@ import {
   addProductDialogSetLoadingStatus
 } from '../actions/addProductDialog';
 
-import { showGlobalMessage } from '../actions/message';
 
 
-class AddProductDialog extends React.PureComponent {  
-  state = {
-    name: '',
-    stock: '',
-    unitPrice: '',
-    message: "خطای اعتبارسنجی، ورودیها را بررسی کنید.",
-    showMessage: false,
-    messageType: "warning",
-    showAddProductLoading: false
-  };
+class AddProductDialog extends PureComponent {  
   clearState() {
     this.props.addProductDialogClearState();
-    // this.setState(() => ({ 
-    //   name: '',
-    //   stock: '',
-    //   unitPrice: '',
-    //   message: "خطای اعتبارسنجی، ورودیها را بررسی کنید.",
-    //   showMessage: false,
-    //   messageType: "warning"
-    // }));
   };
   showMessage = ({ text, type }) => {
     this.props.showGlobalMessage({ type, text });
@@ -68,11 +49,9 @@ class AddProductDialog extends React.PureComponent {
 
     this.onShowAddProductLoading()
       .then(ack => {
-        // this.props.startAddProduct(this.state)
         this.props.startAddProduct(this.props.addProductDialog)
           .then(opStatus => {
             if (opStatus.status === true) {
-              // this.clearState();
               this.props.addProductDialogClearState();
               this.props.onCloseDialog({ opStatus });
             } else {
@@ -98,17 +77,12 @@ class AddProductDialog extends React.PureComponent {
     return new Promise((resolve, reject) => {
       this.props.addProductDialogSetLoadingStatus(true);
       resolve('done');
-      // this.setState(() => ({ showAddProductLoading: true }), () => {
-      //   resolve('done')
-      // });
     });
   };
   onHideAddProductLoading = () => {
     this.props.addProductDialogSetLoadingStatus(false);
-    // this.setState(() => ({ showAddProductLoading: false }));
   };
   onCloseDialog = () => {
-    // this.clearState();
     this.props.addProductDialogClearState();
     this.props.onCloseDialog();    
   };
@@ -120,7 +94,6 @@ class AddProductDialog extends React.PureComponent {
       || persianRex.text.test(name)             
       || !name) && name.length <= 50
     ) {
-      // this.setState(() => ({ name }));
       this.props.addProductDialogSetFormFields({ name });
     }
   };
@@ -128,7 +101,6 @@ class AddProductDialog extends React.PureComponent {
     event.persist();
     const stock = event.target.value;
     if (stock.match(/^[1-9]{1}[0-9]{0,6}$/)) {
-      // this.setState(() => ({ stock }));
       this.props.addProductDialogSetFormFields({ stock });
     }
   };
@@ -136,7 +108,6 @@ class AddProductDialog extends React.PureComponent {
     event.persist();
     const unitPrice = event.target.value;
     if (unitPrice.match(/^[1-9]{1}[0-9]{0,5}$/)) {
-      // this.setState(() => ({ unitPrice }));
       this.props.addProductDialogSetFormFields({ unitPrice });
     }
   };
@@ -153,8 +124,7 @@ class AddProductDialog extends React.PureComponent {
     const { classes } = this.props;
 
     return (
-      <React.Fragment>
-        
+      <Fragment>
         <Dialog 
           open={this.props.show}
           onClose={this.onCloseDialog}
@@ -213,11 +183,11 @@ class AddProductDialog extends React.PureComponent {
           </DialogContent>
           <DialogActions>
             { this.props.addProductDialog.showAddProductLoading && (
-              <CircularProgress
-                size={24}
-                thickness={4}
-              />
-            )
+                <CircularProgress
+                  size={24}
+                  thickness={4}
+                />
+              )
             }
             
             <Button onClick={this.onAddProduct}
@@ -234,23 +204,17 @@ class AddProductDialog extends React.PureComponent {
             </Button>
           </DialogActions>
         </Dialog>
-
-        {
-          // <ToastMessage
-          //   variant={this.props.addProductDialog.messageType}
-          //   message={this.props.addProductDialog.message}
-          //   open={this.props.addProductDialog.showMessage}
-          // />
-        }
-        
-      </React.Fragment>
-
+      </Fragment>
     );
   }
 }
 
 AddProductDialog.propTypes = {
-  classes: propTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
+  show: PropTypes.bool.isRequired,
+  onCloseDialog: PropTypes.func.isRequired,
+  addProductDialog: PropTypes.object.isRequired,
+  message: PropTypes.object.isRequired
 };
 
 const mapStatetoProps = (state) => {
