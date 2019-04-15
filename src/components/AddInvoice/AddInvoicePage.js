@@ -11,15 +11,15 @@ import Button from '@material-ui/core/Button';
 import Stepper from '@material-ui/core/Stepper';;
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 
-// components
+// local components
 import Header from '../shared/Header';
 import GridContainer from '../Grid/GridContainer';
 import GridItem from '../Grid/GridItem';
 import Step0 from '../AddInvoice/Step0';
 import Step1 from '../AddInvoice/Step1';
+import AutoSuggestInput from './AutoSuggestInput';
 
 // local dependencies
 import appStyle from '../../styles/jss/layouts/appStyle';
@@ -51,26 +51,6 @@ import {
 } 
 from '../../actions/addInvoiceForm';
 
-
-function renderInputComponent(inputProps) {
-  const { classes, inputRef = () => {}, ref, ...other } = inputProps;
-
-  return (
-    <TextField
-      fullWidth
-      InputProps={{
-        inputRef: node => {
-          ref(node);
-          inputRef(node);
-        },
-        classes: {
-          input: classes.input,
-        },
-      }}
-      {...other}
-    />
-  );
-}
 
 function getSteps() {
   return [ 'تکمیل اطلاعات اولیه', 'تاریخ تحویل' ];
@@ -358,7 +338,7 @@ class AddInvoicePage extends React.Component {
     let stepContent;
 
     const autosuggestProps = {
-      renderInputComponent,
+      renderInputComponent: AutoSuggestInput,
       suggestions: this.props.addInvoiceForm.suggestions,
       onSuggestionsFetchRequested: this.handleSuggestionsFetchRequested,
       onSuggestionsClearRequested: this.handleSuggestionsClearRequested,
