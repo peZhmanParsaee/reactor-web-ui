@@ -9,7 +9,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 
 // local components
-import AddInvoicePage from '../components/AddInvoicePage';
+import AddInvoicePage from '../components/AddInvoice/AddInvoicePage';
 import SalesReportPage from '../components/SalesReportPage';
 import Footer from '../components/Footer';
 import ToastMessage from '../components/ToastMessage';
