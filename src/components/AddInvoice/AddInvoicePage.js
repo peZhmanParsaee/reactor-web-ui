@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 
@@ -15,21 +15,21 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 
 // components
-import Header from './Header';
-import GridContainer from './Grid/GridContainer';
-import GridItem from './Grid/GridItem';
-import Step0 from './AddInvoice/Step0';
-import Step1 from './AddInvoice/Step1';
+import Header from '../Header';
+import GridContainer from '../Grid/GridContainer';
+import GridItem from '../Grid/GridItem';
+import Step0 from '../AddInvoice/Step0';
+import Step1 from '../AddInvoice/Step1';
 
 // local dependencies
-import appStyle from '../styles/jss/layouts/appStyle';
-import { generateKey } from '../helpers/keyHelper';
+import appStyle from '../../styles/jss/layouts/appStyle';
+import { generateKey } from '../../helpers/keyHelper';
 
 // actions
-import { startAddInvoice } from '../actions/invoices';
-import { startAddProduct } from '../actions/products';
-import { startSearchCustomers } from '../actions/customers';
-import { showGlobalMessage } from '../actions/message';
+import { startAddInvoice } from '../../actions/invoices';
+import { startAddProduct } from '../../actions/products';
+import { startSearchCustomers } from '../../actions/customers';
+import { showGlobalMessage } from '../../actions/message';
 import { 
   invoiceFormClearState,
   invoiceFormSetAddProductDialogOpenState,
@@ -48,7 +48,7 @@ import {
   invoiceFormSetDeliverAfterTimeUnit,
   invoiceFormSetActiveStep
 } 
-from '../actions/addInvoiceForm';
+from '../../actions/addInvoiceForm';
 
 
 function renderInputComponent(inputProps) {
@@ -371,12 +371,6 @@ class AddInvoicePage extends React.Component {
         invoiceDate={this.props.addInvoiceForm.invoice.date} 
         invoiceProducts={this.props.addInvoiceForm.invoice.products}
         handleAutoSuggestChage={this.handleChange}
-        autoSuggestTheme={{
-          container: classes.container,
-          suggestionsContainerOpen: classes.suggestionsContainerOpen,
-          suggestionsList: classes.suggestionsList,
-          suggestion: classes.suggestion
-        }}
         autosuggestProps={autosuggestProps}
         single={this.props.addInvoiceForm.single}
         newProductId={this.props.addInvoiceForm.invoice.newProduct._id}
@@ -389,6 +383,7 @@ class AddInvoicePage extends React.Component {
         onCloseAddProductDialog={this.closeAddProductDialog}
         onNewProductCountChange={this.onNewProductCountChange}
         onAddedProductCountChange={this.onAddedProductCountChange}
+        onOpenAddProductDialog={this.onOpenAddProductDialog}
       />
     } else if (activeStep == 1) {
       stepContent = <Step1 
@@ -404,7 +399,6 @@ class AddInvoicePage extends React.Component {
         deliverAfterTimeUnit={this.props.addInvoiceForm.invoice.deliverAfterTimeUnit}
         onDeliverAfterTimeUnitChange={this.onDeliverAfterTimeUnitChange}
       />
-      
     }
     
     return (
@@ -427,7 +421,7 @@ class AddInvoicePage extends React.Component {
                       </Step>
                     );
                   })}
-                </Stepper>        
+                </Stepper>
                 { stepContent }
                 <div className={classes.stepperActions}>
                   <Button disabled={activeStep === 0}
@@ -456,7 +450,7 @@ class AddInvoicePage extends React.Component {
 }
 
 AddInvoicePage.propTypes = {
-  classes: propTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => {
