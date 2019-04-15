@@ -5,7 +5,7 @@ const INITIAL_STATE = {
   activeStep: 0,    
   isAddProductDialogOpen: false,
   invoice: {
-    no: '',
+    no: 0,
     date: moment().format('jYYYY/jMM/jDD'),
     products: [],
     customerId: 0,
@@ -16,8 +16,8 @@ const INITIAL_STATE = {
       totalPrice: 0
     },
     address: {
-      provinceId: 0,
-      cityId: 0
+      provinceId: '',
+      cityId: ''
     },
     mailType: "registered",
     deliverAfter: "",
@@ -157,7 +157,7 @@ export default (state = INITIAL_STATE, action) => {
         invoice: {
           ...state.invoice,
           address: {
-            cityId: 0,
+            cityId: '',
             provinceId: action.payload.provinceId
           }
         }
