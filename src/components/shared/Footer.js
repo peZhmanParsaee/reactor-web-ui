@@ -10,7 +10,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from '@material-ui/core/ListItemText';
 
 // core components
-import footerStyle from "../styles/jss/components/footerStyle";
+import footerStyle from "../../styles/jss/components/footerStyle";
 
 function Footer(props) {
   const { classes } = props;

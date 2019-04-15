@@ -11,8 +11,8 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 // local components
 import AddInvoicePage from '../components/AddInvoice/AddInvoicePage';
 import SalesReportPage from '../components/SalesReportPage';
-import Footer from '../components/Footer';
-import ToastMessage from '../components/ToastMessage';
+import Footer from '../components/shared/Footer';
+import ToastMessage from '../components/shared/ToastMessage';
 
 // local dependencies
 import layoutStyle from '../styles/jss/layouts/layoutStyle';

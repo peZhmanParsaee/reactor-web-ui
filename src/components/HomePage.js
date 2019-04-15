@@ -13,7 +13,7 @@ import ReceiptIcon from '@material-ui/icons/Receipt';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 // local dependencies
-import Header from './Header';
+import Header from './shared/Header';
 import homePageStyle from '../styles/jss/components/homePageStyle';
 
 class HomePage extends React.PureComponent {

@@ -9,7 +9,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import TypoGraphy from '@material-ui/core/Typography';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 
-import headerStyle from '../styles/jss/components/headerStyle';
+import headerStyle from '../../styles/jss/components/headerStyle';
 
 const Header = (props) => {
   const { classes } = props;

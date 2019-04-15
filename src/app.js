@@ -11,7 +11,7 @@ import CreateClassSample from './playground/CreateClassSample';
 import configureStore from './store/configureStore';
 import { startSetProvinces } from './actions/provinces';
 import { startSetProducts } from './actions/products';
-import Loading from './components/Loading';
+import Loading from './components/shared/Loading';
 import AppRouter from './router/AppRouter';
 
 import './styles/styles.scss';

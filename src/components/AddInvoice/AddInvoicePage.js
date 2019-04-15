@@ -15,7 +15,7 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 
 // components
-import Header from '../Header';
+import Header from '../shared/Header';
 import GridContainer from '../Grid/GridContainer';
 import GridItem from '../Grid/GridItem';
 import Step0 from '../AddInvoice/Step0';
