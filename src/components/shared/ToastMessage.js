@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
 
 // @material-ui/core
 import Button from '@material-ui/core/Button';
@@ -17,6 +18,9 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import InfoIcon from '@material-ui/icons/Info';
 import CloseIcon from '@material-ui/icons/Close';
+
+// actions
+import { setMessageOpenState } from '../../actions/message';
 
 const variantIcon = {
   success: CheckCircleIcon,
@@ -52,25 +56,26 @@ const styles1 = theme => ({
 });
 
 class ToastMessage extends React.PureComponent {
-  state = {
-    open: this.props.open
-  };
   componentWillReceiveProps = (props) => {
-    this.setState(() => ({ open: props.open }));
+    // this.props.setMessageOpenState({ open: props.open });
   }
   handleClose = (event, reason) => {
-    this.setState(() => ({ open: false }));
+    console.log('handleClose');
+    this.props.setMessageOpenState({ open: false });
   };
   render() {
     const { classes, className, message, onClose, variant, open } = this.props;
     const Icon = variantIcon[variant];
+
+    console.log(this.props);
+
     return (
       <Snackbar
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'left',
         }}
-        open={this.state.open}
+        open={this.props.state.open}
         autoHideDuration={6000}
         onClose={this.handleClose}
       >
@@ -109,4 +114,12 @@ ToastMessage.propTypes = {
   variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
 };
 
-export default withStyles(styles1)(ToastMessage);
+const mapStateToProps = (state) => ({
+  state: state.message
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  setMessageOpenState: ({ open }) => dispatch(setMessageOpenState({ open }))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles1)(ToastMessage));

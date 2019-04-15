@@ -14,6 +14,11 @@ export default (state = INITIAL_STATE, action) => {
         type: action.payload.type,
         text: action.payload.text
       };
+    case TYPES.SET_MESSAGE_OPEN_STATE: 
+      return {
+        ...state,
+        open: action.payload.open
+      };
     default:
       return state;
   }

@@ -9,3 +9,10 @@ export const showGlobalMessage = ({ type, text }) => {
     }
   };
 };
+
+export const setMessageOpenState = ({ open }) => {
+  return {
+    type: TYPES.SET_MESSAGE_OPEN_STATE,
+    payload: { open }
+  };
+};
