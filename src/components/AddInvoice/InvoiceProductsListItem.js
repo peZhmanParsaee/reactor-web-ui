@@ -11,29 +11,34 @@ import TextField from '@material-ui/core/TextField';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 
+// local components
+import AddInvoiceContext from './AddInvoiceContext';
+
 // local dependencies
-import { generateKey } from '../../helpers/keyHelper';
 import { separateDigits } from '../../helpers/numberHelpers';
 import invoiceProductsListItemStyle from '../../styles/jss/components/addInvoice/invoiceProductsListItemStyle';
 
 class InvoiceProductListItem extends PureComponent {
-    render() {
-        const { classes } = this.props;
+  render() {
+    const { classes, itemKey } = this.props;
 
-        return (
-            <ListItem key={this.props.key}
-              className={ classes.addFactorProductsListItem }
-            >
+    return (
+      <ListItem key={itemKey}
+                className={ classes.addFactorProductsListItem }
+              >
+        <AddInvoiceContext.Consumer>
+          { context => {
+            return (
               <List className={ classes.addFactorProductsNestedList }>
                 <ListItem scope="product" style={{width:'30%'}}
                   className={ classes.addFactorProductsNestedListItem }
-                  key={ generateKey() }
+                  key={ `${itemKey}_1` }
                 >
                   { this.props.product.name }
                 </ListItem>
                 <ListItem style={{width:'20%'}}
                   className={ classes.addFactorProductsNestedListItem }
-                  key={ generateKey() }
+                  key={ `${itemKey}_2` }
                 >
                   <TextField
                     type="number"
@@ -46,38 +51,42 @@ class InvoiceProductListItem extends PureComponent {
                 </ListItem>
                 <ListItem style={{width:'20%'}}
                   className={ classes.addFactorProductsNestedListItem }
-                  key={ generateKey() }
+                  key={ `${itemKey}_3` }
                 >{ separateDigits({ number: this.props.product.unitPrice, showCurrency: true }) }</ListItem>
                 <ListItem 
                   style={{width:'20%'}}
                   className={ classes.addFactorProductsNestedListItem }
-                  key={ generateKey() }
+                  key={ `${itemKey}_4` }
                 >{ separateDigits({ number: this.props.product.totalPrice }) }</ListItem>
                 <ListItem style={{width:'10%'}}
                   className={ classes.addFactorProductsNestedListItem }
-                  key={ generateKey() }
+                  key={ `${itemKey}_5` }
                 >
                   <IconButton 
                     onClick={() => { 
-                      this.props.onRemoveProductFromInvoice(this.props.product.id);
+                      context.onRemoveProductFromInvoice(this.props.product.id);
                     }}
                   >
                     <Icon>remove_circle</Icon>
                   </IconButton>
                 </ListItem>
               </List>
-            </ListItem>
-        );
-    }
+            )}
+          }
+        </AddInvoiceContext.Consumer>
+      </ListItem>
+    );
+  }
 }
 
 InvoiceProductListItem.propTypes = {
-    classes: PropTypes.object.isRequired,
-    key: PropTypes.string.isRequired,
-    onAddedProductCountChange: PropTypes.func.isRequired,
-    product: PropTypes.object.isRequired,
-    onRemoveProductFromInvoice: PropTypes.func.isRequired
+  classes: PropTypes.object.isRequired,
+  itemKey: PropTypes.string.isRequired,
+  onAddedProductCountChange: PropTypes.func.isRequired,
+  product: PropTypes.object.isRequired
 };
+
+InvoiceProductListItem.contextType = AddInvoiceContext;
 
 const styles = theme => invoiceProductsListItemStyle;
 
