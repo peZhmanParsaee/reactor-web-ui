@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
+import { pure } from 'recompose';
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -52,4 +53,4 @@ Footer.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(footerStyle)(Footer);
+export default pure(withStyles(footerStyle)(Footer));

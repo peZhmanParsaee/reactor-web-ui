@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { pure } from 'recompose';
 
 const NotFoundPage = () => (
   <div>
@@ -7,4 +8,4 @@ const NotFoundPage = () => (
   </div>
 );
 
-export default NotFoundPage;
+export default pure(NotFoundPage);

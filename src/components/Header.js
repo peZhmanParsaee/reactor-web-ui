@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { pure, onlyUpdateForKeys } from 'recompose';
 
 // @material-ui/core
 import { withStyles } from '@material-ui/core/styles';
@@ -31,4 +32,4 @@ Header.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(headerStyle)(Header);
+export default pure(withStyles(headerStyle)(Header));
