@@ -452,6 +452,34 @@ class AddInvoicePage extends React.Component {
 
 AddInvoicePage.propTypes = {
   classes: PropTypes.object.isRequired,
+
+  // reducers
+  products: PropTypes.object.isRequired,
+  customers: PropTypes.object.isRequired,
+  provinces: PropTypes.object.isRequired,
+  addInvoiceForm: PropTypes.object.isRequired,
+
+  // dispatch funcs
+  startAddInvoice: PropTypes.func.isRequired,
+  startAddProduct: PropTypes.func.isRequired,
+  startSearchCustomers: PropTypes.func.isRequired,
+  showGlobalMessage: PropTypes.func.isRequired,
+  invoiceFormSetInvoiceNo: PropTypes.func.isRequired,
+  invoiceFormSetAddProductDialogOpenState: PropTypes.func.isRequired,
+  invoiceFormSetCustomerId: PropTypes.func.isRequired,
+  invoiceFormSetSuggestions: PropTypes.func.isRequired,
+  invoiceFormSetSuggestion: PropTypes.func.isRequired,
+  invoiceFormAddNewProductToInvoice: PropTypes.func.isRequired,
+  invoiceFormSetNewProduct: PropTypes.func.isRequired,
+  invoiceFormRemoveProductFromInvoiceById: PropTypes.func.isRequired,
+  invoiceFormSetInvoiceProductCount: PropTypes.func.isRequired,
+  invoiceFormSetProvinceId: PropTypes.func.isRequired,
+  invoiceFormSetCityId: PropTypes.func.isRequired,
+  invoiceFormSetMailType: PropTypes.func.isRequired,
+  invoiceFormSetDeliverAfter: PropTypes.func.isRequired,
+  invoiceFormSetDeliverAfterTimeUnit: PropTypes.func.isRequired,
+  invoiceFormSetActiveStep: PropTypes.func.isRequired,
+  invoiceFormClearState: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
