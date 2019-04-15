@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import GridContainer from '../Grid/GridContainer';
 import GridItem from '../Grid/GridItem';
@@ -164,5 +165,19 @@ class Step1 extends PureComponent {
     }
 }
 
-export default withStyles(appStyle)(Step1);
+Step1.propTypes = {
+    classes: PropTypes.object.isRequired,
+    provinceId: PropTypes.string.isRequired,
+    cityId: PropTypes.string.isRequired,
+    onProvinceChange: PropTypes.func.isRequired,
+    onCityChange: PropTypes.func.isRequired,
+    provinces: PropTypes.array.isRequired,
+    mailType: PropTypes.string.isRequired,
+    onMailTypeChange: PropTypes.func.isRequired,
+    deliverAfter: PropTypes.string.isRequired,
+    onDeliverAfterChange: PropTypes.func.isRequired,
+    deliverAfterTimeUnit: PropTypes.string.isRequired,
+    onDeliverAfterTimeUnitChange: PropTypes.func.isRequired
+};
 
+export default withStyles(appStyle)(Step1);
