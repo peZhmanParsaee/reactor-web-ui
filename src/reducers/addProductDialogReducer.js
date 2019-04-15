@@ -7,9 +7,6 @@ const INITIAL_STATE = {
 };
 
 export default (state = INITIAL_STATE, action) => {  
-  console.log(`action is: `);
-  console.log(action);
-  
   switch(action.type) {
     case TYPES.ADD_PRODUCT_DIALOG_SET_FORM_FIELDS:
         return {

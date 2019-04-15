@@ -6,17 +6,11 @@ import {
 
 const appStyle = theme => ({
   mainContent: {
-    // marginTop: "70px",
     padding: "0px 15px"
   },
   container,
   map: {
     marginTop: "70px"
-  },
-  iconContainer: { // define styles for icon container
-    // transform: 'scale(1)',
-    paddingRight: 0,
-    paddingLeft: "8px"
   },
   suggestionsContainerOpen: {
     position: 'absolute',
@@ -102,11 +96,9 @@ const appStyle = theme => ({
     },
   },
   addFactorProductsListItemHead: {
-    
   },
   addFactorProductsListItem: {
     textAlign: "center"
-
   },
   addFactorProductsNestedList: {
     display: 'flex', 
@@ -132,6 +124,16 @@ const appStyle = theme => ({
   stepperActions: {
     textAlign: "left",
     marginTop: 10
+  },
+  iconContainer: {
+    paddingLeft: 4
+  },
+  stepper: {
+    marginBottom: 13
+  },
+  stepLabel: {
+    fontWeight: "bold",
+    fontSize:10
   }
 });
 
