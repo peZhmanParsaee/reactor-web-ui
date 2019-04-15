@@ -19,21 +19,20 @@ import IconButton from '@material-ui/core/IconButton';
 
 // local dependencies
 import appStyle from '../../styles/jss/layouts/appStyle';
-import { generateKey } from '../../helpers/keyHelper';
 import { separateDigits } from '../../helpers/numberHelpers';
 
 // local components
 import AddProductDialog from '../AddProductDialog';
 import GridContainer from '../Grid/GridContainer';
 import GridItem from '../Grid/GridItem';
-import InvoiceProductListItem from './InvoiceProductsListItem';
+import InvoiceProductsListItem from './InvoiceProductsListItem';
 
 class Step0 extends PureComponent {
   render() {
     const { classes } = this.props;
 
     return (
-      <div className="container">
+      <div className={classes.container}>
         <GridContainer>
           <GridItem xs={12} sm={12} md={6} style={{marginBottom: '15px'}}>
             <Typography style={{fontWeight: 'bold'}}>
@@ -81,32 +80,32 @@ class Step0 extends PureComponent {
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <List>
-              <ListItem className={ classes.addFactorProductsListItemHead } key={ generateKey() }>
+              <ListItem className={ classes.addFactorProductsListItemHead } key={ `iplh_1` }>
                 <List className={ classes.addFactorProductsNestedList }>
                   <ListItem style={{width:'30%'}}
                     className={ classes.addFactorProductsNestedListItemHead }
-                    key={ generateKey() }
+                    key={ `iplh_1_1` }
                   >نام محصول</ListItem>
                   <ListItem style={{width:'20%'}}
                     className={ classes.addFactorProductsNestedListItemHead }
-                    key={ generateKey() }
+                    key={ `iplh_1_2` }
                   >تعداد</ListItem>
                   <ListItem style={{width:'20%'}}
                     className={ classes.addFactorProductsNestedListItemHead }
-                    key={ generateKey() }>قیمت واحد</ListItem>
+                    key={ `iplh_1_3` }>قیمت واحد</ListItem>
                   <ListItem style={{width:'20%'}}
                     className={ classes.addFactorProductsNestedListItemHead }
-                    key={ generateKey() }>قیمت کل</ListItem>
+                    key={ `iplh_1_4` }>قیمت کل</ListItem>
                   <ListItem style={{width:'10%'}}
-                    className={ classes.addFactorProductsNestedListItemHead }
-                    key={ generateKey() }></ListItem>
+                    key={ `iplh_1_5` }></ListItem>
                 </List>
               </ListItem>
               
               { 
                 this.props.invoiceProducts.map((product, index) => {
-                  return <InvoiceProductListItem 
-                    key={ generateKey(index) }
+                  return <InvoiceProductsListItem 
+                    key={ `ipli1_${index}` }
+                    itemKey={ `ipli_${index}_i` }
                     onAddedProductCountChange={ this.props.onAddedProductCountChange }
                     product={{
                       id: product.id,
@@ -115,16 +114,15 @@ class Step0 extends PureComponent {
                       count: product.count,
                       totalPrice: product.totalPrice
                     }}
-                    onRemoveProductFromInvoice={ this.props.onRemoveProductFromInvoice }
                   />
                 })
               }
               
-              <ListItem className={ classes.addFactorProductsListItem } key={ generateKey() }>
+              <ListItem className={ classes.addFactorProductsListItem } key={ `ipli_add` }>
                 <List className={ classes.addFactorProductsNestedList }>
                   <ListItem style={{width:'30%'}}
                     className={ classes.addFactorProductsNestedListItem }
-                    key={ generateKey() }
+                    key={ `ipli_add_1` }
                   >
                     <IconButton onClick={this.props.onOpenAddProductDialog}>
                       <Icon>add_circle</Icon>
@@ -150,7 +148,7 @@ class Step0 extends PureComponent {
                   </ListItem>
                   <ListItem style={{width:'20%'}}
                     className={ classes.addFactorProductsNestedListItem }
-                    key={ generateKey() }
+                    key={ `ipli_add_2` }
                   >
                     <TextField
                       type="number"
@@ -162,19 +160,19 @@ class Step0 extends PureComponent {
                   </ListItem>
                   <ListItem style={{width:'20%'}}
                     className={ classes.addFactorProductsNestedListItem }
-                    key={ generateKey() }
+                    key={ `ipli_add_3` }
                   >
                     <Typography>{ separateDigits({ number: this.props.newProductUnitPrice, showCurrency: true }) }</Typography>
                   </ListItem>
                   <ListItem style={{width:'20%'}}
                     className={ classes.addFactorProductsNestedListItem }
-                    key={ generateKey() }
+                    key={ `ipli_add_4` }
                   >
                     <Typography>{ separateDigits({ number: this.props.newProductTotalPrice }) }</Typography>
                   </ListItem>
                   <ListItem style={{width:'10%'}}
                     className={ classes.addFactorProductsNestedListItem }
-                    key={ generateKey() }
+                    key={ `ipli_add_5` }
                   >
                     <IconButton 
                       onClick={this.onAddNewProductToInvoice}
