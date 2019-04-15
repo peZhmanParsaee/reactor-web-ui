@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import Autosuggest from 'react-autosuggest';
+import PropTypes from 'prop-types';
 
 import GridContainer from '../Grid/GridContainer';
 import GridItem from '../Grid/GridItem';
@@ -60,7 +61,12 @@ class Step0 extends PureComponent {
                         value: this.props.single,
                         onChange: this.props.handleAutoSuggestChage('single'),
                       }}
-                      theme={this.props.autoSuggestTheme}
+                      theme={{
+                        container: classes.container,
+                        suggestionsContainerOpen: classes.suggestionsContainerOpen,
+                        suggestionsList: classes.suggestionsList,
+                        suggestion: classes.suggestion
+                      }}
                       renderSuggestionsContainer={options => (
                         <Paper {...options.containerProps} square>
                           {options.children}
@@ -158,7 +164,7 @@ class Step0 extends PureComponent {
                           className={ classes.addFactorProductsNestedListItem }
                           key={ generateKey() }
                         >
-                          <IconButton onClick={this.onOpenAddProductDialog}>
+                          <IconButton onClick={this.props.onOpenAddProductDialog}>
                             <Icon>add_circle</Icon>
                           </IconButton>
                           <Select
@@ -231,5 +237,25 @@ class Step0 extends PureComponent {
         )
     }
 }
+
+Step0.propTypes = {
+  classes: PropTypes.object.isRequired,
+  invoiceNo: PropTypes.number.isRequired,
+  invoiceDate: PropTypes.string.isRequired,
+  invoiceProducts: PropTypes.array.isRequired,
+  handleAutoSuggestChage: PropTypes.func.isRequired,
+  single: PropTypes.string.isRequired,
+  newProductId: PropTypes.number.isRequired,
+  newProductCount: PropTypes.number.isRequired,
+  newProductUnitPrice: PropTypes.number.isRequired,
+  newProductTotalPrice: PropTypes.number.isRequired,
+  onNewProductSelectChange: PropTypes.func.isRequired,
+  products: PropTypes.array.isRequired,
+  isAddProductDialogOpen: PropTypes.bool.isRequired,
+  onCloseAddProductDialog: PropTypes.func.isRequired,
+  onNewProductCountChange: PropTypes.func.isRequired,
+  onAddedProductCountChange: PropTypes.func.isRequired,
+  onOpenAddProductDialog: PropTypes.func.isRequired
+};
 
 export default withStyles(appStyle)(Step0);
