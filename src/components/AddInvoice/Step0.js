@@ -26,7 +26,7 @@ import { separateDigits } from '../../helpers/numberHelpers';
 import AddProductDialog from '../AddProductDialog';
 import GridContainer from '../Grid/GridContainer';
 import GridItem from '../Grid/GridItem';
-
+import InvoiceProductListItem from './InvoiceProductsListItem';
 
 class Step0 extends PureComponent {
   render() {
@@ -81,7 +81,6 @@ class Step0 extends PureComponent {
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <List>
-  
               <ListItem className={ classes.addFactorProductsListItemHead } key={ generateKey() }>
                 <List className={ classes.addFactorProductsNestedList }>
                   <ListItem style={{width:'30%'}}
@@ -103,63 +102,24 @@ class Step0 extends PureComponent {
                     key={ generateKey() }></ListItem>
                 </List>
               </ListItem>
-  
-                
               
               { 
                 this.props.invoiceProducts.map((product, index) => {
-                  return (
-                    <ListItem key={product.id}
-                      className={ classes.addFactorProductsListItem }
-                      key={ generateKey(index) }
-                    >
-                      <List className={ classes.addFactorProductsNestedList }>
-                        <ListItem scope="product" style={{width:'30%'}}
-                          className={ classes.addFactorProductsNestedListItem }
-                          key={ generateKey(index) }
-                        >
-                          { product.name }
-                        </ListItem>
-                        <ListItem style={{width:'20%'}}
-                          className={ classes.addFactorProductsNestedListItem }
-                          key={ generateKey(index) }
-                        >
-                          <TextField
-                            type="number"
-                            value={ product.count }
-                            id={product.id}
-                            onChange={ this.props.onAddedProductCountChange }
-                            className="text-center"
-                          >
-                          </TextField>
-                        </ListItem>
-                        <ListItem style={{width:'20%'}}
-                          className={ classes.addFactorProductsNestedListItem }
-                          key={ generateKey(index) }
-                        >{ separateDigits({ number: product.unitPrice, showCurrency: true }) }</ListItem>
-                        <ListItem 
-                          style={{width:'20%'}}
-                          className={ classes.addFactorProductsNestedListItem }
-                          key={ generateKey(index) }
-                        >{ separateDigits({ number: product.totalPrice }) }</ListItem>
-                        <ListItem style={{width:'10%'}}
-                          className={ classes.addFactorProductsNestedListItem }
-                          key={ generateKey(index) }
-                        >
-                          <IconButton 
-                            onClick={() => { 
-                              this.onRemoveProductFromInvoice(product.id);
-                            }}
-                          >
-                            <Icon>remove_circle</Icon>
-                          </IconButton>
-                        </ListItem>
-                      </List>
-                    </ListItem>
-                  );
+                  return <InvoiceProductListItem 
+                    key={ generateKey(index) }
+                    onAddedProductCountChange={ this.props.onAddedProductCountChange }
+                    product={{
+                      id: product.id,
+                      name: product.name,
+                      unitPrice: product.unitPrice,                              
+                      count: product.count,
+                      totalPrice: product.totalPrice
+                    }}
+                    onRemoveProductFromInvoice={ this.props.onRemoveProductFromInvoice }
+                  />
                 })
               }
-                
+              
               <ListItem className={ classes.addFactorProductsListItem } key={ generateKey() }>
                 <List className={ classes.addFactorProductsNestedList }>
                   <ListItem style={{width:'30%'}}
@@ -257,7 +217,8 @@ Step0.propTypes = {
   onCloseAddProductDialog: PropTypes.func.isRequired,
   onNewProductCountChange: PropTypes.func.isRequired,
   onAddedProductCountChange: PropTypes.func.isRequired,
-  onOpenAddProductDialog: PropTypes.func.isRequired
+  onOpenAddProductDialog: PropTypes.func.isRequired,
+  onRemoveProductFromInvoice: PropTypes.func.isRequired
 };
 
 export default withStyles(appStyle)(Step0);
