@@ -24,6 +24,7 @@ import Step1 from '../AddInvoice/Step1';
 // local dependencies
 import appStyle from '../../styles/jss/layouts/appStyle';
 import { generateKey } from '../../helpers/keyHelper';
+import AddInvoiceContext from './AddInvoiceContext';
 
 // actions
 import { startAddInvoice } from '../../actions/invoices';
@@ -403,49 +404,62 @@ class AddInvoicePage extends React.Component {
     }
     
     return (
-      <Fragment>
-        
-        <Header/>
-        
-        <div className={classes.mainContent}>
-          <div className={classes.container}>
-            <GridContainer>
-              <GridItem xs={12}>
-                <Stepper activeStep={activeStep}>
-                  { steps.map((label, index) => {
-                    const props = {};
-                    const labelProps = {};
-                    return (
-                      <Step key={label} {...props}>
-                        <StepLabel 
-                          {...labelProps}>{label}</StepLabel>
-                      </Step>
-                    );
-                  })}
-                </Stepper>
-                { stepContent }
-                <div className={classes.stepperActions}>
-                  <Button disabled={activeStep === 0}
-                    onClick={this.handleBackStep}
-                    className={classes.button}
+      <AddInvoiceContext.Provider
+        value={{
+          onRemoveProductFromInvoice: this.onRemoveProductFromInvoice
+        }}
+      >
+        <Fragment>
+          
+          <Header/>
+          
+          <div className={classes.mainContent}>
+            <div className={classes.container}>
+              <GridContainer>
+                <GridItem xs={12}>
+                  <Stepper activeStep={activeStep}
+                    className={classes.stepper}
                   >
-                    بازگشت
-                  </Button>
-                  <Button variant="contained"
-                    color="primary"
-                    onClick={this.handleNextStep}
-                    className={classes.button}
-                  >
-                    { this.props.addInvoiceForm.activeStep === 1 ? "ثبت" : "مرحله بعد" }
-                  </Button>
-                </div>
-              </GridItem>
-            </GridContainer>
-            
+                    { steps.map((label, index) => {
+                      const props = {};
+                      const labelProps = { };
+                      return (
+                        <Step key={label} {...props}>
+                          <StepLabel 
+                            {...labelProps}
+                            classes={{
+                              iconContainer: classes.iconContainer
+                            }}
+                            className={classes.StepLabel}
+                            >{label}</StepLabel>
+                        </Step>
+                      );
+                    })}
+                  </Stepper>
+                  { stepContent }
+                  <div className={classes.stepperActions}>
+                    <Button disabled={activeStep === 0}
+                      onClick={this.handleBackStep}
+                      className={classes.button}
+                    >
+                      بازگشت
+                    </Button>
+                    <Button variant="contained"
+                      color="primary"
+                      onClick={this.handleNextStep}
+                      className={classes.button}
+                    >
+                      { this.props.addInvoiceForm.activeStep === 1 ? "ثبت" : "مرحله بعد" }
+                    </Button>
+                  </div>
+                </GridItem>
+              </GridContainer>
+              
+            </div>
           </div>
-        </div>
-      
-      </Fragment>
+        
+        </Fragment>
+      </AddInvoiceContext.Provider>
     );
   }
 }
@@ -454,9 +468,9 @@ AddInvoicePage.propTypes = {
   classes: PropTypes.object.isRequired,
 
   // reducers
-  products: PropTypes.object.isRequired,
-  customers: PropTypes.object.isRequired,
-  provinces: PropTypes.object.isRequired,
+  products: PropTypes.array.isRequired,
+  customers: PropTypes.array.isRequired,
+  provinces: PropTypes.array.isRequired,
   addInvoiceForm: PropTypes.object.isRequired,
 
   // dispatch funcs
