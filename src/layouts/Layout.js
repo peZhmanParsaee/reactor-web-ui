@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
 
 // @material-ui/core
 import { withStyles } from '@material-ui/core';
@@ -38,11 +37,7 @@ class Layout extends React.Component {
             <Redirect from="/" to="/add-invoice" />
           </Switch>
 
-          <ToastMessage
-            variant={this.props.message.type}
-            message={this.props.message.text}
-            open={this.props.message.open}
-          />
+          <ToastMessage />
           
           { this.areWeInReportRoute() ? null : <Footer />  }
         
@@ -57,15 +52,4 @@ Layout.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => {
-  return {
-    message: state.message
-  };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  showGlobalMessage: (message) => dispatch(showGlobalMessage(message))
-});
-
-// export default withStyles(layoutStyle)(Layout);
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(layoutStyle)(Layout));
+export default withStyles(layoutStyle)(Layout);
