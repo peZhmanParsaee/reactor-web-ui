@@ -6,7 +6,6 @@ import TextField from '@material-ui/core/TextField';
 
 const AutoSuggestInput = (inputProps) => {
     const { classes, inputRef = () => {}, ref, ...other } = inputProps;
-    console.log('inputProps', inputProps);
     return (
         <TextField
             fullWidth

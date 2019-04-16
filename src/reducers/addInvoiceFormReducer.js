@@ -36,7 +36,6 @@ const INITIAL_STATE = {
 };
 
 export default (state = INITIAL_STATE, action) => {
-  
   switch(action.type) {
     
     case TYPES.INVOICE_FORM_CLEAR_STATE:
