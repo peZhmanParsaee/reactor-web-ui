@@ -1,6 +1,5 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
@@ -27,7 +26,7 @@ import { generateKey } from '../../helpers/keyHelper';
 import AddInvoiceContext from './AddInvoiceContext';
 
 // actions
-import { startAddInvoice } from '../../actions/invoices';
+import { startAddInvoice, setInvoiceNo } from '../../actions/invoices';
 import { startAddProduct } from '../../actions/products';
 import { startSearchCustomers } from '../../actions/customers';
 import { showGlobalMessage } from '../../actions/message';
@@ -56,13 +55,11 @@ function getSteps() {
   return [ 'تکمیل اطلاعات اولیه', 'تاریخ تحویل' ];
 }
 
-class AddInvoicePage extends React.Component {
+class AddInvoicePage extends Component {
   
   async componentDidMount() {
-    const res = await axios.get(`${API_ENDPOINT}/api/v1/invoice/new-invoice-no`);
-    if (res.data.status === true) {
-      this.props.invoiceFormSetInvoiceNo(res.data.payload);
-    }
+    this.props.setInvoiceNo();
+
 
     history.pushState(null, null, location.href);
     window.onpopstate = (event) => {
@@ -486,6 +483,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   startAddInvoice: (invoice) => dispatch(startAddInvoice(invoice)),
+  setInvoiceNo: () => dispatch(setInvoiceNo()),
   startAddProduct: (product) => dispatch(startAddProduct(product)),
   startSearchCustomers: (customerName) => dispatch(startSearchCustomers(customerName)),
   showGlobalMessage: (message) => dispatch(showGlobalMessage(message)),
