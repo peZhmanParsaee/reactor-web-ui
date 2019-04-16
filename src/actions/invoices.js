@@ -1,6 +1,7 @@
 import * as TYPES from './types';
 import { showLoading, hideLoading } from './loading';
 import * as API from '../api/api';
+import { invoiceFormSetInvoiceNo } from './addInvoiceForm';
 
 export const addInvoice = (invoice) => {
   return {
@@ -36,13 +37,12 @@ export const startAddInvoice = (invoiceData = {}) => {
     };
 
     dispatch(showLoading());
-    
+
     return API.addInvoice(invoice)
       .then(insertedInvoiceRes => {
         const opStatus = insertedInvoiceRes.data;
         dispatch(addInvoice(opStatus.payload));
         dispatch(hideLoading());
-        // dispatch(showGlobalMessage(opStatus));
         return opStatus;
       });
 
@@ -66,5 +66,18 @@ export const startSetInvoices = () => async dispatch => {
       
   } catch (err) {
     // console.log(err);
+  }
+};
+
+export const setInvoiceNo = () => async dispatch => {
+  try {
+    const res = await API.getNewInvoiceNo();
+    const opStatus = res.data;
+    if (opStatus.status === true) {
+      const invoiceNo = opStatus.payload;
+      dispatch(invoiceFormSetInvoiceNo(invoiceNo));
+    }
+  } catch (error) {
+    // todo: handle error
   }
 };
