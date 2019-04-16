@@ -190,6 +190,8 @@ class Step0 extends PureComponent {
             <AddProductDialog 
               show={this.props.isAddProductDialogOpen} 
               onCloseDialog={this.props.onCloseAddProductDialog}
+              showGlobalMessage={this.props.showGlobalMessage}
+              onSaveAddProductDialog={this.props.onSaveAddProductDialog}
             />
           </GridItem>
         </GridContainer>
@@ -216,7 +218,8 @@ Step0.propTypes = {
   onNewProductCountChange: PropTypes.func.isRequired,
   onAddedProductCountChange: PropTypes.func.isRequired,
   onOpenAddProductDialog: PropTypes.func.isRequired,
-  onRemoveProductFromInvoice: PropTypes.func.isRequired
+  onRemoveProductFromInvoice: PropTypes.func.isRequired,
+  showGlobalMessage: PropTypes.func.isRequired
 };
 
 export default withStyles(appStyle)(Step0);
