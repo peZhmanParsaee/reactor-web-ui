@@ -7,7 +7,6 @@ import loadingReducer from './loadingReducer';
 import messageReducer from './messageReducer';
 import addInvoiceFormReducer from './addInvoiceFormReducer';
 import salesReportFormReducer from './salesReportFormReducer';
-import addProductDialogReducer from './addProductDialogReducer';
 
 export default combineReducers({
   customers: customersReducer,
@@ -17,6 +16,5 @@ export default combineReducers({
   loading: loadingReducer,
   message: messageReducer,
   addInvoiceForm: addInvoiceFormReducer,
-  salesReportForm: salesReportFormReducer,
-  addProductDialog: addProductDialogReducer
+  salesReportForm: salesReportFormReducer
 });
