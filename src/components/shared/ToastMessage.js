@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 
 // @material-ui/core
-import Button from '@material-ui/core/Button';
 import green from '@material-ui/core/colors/green';
 import amber from '@material-ui/core/colors/amber';
 import IconButton from '@material-ui/core/IconButton';
@@ -56,18 +55,15 @@ const styles1 = theme => ({
 });
 
 class ToastMessage extends React.PureComponent {
-  componentWillReceiveProps = (props) => {
-    // this.props.setMessageOpenState({ open: props.open });
-  }
   handleClose = (event, reason) => {
-    console.log('handleClose');
     this.props.setMessageOpenState({ open: false });
   };
+
   render() {
-    const { classes, className, message, onClose, variant, open } = this.props;
+    const { classes, className } = this.props;
+    const { text: message, open, type: variant } = this.props.state;
     const Icon = variantIcon[variant];
 
-    console.log(this.props);
 
     return (
       <Snackbar
@@ -75,7 +71,7 @@ class ToastMessage extends React.PureComponent {
           vertical: 'bottom',
           horizontal: 'left',
         }}
-        open={this.props.state.open}
+        open={open}
         autoHideDuration={6000}
         onClose={this.handleClose}
       >
@@ -110,8 +106,7 @@ ToastMessage.propTypes = {
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
   message: PropTypes.node,
-  onClose: PropTypes.func,
-  variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
+  // variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
 };
 
 const mapStateToProps = (state) => ({
