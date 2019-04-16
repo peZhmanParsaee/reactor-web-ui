@@ -39,8 +39,7 @@ const apiCall = ({
 
 export const getCustomers = () => {
     return apiCall({
-        url: 'v1/customer',
-        withAuth: true
+        url: 'v1/customer'
     });
 }
 
@@ -49,8 +48,7 @@ export const searchCustomers = customerName => {
         url: 'v1/customer/search',
         params: {
             q: customerName
-        },
-        withAuth: false
+        }
     });
 };
 
@@ -58,15 +56,13 @@ export const addInvoice = invoice => {
     return apiCall({
         url: 'v1/invoice',
         method: 'POST',
-        data: invoice,
-        withAuth: false
+        data: invoice
     });
 };
 
 export const getInvoices = () => {
     return apiCall({
-        url: 'v1/invoice',
-        withAuth: false
+        url: 'v1/invoice'
     });
 };
 
@@ -74,20 +70,24 @@ export const addProduct = product => {
     return apiCall({
         url: 'v1/product',
         method: 'POST',
-        withAuth: false,
         data: product
     });
 };
 
 export const getProducts = () => {
     return apiCall({
-        url: 'v1/product',
-        withAuth: false
+        url: 'v1/product'
     });
 };
 
 export const getProvinces = () => {
     return apiCall({
         url: 'v1/province'
+    });
+};
+
+export const getNewInvoiceNo = () => {
+    return apiCall({
+        url: 'v1/invoice/new-invoice-no'
     });
 };
