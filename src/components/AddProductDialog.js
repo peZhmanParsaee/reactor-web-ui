@@ -1,5 +1,4 @@
 import React, { PureComponent, Fragment } from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import persianRex from 'persian-rex';
@@ -18,28 +17,31 @@ import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 // local dependencies
-import { startAddProduct } from '../actions/products';
 import appStyle from '../styles/jss/layouts/appStyle';
-import { showGlobalMessage } from '../actions/message';
-
-// actions
-import {
-  addProductDialogSetFormFields,
-  addProductDialogClearState,
-  addProductDialogSetLoadingStatus
-} from '../actions/addProductDialog';
-
+import RESOURCES from '../resources';
 
 
 class AddProductDialog extends PureComponent {  
+  state = {
+    name: '',
+    stock: '',
+    unitPrice: '',
+    loadingStatus: false
+  };
+
   clearState() {
-    this.props.addProductDialogClearState();
+    this.setState(() => ({
+      name: '',
+      stock: '',
+      unitPrice: '',
+      loadingStatus: false
+    }));
   };
   showMessage = ({ text, type }) => {
     this.props.showGlobalMessage({ type, text });
   };
   onAddProduct = () => {
-    if (!this.props.addProductDialog.name || !this.props.addProductDialog.stock || !this.props.addProductDialog.unitPrice) {
+    if (!this.state.name || !this.state.stock || !this.state.unitPrice) {
       this.showMessage({ 
         type: "warning",
         text: "خطای اعتبارسنجی، ورودیها را بررسی کنید."
@@ -49,11 +51,17 @@ class AddProductDialog extends PureComponent {
 
     this.onShowAddProductLoading()
       .then(ack => {
-        this.props.startAddProduct(this.props.addProductDialog)
+        const product = { 
+          name: this.state.name,
+          stock: this.state.stock, 
+          unitPrice: this.state.unitPrice
+        };
+
+        this.props.onSaveAddProductDialog(product)
           .then(opStatus => {
             if (opStatus.status === true) {
-              this.props.addProductDialogClearState();
-              this.props.onCloseDialog({ opStatus });
+              this.clearState();
+              this.onCloseDialog();
             } else {
               this.showMessage({ 
                 type: "error",
@@ -69,50 +77,50 @@ class AddProductDialog extends PureComponent {
           })
           .finally(() =>{
             this.onHideAddProductLoading();
-          });;
+          });
       });
     
   };
-  onShowAddProductLoading = () => {
+  onShowAddProductLoading = () => {    
     return new Promise((resolve, reject) => {
-      this.props.addProductDialogSetLoadingStatus(true);
-      resolve('done');
+      this.setState({ loadingStatus: true }, () => resolve('done'));
     });
   };
   onHideAddProductLoading = () => {
-    this.props.addProductDialogSetLoadingStatus(false);
+    this.setState({ loadingStatus: false });
   };
   onCloseDialog = () => {
-    this.props.addProductDialogClearState();
-    this.props.onCloseDialog();    
+    this.setState(() =>({
+      name: '',
+      stock: '',
+      unitPrice: '',
+      loadingStatus: false
+    }));
+    this.props.onCloseDialog();
   };
   onNameChage = (event) => {
-    event.persist();
     const name = event.target.value;
     if (
       (persianRex.letter.test(name) 
       || persianRex.text.test(name)             
       || !name) && name.length <= 50
     ) {
-      this.props.addProductDialogSetFormFields({ name });
+      this.setState(() => ({ name }));
     }
   };
   onStockChange = (event) => {
-    event.persist();
     const stock = event.target.value;
-    if (stock.match(/^[1-9]{1}[0-9]{0,6}$/)) {
-      this.props.addProductDialogSetFormFields({ stock });
+    if (stock.match(/^[1-9]{1}[0-9]{0,6}$/) || !stock) {
+      this.setState(() => ({ stock }));
     }
   };
   onUnitPriceChange = (event) => {
-    event.persist();
     const unitPrice = event.target.value;
-    if (unitPrice.match(/^[1-9]{1}[0-9]{0,5}$/)) {
-      this.props.addProductDialogSetFormFields({ unitPrice });
+    if (unitPrice.match(/^[1-9]{1}[0-9]{0,5}$/) || !unitPrice) {
+      this.setState(() => ({ unitPrice }));
     }
   };
   moveNextElementInForm = (event) => {
-    event.persist();
     if (event.keyCode == 13) {
       const form = event.target.form;
       const index = Array.prototype.indexOf.call(form, event.target);
@@ -136,10 +144,12 @@ class AddProductDialog extends PureComponent {
                 className={classes.textField}>
                 <InputLabel htmlFor="name"
                   className="form-control__input-label"
-                >نام محصول</InputLabel>
+                >
+                  { RESOURCES.FIELDS.ADD_PRODUCT__PRODUCT_NAME }
+                </InputLabel>
                 <Input id="name"
                   onChange={this.onNameChage}
-                  value={this.props.addProductDialog.name}
+                  value={this.state.name}
                   autoComplete='off'
                   onKeyDown={ this.moveNextElementInForm }
                   ref={this.focusInput}
@@ -152,7 +162,7 @@ class AddProductDialog extends PureComponent {
                   className="form-control__input-label"
                 >موجودی</InputLabel>
                 <Input id="stock"
-                  value={this.props.addProductDialog.stock}
+                  value={this.state.stock}
                   onChange={this.onStockChange}
                   type="text"
                   endAdornment={<InputAdornment position="start">عدد</InputAdornment>}
@@ -167,7 +177,7 @@ class AddProductDialog extends PureComponent {
                   className="form-control__input-label"
                 >قیمت واحد</InputLabel>
                 <Input id="unit-price"
-                  value={this.props.addProductDialog.unitPrice}
+                  value={this.state.unitPrice}
                   onChange={this.onUnitPriceChange}
                   type="text"
                   endAdornment={<InputAdornment position="start">تومان</InputAdornment>}
@@ -182,7 +192,7 @@ class AddProductDialog extends PureComponent {
             </form>
           </DialogContent>
           <DialogActions>
-            { this.props.addProductDialog.showAddProductLoading && (
+            { this.state.loadingStatus && (
                 <CircularProgress
                   size={24}
                   thickness={4}
@@ -191,7 +201,7 @@ class AddProductDialog extends PureComponent {
             }
             
             <Button onClick={this.onAddProduct}
-              disabled={this.props.addProductDialog.showAddProductLoading }
+              disabled={this.state.loadingStatus }
               color="primary"
               variant="contained"
             >
@@ -212,24 +222,7 @@ class AddProductDialog extends PureComponent {
 AddProductDialog.propTypes = {
   classes: PropTypes.object.isRequired,
   show: PropTypes.bool.isRequired,
-  onCloseDialog: PropTypes.func.isRequired,
-  addProductDialog: PropTypes.object.isRequired,
-  message: PropTypes.object.isRequired
+  onCloseDialog: PropTypes.func.isRequired
 };
 
-const mapStatetoProps = (state) => {
-  return {
-    addProductDialog: state.addProductDialog,
-    message: state.message
-  }
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  startAddProduct: (product) => dispatch(startAddProduct(product)),
-  addProductDialogSetFormFields: (formFields) => dispatch(addProductDialogSetFormFields(formFields)),
-  addProductDialogClearState: () => dispatch(addProductDialogClearState()),
-  addProductDialogSetLoadingStatus: (loadingStatus) => dispatch(addProductDialogSetLoadingStatus(loadingStatus)),
-  showGlobalMessage: (message) => dispatch(showGlobalMessage(message))
-});
-
-export default connect(mapStatetoProps, mapDispatchToProps)(withStyles(appStyle)(AddProductDialog));
+export default withStyles(appStyle)(AddProductDialog);

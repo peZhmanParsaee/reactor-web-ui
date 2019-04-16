@@ -80,14 +80,11 @@ class AddInvoicePage extends React.Component {
   onOpenAddProductDialog = (e) => {
     this.props.invoiceFormSetAddProductDialogOpenState(true);
   };
-  closeAddProductDialog = ({ opStatus = {} } = {}) => {
+  closeAddProductDialog = () => {
     this.props.invoiceFormSetAddProductDialogOpenState(false);
-    if (opStatus.status === true) {
-      this.showMessage({
-        type: "success",
-        text: opStatus.message || "محصول اضافه شد."
-      });
-    }
+  };
+  onSaveAddProductDialog = (product) => {
+    return this.props.startAddProduct(product);
   };
   onNewProductSelectChange = (event) => {
     event.persist();
@@ -363,9 +360,11 @@ class AddInvoicePage extends React.Component {
         products={this.props.products}
         isAddProductDialogOpen={this.props.addInvoiceForm.isAddProductDialogOpen}
         onCloseAddProductDialog={this.closeAddProductDialog}
+        onSaveAddProductDialog={this.onSaveAddProductDialog}
         onNewProductCountChange={this.onNewProductCountChange}
         onAddedProductCountChange={this.onAddedProductCountChange}
         onOpenAddProductDialog={this.onOpenAddProductDialog}
+        showGlobalMessage={this.props.showGlobalMessage}
       />
     } else if (activeStep == 1) {
       stepContent = <Step1 
