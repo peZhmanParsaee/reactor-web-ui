@@ -1,5 +1,5 @@
 import { ADD_PRODUCT, SET_PRODUCTS } from './types';
-import axios from 'axios';
+import * as API from '../api/api';
 
 export const addProduct = (product) => {
   return {
@@ -18,7 +18,8 @@ export const startAddProduct = (productData = {}) => {
 
     const product = { name, stock, unitPrice };
 
-    return axios.post(`${API_ENDPOINT}/api/v1/product`, product)
+    // return axios.post(`${API_ENDPOINT}/api/v1/product`, product)
+    return API.addProduct(product)
       .then(insertedProductRes => {
         const opStatus = insertedProductRes.data;
 
@@ -39,9 +40,9 @@ export const setProducts = (products) => {
 
 export const startSetProducts = () => {
   return (dispatch) => {
-    return axios.get(`${API_ENDPOINT}/api/v1/product`)
-      .then(res => {
-        
+    //return axios.get(`${API_ENDPOINT}/api/v1/product`)
+    return API.getProducts()
+      .then(res => {        
         if (res.data.status === true) {
           dispatch(setProducts(res.data.payload));
         }

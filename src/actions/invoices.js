@@ -1,7 +1,6 @@
 import * as TYPES from './types';
 import { showLoading, hideLoading } from './loading';
-import { showGlobalMessage } from './message';
-import axios from 'axios';
+import * as API from '../api/api';
 
 export const addInvoice = (invoice) => {
   return {
@@ -36,9 +35,9 @@ export const startAddInvoice = (invoiceData = {}) => {
       totalPrice
     };
 
-    dispatch(showLoading())
-      
-    return axios.post(`${API_ENDPOINT}/api/v1/invoice`, invoice)
+    dispatch(showLoading());
+    
+    return API.addInvoice(invoice)
       .then(insertedInvoiceRes => {
         const opStatus = insertedInvoiceRes.data;
         dispatch(addInvoice(opStatus.payload));
@@ -59,7 +58,7 @@ export const setInvoices = (invoices) => {
 
 export const startSetInvoices = () => async dispatch => {
   try {
-    const res = await axios.get(`${API_ENDPOINT}/api/v1/invoice`);      
+    const res = await API.getInvoices();
     
     if (res.data.status === true) {
       dispatch(setInvoices(res.data.payload));

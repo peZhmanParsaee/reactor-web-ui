@@ -1,5 +1,5 @@
 import * as TYPES from './types';
-import axios from 'axios';
+import * as API from '../api/api';
 
 export const setCustomers = (customers) => {
   return {
@@ -10,7 +10,7 @@ export const setCustomers = (customers) => {
 
 export const startSetCustomers = () => {
   return (dispatch) => {
-    return axios.get(`${API_ENDPOINT}/api/v1/customer`)
+    return API.getCustomers()
       .then(res => {
         if (res.data.status === true) {
           dispatch(setCustomers(res.data.payload));
@@ -28,19 +28,23 @@ export const searchCustomers = (customerName) => {
 
 export const startSearchCustomers = (customerName) => {
   return (dispatch) => {
-    return axios.get(`${API_ENDPOINT}/api/v1/customer/search`, {
-      params: {
-        q: customerName
-      }
-    })
+    dispatch({
+      type: TYPES.SEARCH_CUSTOMERS,
+      customerName
+    });
+    
+    return API.searchCustomers(customerName)
       .then(res => {
         const opStatus = res.data;
 
         if (opStatus.status === true) {
-          dispatch(setCustomers(res.data.payload));        
+          dispatch(setCustomers(res.data.payload));
         }
 
         return opStatus;
+      })
+      .catch(error => {
+        console.error('an error was happened ', error);
       });
   };
 };

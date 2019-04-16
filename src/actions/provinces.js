@@ -1,6 +1,5 @@
-import uuid from 'uuid';
 import { SET_PROVINCES } from './types';
-import axios from 'axios';
+import * as API from '../api/api';
 
 export const setProvinces = (provinces) => ({
   type: SET_PROVINCES,
@@ -10,7 +9,7 @@ export const setProvinces = (provinces) => ({
 export const startSetProvinces = () => {
   return (dispatch) => {
 
-    return axios.get(`${API_ENDPOINT}/api/v1/province`)
+    return API.getProvinces()
       .then(res => {
         if (res.data.status === true) {
           dispatch(setProvinces(res.data.payload));
