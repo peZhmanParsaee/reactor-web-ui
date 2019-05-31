@@ -2,6 +2,9 @@
 
 Reactor is a super tiny invoice management application. This code repository is its `Web UI` source code which has been developed by [React](https://reactjs.org/) and [Material UI](https://material-ui.com). Moreover, there is an API for Reactor which is located in [Reactor API Code Repository](https://github.com/pezhmanparsaee/reactor-api)
 
+## Demo
+![Reactor Demo](http://raw.githubusercontent.com/pezhmanparsaee/reactor-web-ui/master/reactor-demo.gif)
+
 ## Popular dependencies
 
 * React
