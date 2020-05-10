@@ -24,8 +24,8 @@ class InvoiceProductListItem extends PureComponent {
 
     return (
       <ListItem key={itemKey}
-                className={ classes.addFactorProductsListItem }
-              >
+        className={ classes.addFactorProductsListItem }
+      >
         <AddInvoiceContext.Consumer>
           { context => {
             return (
