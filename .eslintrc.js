@@ -11,7 +11,8 @@ module.exports = {
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly",
-        "jest/globals": true
+        "jest/globals": true,
+        "API_ENDPOINT": true
     },
     "parserOptions": {
         "ecmaFeatures": {
