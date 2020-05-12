@@ -13,4 +13,5 @@ test('should render Loading with ReactShallowRenderer correctly', () => {
 test('should render Loading with enzyme correctly', () => {
   const wrapper = shallow(<Loading />);
   expect(wrapper.find('div').length).toBe(1);
+  expect(wrapper.find('div').text()).toBe('Please wait ....');
 });
