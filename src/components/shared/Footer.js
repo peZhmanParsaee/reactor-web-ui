@@ -12,7 +12,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 // core components
 import footerStyle from "../../styles/jss/components/footerStyle";
 
-function Footer(props) {
+export function Footer(props) {
   const { classes } = props;
   return (
     <footer className={classes.footer}>
