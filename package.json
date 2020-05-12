@@ -9,9 +9,9 @@
     "build:prod": "webpack -p --env production",
     "dev-server": "webpack-dev-server --open",
     "start": "node server/server.js",
-    "test": "set NODE_ENV=test && jest",
+    "test": "set NODE_ENV=test && jest --config=jest.config.json",
     "lint": "eslint src/**/*.js",
-    "fix-indents": "eslint --fix --parser babel-eslint --ext js --no-eslintrc  --rule 'indent: [1,2,{SwitchCase: 1}]' src/"
+    "fix-indents": "eslint --fix --parser babel-eslint --ext js --no-eslintrc --rule 'indent: [1,2,{SwitchCase: 1}]' src/"
   },
   "dependencies": {
     "@babel/core": "^7.9.6",
