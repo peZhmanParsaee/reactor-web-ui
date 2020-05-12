@@ -1,9 +1,9 @@
 import React from  'react';
 import { pure } from 'recompose';
 
-const Loading = (props) => (
+export const Loading = (props) => (
   <div>
-        Please wait ....
+    Please wait ....
   </div>
 );
 
