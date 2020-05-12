@@ -10,8 +10,13 @@ test('should render Loading with ReactShallowRenderer correctly', () => {
   expect(renderer.getRenderOutput()).toMatchSnapshot();
 });
 
-test('should render Loading with enzyme correctly', () => {
+test('should assess rendered Loading jsx with enzyme correctly', () => {
   const wrapper = shallow(<Loading />);
   expect(wrapper.find('div').length).toBe(1);
   expect(wrapper.find('div').text()).toBe('Please wait ....');
+});
+
+test('should render Loading with enzyme correctly', () => {
+  const wrapper = shallow(<Loading />);
+  expect(wrapper).toMatchSnapshot();
 });

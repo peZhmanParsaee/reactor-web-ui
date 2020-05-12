@@ -5,3 +5,9 @@ exports[`should render Loading with ReactShallowRenderer correctly 1`] = `
   Please wait ....
 </div>
 `;
+
+exports[`should render Loading with enzyme correctly 1`] = `
+<div>
+  Please wait ....
+</div>
+`;
