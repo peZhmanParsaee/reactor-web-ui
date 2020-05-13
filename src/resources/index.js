@@ -1,5 +1,5 @@
 import FIELDS from './fields.json';
 
-module.exports = {
-    FIELDS    
+export default {
+  FIELDS    
 };
