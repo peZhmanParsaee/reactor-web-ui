@@ -25,30 +25,12 @@ import appStyle from '../../styles/jss/layouts/appStyle';
 import { generateKey } from '../../helpers/keyHelper';
 import AddInvoiceContext from './AddInvoiceContext';
 
-// actions
-import { startAddInvoice, setInvoiceNo } from '../../actions/invoices';
-import { startAddProduct } from '../../actions/products';
-import { startSearchCustomers } from '../../actions/customers';
-import { showGlobalMessage } from '../../actions/message';
-import { 
-  invoiceFormClearState,
-  invoiceFormSetAddProductDialogOpenState,
-  invoiceFormSetCustomerId,
-  invoiceFormSetSuggestions,
-  invoiceFormSetSuggestion,
-  invoiceFormSetInvoiceNo,
-  invoiceFormAddNewProductToInvoice,
-  invoiceFormSetNewProduct,
-  invoiceFormRemoveProductFromInvoiceById,
-  invoiceFormSetInvoiceProductCount,
-  invoiceFormSetProvinceId,
-  invoiceFormSetCityId,
-  invoiceFormSetMailType,
-  invoiceFormSetDeliverAfter,
-  invoiceFormSetDeliverAfterTimeUnit,
-  invoiceFormSetActiveStep
-} 
-from '../../actions/addInvoiceForm';
+// action creators
+import * as invoicesActions from '../../actions/invoices';
+import * as addInvoiceActions from '../../actions/addInvoiceForm';
+import * as productsActions from '../../actions/products';
+import * as customersActions from '../../actions/customers';
+import * as messageActions from '../../actions/message';
 
 
 function getSteps() {
@@ -58,7 +40,7 @@ function getSteps() {
 class AddInvoicePage extends Component {
   
   async componentDidMount() {
-    this.props.setInvoiceNo();
+    this.props.actions.setInvoiceNo();
 
 
     history.pushState(null, null, location.href);
@@ -75,13 +57,13 @@ class AddInvoicePage extends Component {
     window.onpopstate = () => {};
   }  
   onOpenAddProductDialog = (e) => {
-    this.props.invoiceFormSetAddProductDialogOpenState(true);
+    this.props.actions.invoiceFormSetAddProductDialogOpenState(true);
   };
   closeAddProductDialog = () => {
-    this.props.invoiceFormSetAddProductDialogOpenState(false);
+    this.props.actions.invoiceFormSetAddProductDialogOpenState(false);
   };
   onSaveAddProductDialog = (product) => {
-    return this.props.startAddProduct(product);
+    return this.props.actions.startAddProduct(product);
   };
   onNewProductSelectChange = (event) => {
     event.persist();
@@ -95,7 +77,7 @@ class AddInvoicePage extends Component {
       totalPrice: product.unitPrice * 1,
       name: product.name
     };
-    this.props.invoiceFormAddNewProductToInvoice(newInvoiceProduct);
+    this.props.actions.invoiceFormAddNewProductToInvoice(newInvoiceProduct);
   };
   onNewProductCountChange = (event) => {    
     event.persist();
@@ -115,7 +97,7 @@ class AddInvoicePage extends Component {
     event.persist();
     const count = event.target.value;
     if (count.match(/^[1-9]{1}[0-9]{0,2}$/)) {
-      this.props.invoiceFormSetInvoiceProductCount({
+      this.props.actions.invoiceFormSetInvoiceProductCount({
         invoiceProductId: event.target.id,
         count: count
       });
@@ -141,13 +123,13 @@ class AddInvoicePage extends Component {
       name: product.name
     };
 
-    this.props.invoiceFormAddNewProductToInvoice(newInvoiceProduct);
+    this.props.actions.invoiceFormAddNewProductToInvoice(newInvoiceProduct);
   };
   showMessage = ({ text, type }) => {
-    this.props.showGlobalMessage({ type, text });
+    this.props.actions.showGlobalMessage({ type, text });
   };
   onRemoveProductFromInvoice = (_id) => {
-    this.props.invoiceFormRemoveProductFromInvoiceById(_id);
+    this.props.actions.invoiceFormRemoveProductFromInvoiceById(_id);
   };
   handleNextStep = () => {
     if (this.props.addInvoiceForm.activeStep === 0) {
@@ -171,7 +153,7 @@ class AddInvoicePage extends Component {
         return;
       }      
 
-      this.props.invoiceFormSetActiveStep(this.props.addInvoiceForm.activeStep + 1);
+      this.props.actions.invoiceFormSetActiveStep(this.props.addInvoiceForm.activeStep + 1);
 
     } else if (this.props.addInvoiceForm.activeStep === 1) {
       if (this.props.addInvoiceForm.invoice.products.length 
@@ -193,8 +175,8 @@ class AddInvoicePage extends Component {
           deliverAfterTimeUnit: invoice.deliverAfterTimeUnit,
           totalPrice: invoice.totalPrice
         };
-        this.props.startAddInvoice(invoiceData);
-        this.props.invoiceFormClearState();
+        this.props.actions.startAddInvoice(invoiceData);
+        this.props.actions.invoiceFormClearState();
         this.showMessage({
           type: "success",
           text: "فاکتور با موفقیت ثبت شد"
@@ -236,53 +218,53 @@ class AddInvoicePage extends Component {
   };
   handleBackStep = () => {
     if (this.props.addInvoiceForm.activeStep === 1) {
-      this.props.invoiceFormSetActiveStep(this.props.addInvoiceForm.activeStep - 1);
+      this.props.actions.invoiceFormSetActiveStep(this.props.addInvoiceForm.activeStep - 1);
     }
   };
   onProvinceChange = (event) => {
     const provinceId = event.target.value;
     if (provinceId) {
-      this.props.invoiceFormSetProvinceId(provinceId);
+      this.props.actions.invoiceFormSetProvinceId(provinceId);
     }
   };
   onCityChange = (event) => {
     const cityId = event.target.value;
-    this.props.invoiceFormSetCityId(cityId);
+    this.props.actions.invoiceFormSetCityId(cityId);
   };
   onMailTypeChange = (event) => {
     const mailType = event.target.value;
-    this.props.invoiceFormSetMailType(mailType);
+    this.props.actions.invoiceFormSetMailType(mailType);
   };
   onDeliverAfterChange = (event) => {
     const deliverAfter = event.target.value;
     if (deliverAfter.match(/^[1-9]{1}[0-9]{0,1}$/)) {
-      this.props.invoiceFormSetDeliverAfter(deliverAfter);
+      this.props.actions.invoiceFormSetDeliverAfter(deliverAfter);
     }
   };
   onDeliverAfterTimeUnitChange = (event) => {
     const deliverAfterTimeUnit = event.target.value;
-    this.props.invoiceFormSetDeliverAfterTimeUnit(deliverAfterTimeUnit);
+    this.props.actions.invoiceFormSetDeliverAfterTimeUnit(deliverAfterTimeUnit);
   };
   handleSuggestionsFetchRequested = ({ value }) => {
     this.getSuggestions(value)
       .then(suggestions => {
-        this.props.invoiceFormSetSuggestions({ single: value, suggestions});
+        this.props.actions.invoiceFormSetSuggestions({ single: value, suggestions});
       });    
   };
   handleSuggestionsClearRequested = () => {
-    this.props.invoiceFormSetSuggestions({ suggestions: []});
+    this.props.actions.invoiceFormSetSuggestions({ suggestions: []});
   };
   handleChange = name => (event, { newValue }) => {
     const selectedCustomer = this.props.customers.find(x => x.fullName === newValue);
     
     if (selectedCustomer) {
-      this.props.invoiceFormSetSuggestion({ 
+      this.props.actions.invoiceFormSetSuggestion({ 
         [name]: newValue, 
         customerId: selectedCustomer._id,
         single: newValue
       });
     } else {
-      this.props.invoiceFormSetSuggestion({ [name]: newValue, customerId: null, single: newValue });
+      this.props.actions.invoiceFormSetSuggestion({ [name]: newValue, customerId: null, single: newValue });
     }    
   };
   renderSuggestion = (suggestion, { query, isHighlighted }) => {
@@ -314,7 +296,7 @@ class AddInvoicePage extends Component {
     if (inputLength === 0)
       return [];
     else {
-      return this.props.startSearchCustomers(inputValue)
+      return this.props.actions.startSearchCustomers(inputValue)
         .then(opStatus => {
           return opStatus.payload;
         })
@@ -361,7 +343,7 @@ class AddInvoicePage extends Component {
         onNewProductCountChange={this.onNewProductCountChange}
         onAddedProductCountChange={this.onAddedProductCountChange}
         onOpenAddProductDialog={this.onOpenAddProductDialog}
-        showGlobalMessage={this.props.showGlobalMessage}
+        showGlobalMessage={this.props.actions.showGlobalMessage}
       />
     } else if (activeStep == 1) {
       stepContent = <Step1 
@@ -450,29 +432,10 @@ AddInvoicePage.propTypes = {
   addInvoiceForm: PropTypes.object.isRequired,
 
   // dispatch funcs
-  startAddInvoice: PropTypes.func.isRequired,
-  startAddProduct: PropTypes.func.isRequired,
-  startSearchCustomers: PropTypes.func.isRequired,
-  showGlobalMessage: PropTypes.func.isRequired,
-  invoiceFormSetInvoiceNo: PropTypes.func.isRequired,
-  invoiceFormSetAddProductDialogOpenState: PropTypes.func.isRequired,
-  invoiceFormSetCustomerId: PropTypes.func.isRequired,
-  invoiceFormSetSuggestions: PropTypes.func.isRequired,
-  invoiceFormSetSuggestion: PropTypes.func.isRequired,
-  invoiceFormAddNewProductToInvoice: PropTypes.func.isRequired,
-  invoiceFormSetNewProduct: PropTypes.func.isRequired,
-  invoiceFormRemoveProductFromInvoiceById: PropTypes.func.isRequired,
-  invoiceFormSetInvoiceProductCount: PropTypes.func.isRequired,
-  invoiceFormSetProvinceId: PropTypes.func.isRequired,
-  invoiceFormSetCityId: PropTypes.func.isRequired,
-  invoiceFormSetMailType: PropTypes.func.isRequired,
-  invoiceFormSetDeliverAfter: PropTypes.func.isRequired,
-  invoiceFormSetDeliverAfterTimeUnit: PropTypes.func.isRequired,
-  invoiceFormSetActiveStep: PropTypes.func.isRequired,
-  invoiceFormClearState: PropTypes.func.isRequired
+  actions: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     products: state.products,
     customers: state.customers,
@@ -481,29 +444,31 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  startAddInvoice: (invoice) => dispatch(startAddInvoice(invoice)),
-  setInvoiceNo: () => dispatch(setInvoiceNo()),
-  startAddProduct: (product) => dispatch(startAddProduct(product)),
-  startSearchCustomers: (customerName) => dispatch(startSearchCustomers(customerName)),
-  showGlobalMessage: (message) => dispatch(showGlobalMessage(message)),
-  
-  invoiceFormSetInvoiceNo: (invoiceNo) => dispatch(invoiceFormSetInvoiceNo(invoiceNo)),
-  invoiceFormSetAddProductDialogOpenState: (openState) => dispatch(invoiceFormSetAddProductDialogOpenState(openState)),
-  invoiceFormSetCustomerId: (customerId) => dispatch(invoiceFormSetCustomerId(customerId)),
-  invoiceFormSetSuggestions: ({ single, suggestions }) => dispatch(invoiceFormSetSuggestions({ single, suggestions })),
-  invoiceFormSetSuggestion: ({ name, customerId, single }) => dispatch(invoiceFormSetSuggestion({ name, customerId, single })),
-  invoiceFormAddNewProductToInvoice: (product) => dispatch(invoiceFormAddNewProductToInvoice(product)),
-  invoiceFormSetNewProduct: ({ newProduct, newInvoiceProduct }) => dispatch(invoiceFormSetNewProduct({ newProduct, newInvoiceProduct })),
-  invoiceFormRemoveProductFromInvoiceById: (invoiceProductId) => dispatch(invoiceFormRemoveProductFromInvoiceById(invoiceProductId)),
-  invoiceFormSetInvoiceProductCount: ({ invoiceProductId, count }) => dispatch(invoiceFormSetInvoiceProductCount({ invoiceProductId, count })),
-  invoiceFormSetProvinceId: (provinceId) => dispatch(invoiceFormSetProvinceId(provinceId)),
-  invoiceFormSetCityId: (cityId) => dispatch(invoiceFormSetCityId(cityId)),  
-  invoiceFormSetMailType: (mailType) => dispatch(invoiceFormSetMailType(mailType)),
-  invoiceFormSetDeliverAfter: (deliverAfter) => dispatch(invoiceFormSetDeliverAfter(deliverAfter)),
-  invoiceFormSetDeliverAfterTimeUnit: (deliverAfterTimeUnit) => dispatch(invoiceFormSetDeliverAfterTimeUnit(deliverAfterTimeUnit)),
-  invoiceFormSetActiveStep: (activeStep) => dispatch(invoiceFormSetActiveStep(activeStep)),
-  invoiceFormClearState: () => dispatch(invoiceFormClearState())
+const mapDispatchToProps = dispatch => ({
+  actions: {
+    startAddInvoice: invoice => dispatch(invoicesActions.startAddInvoice(invoice)),
+    setInvoiceNo: () => dispatch(invoicesActions.setInvoiceNo()),
+
+    startAddProduct: product => dispatch(productsActions.startAddProduct(product)),
+    
+    startSearchCustomers: customerName => dispatch(customersActions.startSearchCustomers(customerName)),
+    
+    showGlobalMessage: message => dispatch(messageActions.showGlobalMessage(message)),
+    
+    invoiceFormSetAddProductDialogOpenState: openState => dispatch(addInvoiceActions.invoiceFormSetAddProductDialogOpenState(openState)),
+    invoiceFormSetSuggestions: ({ single, suggestions }) => dispatch(addInvoiceActions.invoiceFormSetSuggestions({ single, suggestions })),
+    invoiceFormSetSuggestion: ({ name, customerId, single }) => dispatch(addInvoiceActions.invoiceFormSetSuggestion({ name, customerId, single })),
+    invoiceFormAddNewProductToInvoice: product => dispatch(addInvoiceActions.invoiceFormAddNewProductToInvoice(product)),
+    invoiceFormRemoveProductFromInvoiceById: invoiceProductId => dispatch(addInvoiceActions.invoiceFormRemoveProductFromInvoiceById(invoiceProductId)),
+    invoiceFormSetInvoiceProductCount: ({ invoiceProductId, count }) => dispatch(addInvoiceActions.invoiceFormSetInvoiceProductCount({ invoiceProductId, count })),
+    invoiceFormSetProvinceId: provinceId => dispatch(addInvoiceActions.invoiceFormSetProvinceId(provinceId)),
+    invoiceFormSetCityId: cityId => dispatch(addInvoiceActions.invoiceFormSetCityId(cityId)),  
+    invoiceFormSetMailType: mailType => dispatch(addInvoiceActions.invoiceFormSetMailType(mailType)),
+    invoiceFormSetDeliverAfter: deliverAfter => dispatch(addInvoiceActions.invoiceFormSetDeliverAfter(deliverAfter)),
+    invoiceFormSetDeliverAfterTimeUnit: deliverAfterTimeUnit => dispatch(addInvoiceActions.invoiceFormSetDeliverAfterTimeUnit(deliverAfterTimeUnit)),
+    invoiceFormSetActiveStep: activeStep => dispatch(addInvoiceActions.invoiceFormSetActiveStep(activeStep)),
+    invoiceFormClearState: () => dispatch(addInvoiceActions.invoiceFormClearState())
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(appStyle)(AddInvoicePage));
