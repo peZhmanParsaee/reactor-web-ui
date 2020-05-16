@@ -26,7 +26,7 @@ export const invoiceFormSetSuggestion = ({ name, customerId, single }) => (
 )
 
 export const invoiceFormAddNewProductToInvoice = newInvoiceProduct => (
-  reduxHelper.action(types.INVOICE_FORM_ADD_NEW_PRODUCT_TO_INVOICE, { newInvoiceProduct })
+  reduxHelper.action(types.INVOICE_FORM_ADD_NEW_PRODUCT_TO_INVOICE, newInvoiceProduct)
 )
 
 export const invoiceFormSetNewProduct = ({ newProduct, newInvoiceProduct }) => (

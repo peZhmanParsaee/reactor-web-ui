@@ -3,7 +3,7 @@ import * as API from '../api/api';
 import * as reduxHelper from '../helpers/reduxHelper';
 
 export const setCustomers = customers => (
-  reduxHelper.action(types.SET_CUSTOMERS, { customers })
+  reduxHelper.action(types.SET_CUSTOMERS, customers)
 );
 
 export const startSetCustomers = () => {

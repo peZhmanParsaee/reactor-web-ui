@@ -3,7 +3,7 @@ import * as API from '../api/api';
 import * as reduxHelper from '../helpers/reduxHelper';
 
 export const addProduct = product => (
-  reduxHelper.action(types.ADD_PRODUCT, { product })
+  reduxHelper.action(types.ADD_PRODUCT, product)
 );
 
 export const startAddProduct = (productData = {}) => {
@@ -28,7 +28,7 @@ export const startAddProduct = (productData = {}) => {
 };
 
 export const setProducts = products => (
-  reduxHelper.action(types.SET_PRODUCTS, { products })
+  reduxHelper.action(types.SET_PRODUCTS, products)
 );
 
 export const startSetProducts = () => {

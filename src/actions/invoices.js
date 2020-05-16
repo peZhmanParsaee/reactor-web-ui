@@ -48,7 +48,7 @@ export const startAddInvoice = (invoiceData = {}) => {
 };
 
 export const setInvoices = invoices => (
-  reduxHelper.action(types.SET_INVOICES, invoices)
+  reduxHelper.action(types.SET_INVOICES, { ...invoices })
 );
 
 export const startSetInvoices = () => async dispatch => {
