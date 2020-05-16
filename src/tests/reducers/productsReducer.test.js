@@ -1,5 +1,5 @@
 import productsReducer from '../../reducers/productsReducer';
-import { ADD_PRODUCT, SET_PRODUCTS } from '../../actions/types';
+import * as types from '../../actions/actionTypes';
 import products from '../fixtures/products';
 
 test('should set default state', () => {
@@ -9,8 +9,8 @@ test('should set default state', () => {
 
 test('should set products state to an array', () => {
   const action = {
-    type: SET_PRODUCTS,
-    products
+    type: types.SET_PRODUCTS,
+    payload: { products }
   };
   const state = productsReducer(undefined, action);
   expect(state).toEqual(products);
@@ -23,8 +23,8 @@ test('should add product', () => {
     count: 125
   };
   const action = {
-    type: ADD_PRODUCT,
-    product: product
+    type: types.ADD_PRODUCT,
+    payload: { product }
   };
   const state = productsReducer(products, action);
   expect(state).toEqual([...products, product]);
