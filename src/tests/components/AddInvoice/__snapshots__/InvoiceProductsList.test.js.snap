@@ -1,0 +1,176 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render InvoiceProductsList with products 1`] = `
+<WithStyles(List)>
+  <WithStyles(ListItem)
+    key="iplh_1"
+  >
+    <WithStyles(List)>
+      <WithStyles(ListItem)
+        key="iplh_1_1"
+        style={
+          Object {
+            "width": "30%",
+          }
+        }
+      >
+        نام محصول
+      </WithStyles(ListItem)>
+      <WithStyles(ListItem)
+        key="iplh_1_2"
+        style={
+          Object {
+            "width": "20%",
+          }
+        }
+      >
+        تعداد
+      </WithStyles(ListItem)>
+      <WithStyles(ListItem)
+        key="iplh_1_3"
+        style={
+          Object {
+            "width": "20%",
+          }
+        }
+      >
+        قیمت واحد
+      </WithStyles(ListItem)>
+      <WithStyles(ListItem)
+        key="iplh_1_4"
+        style={
+          Object {
+            "width": "20%",
+          }
+        }
+      >
+        قیمت کل
+      </WithStyles(ListItem)>
+      <WithStyles(ListItem)
+        key="iplh_1_5"
+        style={
+          Object {
+            "width": "10%",
+          }
+        }
+      />
+    </WithStyles(List)>
+  </WithStyles(ListItem)>
+  <WithStyles(InvoiceProductListItem)
+    itemKey="ipli_undefined_i"
+    key="ipli1_undefined"
+    product={
+      Object {
+        "count": 300,
+        "id": undefined,
+        "name": "prod 1",
+        "totalPrice": undefined,
+        "unitPrice": 12100,
+      }
+    }
+  />
+  <WithStyles(InvoiceProductListItem)
+    itemKey="ipli_undefined_i"
+    key="ipli1_undefined"
+    product={
+      Object {
+        "count": 8,
+        "id": undefined,
+        "name": "prod 2",
+        "totalPrice": undefined,
+        "unitPrice": 125000,
+      }
+    }
+  />
+  <WithStyles(InvoiceProductListItem)
+    itemKey="ipli_undefined_i"
+    key="ipli1_undefined"
+    product={
+      Object {
+        "count": 652,
+        "id": undefined,
+        "name": "prod 1",
+        "totalPrice": undefined,
+        "unitPrice": 14150,
+      }
+    }
+  />
+  <WithStyles(ListItem)
+    key="ipli_add"
+  >
+    <WithStyles(List)>
+      <WithStyles(ListItem)
+        key="ipli_add_1"
+        style={
+          Object {
+            "width": "30%",
+          }
+        }
+      >
+        <WithStyles(IconButton)>
+          <WithStyles(Icon)>
+            add_circle
+          </WithStyles(Icon)>
+        </WithStyles(IconButton)>
+        <WithStyles(WithFormControlContext(Select)) />
+      </WithStyles(ListItem)>
+      <WithStyles(ListItem)
+        key="ipli_add_2"
+        style={
+          Object {
+            "width": "20%",
+          }
+        }
+      >
+        <TextField
+          className="text-center"
+          required={false}
+          select={false}
+          type="number"
+          variant="standard"
+        />
+      </WithStyles(ListItem)>
+      <WithStyles(ListItem)
+        key="ipli_add_3"
+        style={
+          Object {
+            "width": "20%",
+          }
+        }
+      >
+        <WithStyles(Typography)>
+          NaN تومان
+        </WithStyles(Typography)>
+      </WithStyles(ListItem)>
+      <WithStyles(ListItem)
+        key="ipli_add_4"
+        style={
+          Object {
+            "width": "20%",
+          }
+        }
+      >
+        <WithStyles(Typography)>
+          NaN
+        </WithStyles(Typography)>
+      </WithStyles(ListItem)>
+      <WithStyles(ListItem)
+        key="ipli_add_5"
+        style={
+          Object {
+            "width": "10%",
+          }
+        }
+      >
+        <WithStyles(IconButton)
+          onClick={[Function]}
+        >
+          <WithStyles(Icon)>
+            add_circle
+          </WithStyles(Icon)>
+        </WithStyles(IconButton)>
+      </WithStyles(ListItem)>
+    </WithStyles(List)>
+  </WithStyles(ListItem)>
+</WithStyles(List)>
+`;
