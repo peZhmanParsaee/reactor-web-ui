@@ -1,11 +1,11 @@
 import axios from "axios";
-import { API } from "../actions/types";
+import * as types from "../actions/actionTypes";
 import { accessDenied, apiError, apiStart, apiEnd } from "../actions/api";
 
 const apiMiddleware = ({ dispatch }) => next => action => {
   next(action);
 
-  if (action.type !== API) return;
+  if (action.type !== types.API) return;
 
   const {
     url,

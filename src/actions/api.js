@@ -1,5 +1,5 @@
-import types from "./actionTypes";
-import reduxHelper from '../helpers/reduxHelper';
+import * as types from "./actionTypes";
+import * as reduxHelper from '../helpers/reduxHelper';
 
 export const apiStart = label => (
   reduxHelper.action(types.API_START, { label })
