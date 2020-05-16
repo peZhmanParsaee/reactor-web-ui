@@ -1,13 +1,10 @@
-import * as TYPES from './types';
+import * as types from './actionTypes';
+import * as reduxHelper from '../helpers/reduxHelper';
 
 export const showLoading = () => {
-  return {
-    type: TYPES.SHOW_LOADING
-  };
+  return reduxHelper.action(types.SHOW_LOADING);
 };
 
 export const hideLoading = () => {
-  return {
-    type: TYPES.HIDE_LOADING
-  };
+  return reduxHelper.action(types.HIDE_LOADING);
 };

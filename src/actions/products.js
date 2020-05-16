@@ -1,15 +1,13 @@
-import { ADD_PRODUCT, SET_PRODUCTS } from './types';
+import * as types from './actionTypes';
 import * as API from '../api/api';
+import * as reduxHelper from '../helpers/reduxHelper';
 
-export const addProduct = (product) => {
-  return {
-    type: ADD_PRODUCT,
-    product
-  };
-}
+export const addProduct = product => (
+  reduxHelper.action(types.ADD_PRODUCT, { product })
+);
 
 export const startAddProduct = (productData = {}) => {
-  return (dispatch) => {
+  return dispatch => {
     const {
       name, 
       stock, 
@@ -18,7 +16,6 @@ export const startAddProduct = (productData = {}) => {
 
     const product = { name, stock, unitPrice };
 
-    // return axios.post(`${API_ENDPOINT}/api/v1/product`, product)
     return API.addProduct(product)
       .then(insertedProductRes => {
         const opStatus = insertedProductRes.data;
@@ -30,17 +27,12 @@ export const startAddProduct = (productData = {}) => {
   };
 };
 
-
-export const setProducts = (products) => {
-  return {
-    type: SET_PRODUCTS,
-    products
-  };
-};
+export const setProducts = products => (
+  reduxHelper.action(types.SET_PRODUCTS, { products })
+);
 
 export const startSetProducts = () => {
-  return (dispatch) => {
-    //return axios.get(`${API_ENDPOINT}/api/v1/product`)
+  return dispatch => {
     return API.getProducts()
       .then(res => {        
         if (res.data.status === true) {

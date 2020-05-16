@@ -1,17 +1,15 @@
-import * as TYPES from './types';
+import * as types from './actionTypes';
 import { showLoading, hideLoading } from './loading';
 import * as API from '../api/api';
 import { invoiceFormSetInvoiceNo } from './addInvoiceForm';
+import * as reduxHelper from '../helpers/reduxHelper';
 
-export const addInvoice = (invoice) => {
-  return {
-    type: TYPES.ADD_INVOICE,
-    invoice
-  };
-};
+export const addInvoice = invoice => (
+  reduxHelper.action(types.ADD_INVOICE, invoice)
+);
 
 export const startAddInvoice = (invoiceData = {}) => {
-  return (dispatch) => {
+  return dispatch => {
     const {
       no,
       products,
@@ -49,12 +47,9 @@ export const startAddInvoice = (invoiceData = {}) => {
   };
 };
 
-export const setInvoices = (invoices) => {
-  return {
-    type: TYPES.SET_INVOICES,
-    invoices
-  };
-};
+export const setInvoices = invoices => (
+  reduxHelper.action(types.SET_INVOICES, invoices)
+);
 
 export const startSetInvoices = () => async dispatch => {
   try {

@@ -1,15 +1,13 @@
-import * as TYPES from './types';
+import * as types from './actionTypes';
 import * as API from '../api/api';
+import * as reduxHelper from '../helpers/reduxHelper';
 
-export const setCustomers = (customers) => {
-  return {
-    type: TYPES.SET_CUSTOMERS,
-    customers
-  };
-};
+export const setCustomers = customers => (
+  reduxHelper.action(types.SET_CUSTOMERS, { customers })
+);
 
 export const startSetCustomers = () => {
-  return (dispatch) => {
+  return dispatch => {
     return API.getCustomers()
       .then(res => {
         if (res.data.status === true) {
@@ -19,20 +17,14 @@ export const startSetCustomers = () => {
   };
 };
 
-export const searchCustomers = (customerName) => {
-  return {
-    type: TYPES.SEARCH_CUSTOMERS,
-    customerName
-  };
-};
+export const searchCustomers = customerName => (
+  reduxHelper.action(types.SEARCH_CUSTOMERS, { customerName })
+);
 
-export const startSearchCustomers = (customerName) => {
-  return (dispatch) => {
-    dispatch({
-      type: TYPES.SEARCH_CUSTOMERS,
-      customerName
-    });
-    
+export const startSearchCustomers = customerName => {
+  return dispatch => {
+    dispatch(searchCustomers(customerName));
+        
     return API.searchCustomers(customerName)
       .then(res => {
         const opStatus = res.data;
