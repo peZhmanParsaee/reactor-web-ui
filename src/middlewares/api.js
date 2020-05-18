@@ -1,8 +1,10 @@
-import axios from "axios";
-import * as types from "../actions/actionTypes";
-import { accessDenied, apiError, apiStart, apiEnd } from "../actions/api";
+import axios from 'axios';
+import * as types from '../actions/actionTypes';
+import {
+  accessDenied, apiError, apiStart, apiEnd
+} from '../actions/api';
 
-const apiMiddleware = ({ dispatch }) => next => action => {
+const apiMiddleware = ({ dispatch }) => (next) => (action) => {
   next(action);
 
   if (action.type !== types.API) return;
@@ -17,12 +19,12 @@ const apiMiddleware = ({ dispatch }) => next => action => {
     label,
     headers
   } = action.payload;
-  const dataOrParams = ["GET", "DELETE"].includes(method) ? "params" : "data";
+  const dataOrParams = ['GET', 'DELETE'].includes(method) ? 'params' : 'data';
 
   // axios default configs
-  axios.defaults.baseURL = API_ENDPOINT || "";
-  axios.defaults.headers.common["Content-Type"] = "application/json";
-  axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+  axios.defaults.baseURL = API_ENDPOINT || '';
+  axios.defaults.headers.common['Content-Type'] = 'application/json';
+  axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
   if (label) {
     dispatch(apiStart(label));
@@ -38,7 +40,7 @@ const apiMiddleware = ({ dispatch }) => next => action => {
     .then(({ data }) => {
       dispatch(onSuccess(data));
     })
-    .catch(error => {
+    .catch((error) => {
       dispatch(apiError(error));
       dispatch(onFailure(error));
 

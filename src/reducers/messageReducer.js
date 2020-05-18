@@ -1,7 +1,7 @@
 import * as types from '../actions/actionTypes';
 
 const INITIAL_STATE = {
-  type:'info',
+  type: 'info',
   text: '',
   open: false
 };

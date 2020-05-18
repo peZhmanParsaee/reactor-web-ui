@@ -5,9 +5,9 @@ import axios from 'axios';
 const getUrl = (route) => `${API_ENDPOINT}/api/${route}`;
 
 const getRequestHeaders = (withAuth) => ({
-  "Authorization": withAuth ? `Bearer ${localStorage['token']}` : undefined,
-  "Content-Type": "application/json; charset=utf-8",        
-  'Access-Control-Allow-Origin' : '*'
+  Authorization: withAuth ? `Bearer ${localStorage.token}` : undefined,
+  'Content-Type': 'application/json; charset=utf-8',
+  'Access-Control-Allow-Origin': '*'
 });
 
 const apiCall = ({
@@ -25,66 +25,40 @@ const apiCall = ({
       data,
       params
     })
-    .catch(error => {            
+    .catch((error) => {
       if (error.response && error.response.status === 403) {
         // dispatch(accessDenied(window.location.pathname));
       } else {
         throw error;
       }
     });
-}
-
-export const getCustomers = () => {
-  return apiCall({
-    url: 'v1/customer'
-  });
-}
-
-export const searchCustomers = customerName => {
-  return apiCall({
-    url: 'v1/customer/search',
-    params: {
-      q: customerName
-    }
-  });
 };
 
-export const addInvoice = invoice => {
-  return apiCall({
-    url: 'v1/invoice',
-    method: 'POST',
-    data: invoice
-  });
-};
+export const getCustomers = () => apiCall({ url: 'v1/customer' });
 
-export const getInvoices = () => {
-  return apiCall({
-    url: 'v1/invoice'
-  });
-};
+export const searchCustomers = (customerName) => apiCall({
+  url: 'v1/customer/search',
+  params: {
+    q: customerName
+  }
+});
 
-export const addProduct = product => {
-  return apiCall({
-    url: 'v1/product',
-    method: 'POST',
-    data: product
-  });
-};
+export const addInvoice = (invoice) => apiCall({
+  url: 'v1/invoice',
+  method: 'POST',
+  data: invoice
+});
 
-export const getProducts = () => {
-  return apiCall({
-    url: 'v1/product'
-  });
-};
+export const getInvoices = () => apiCall({ url: 'v1/invoice' });
 
-export const getProvinces = () => {
-  return apiCall({
-    url: 'v1/province'
-  });
-};
+export const addProduct = (product) => apiCall({
+  url: 'v1/product',
+  method: 'POST',
+  data: product
+});
 
-export const getNewInvoiceNo = () => {
-  return apiCall({
-    url: 'v1/invoice/new-invoice-no'
-  });
-};
+export const getProducts = () => apiCall({ url: 'v1/product' });
+
+export const getProvinces = () => apiCall({ url: 'v1/province' });
+
+export const getNewInvoiceNo = () => apiCall({ url: 'v1/invoice/new-invoice-no' });

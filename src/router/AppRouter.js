@@ -1,13 +1,13 @@
 import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import { createBrowserHistory } from 'history';
 import NotFoundPage from '../components/NotFoundPage';
 import AppTheme from '../themes/AppTheme';
-import { MuiThemeProvider } from '@material-ui/core/styles';
-import { createBrowserHistory } from "history";
 
 import Layout from '../layouts/Layout';
 
-const history = createBrowserHistory()
+const history = createBrowserHistory();
 
 const AppRouter = () => (
   <MuiThemeProvider theme={AppTheme}>

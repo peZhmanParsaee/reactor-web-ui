@@ -8,42 +8,41 @@ export const addInvoice = (invoice) => (
   reduxHelper.action(types.ADD_INVOICE, invoice)
 );
 
-export const startAddInvoice = (invoiceData = {}) => dispatch => {
-    const {
-      no,
-      products,
-      customerId,
-      address,
-      mailType,
-      deliverAfter,
-      deliverAfterTimeUnit,
-      date,
-      totalPrice
-    } = invoiceData;
+export const startAddInvoice = (invoiceData = {}) => (dispatch) => {
+  const {
+    no,
+    products,
+    customerId,
+    address,
+    mailType,
+    deliverAfter,
+    deliverAfterTimeUnit,
+    date,
+    totalPrice
+  } = invoiceData;
 
-    const invoice = {
-      no,
-      products,
-      customerId,
-      address,
-      mailType,
-      deliverAfter,
-      deliverAfterTimeUnit,
-      date,
-      totalPrice
-    };
-
-    dispatch(showLoading());
-
-    return API.addInvoice(invoice)
-      .then(insertedInvoiceRes => {
-        const opStatus = insertedInvoiceRes.data;
-        dispatch(addInvoice(opStatus.payload));
-        dispatch(hideLoading());
-        return opStatus;
-      });
-
+  const invoice = {
+    no,
+    products,
+    customerId,
+    address,
+    mailType,
+    deliverAfter,
+    deliverAfterTimeUnit,
+    date,
+    totalPrice
   };
+
+  dispatch(showLoading());
+
+  return API.addInvoice(invoice)
+    .then((insertedInvoiceRes) => {
+      const opStatus = insertedInvoiceRes.data;
+      dispatch(addInvoice(opStatus.payload));
+      dispatch(hideLoading());
+      return opStatus;
+    });
+};
 
 export const setInvoices = (invoices) => (
   reduxHelper.action(types.SET_INVOICES, { ...invoices })

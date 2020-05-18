@@ -17,20 +17,19 @@ import Header from './shared/Header';
 import homePageStyle from '../styles/jss/components/homePageStyle';
 
 class HomePage extends React.PureComponent {
-  constructor(props) {
-    super(props);
-  }
   componentWillMount() {
     console.log('HomePage componentWillMount');
   }
+
   componentWillUnmount() {
     console.log('HomePage componentWillUnmount');
   }
+
   render() {
     const { classes } = this.props;
 
     return (
-      <React.Fragment>
+      <>
         <CssBaseline />
         <Header />
         <List>
@@ -47,7 +46,7 @@ class HomePage extends React.PureComponent {
             <ListItemText primary="گزارش فروش" className={classes.mainNavItem} />
           </ListItem>
         </List>
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -4,38 +4,28 @@ import * as reduxHelper from '../helpers/reduxHelper';
 
 export const addProduct = (product) => reduxHelper.action(types.ADD_PRODUCT, product);
 
-export const startAddProduct = (productData = {}) => {
-  return (dispatch) => {
-    const {
-      name, 
-      stock, 
-      unitPrice
-    } = productData;
+export const startAddProduct = (productData = {}) => async (dispatch) => {
+  const {
+    name,
+    stock,
+    unitPrice
+  } = productData;
 
-    const product = { name, stock, unitPrice };
+  const product = { name, stock, unitPrice };
 
-    return API.addProduct(product)
-      .then((insertedProductRes) => {
-        const opStatus = insertedProductRes.data;
-
-        dispatch(addProduct(opStatus.payload));
-
-        return opStatus;
-      });
-  };
+  const insertedProductRes = await API.addProduct(product);
+  const opStatus = insertedProductRes.data;
+  dispatch(addProduct(opStatus.payload));
+  return opStatus;
 };
 
 export const setProducts = (products) => (
   reduxHelper.action(types.SET_PRODUCTS, products)
 );
 
-export const startSetProducts = () => {
-  return (dispatch) => {
-    return API.getProducts()
-      .then((res) => {        
-        if (res.data.status === true) {
-          dispatch(setProducts(res.data.payload));
-        }
-      });
-  };
+export const startSetProducts = () => async (dispatch) => {
+  const res = await API.getProducts();
+  if (res.data.status === true) {
+    dispatch(setProducts(res.data.payload));
+  }
 };

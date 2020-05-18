@@ -5,17 +5,17 @@ class Main extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      city: 'Alwar',
+      city: 'Shiraz',
     };
   }
 
   componentDidMount() {
     setInterval(() => {
-      this.setState(() => ({ city: 'Alwar' }));
+      this.setState(() => ({ city: 'Shiraz' }));
     }, 1000);
 
     setInterval(() => {
-      this.setState(() => ({ city: 'Jaipur' }));
+      this.setState(() => ({ city: 'Tehran' }));
     }, 6000);
   }
 
@@ -28,19 +28,20 @@ class Main extends React.PureComponent {
           {this.state.title}
         </h2>
         <p>
-User Name:
-                    {' '}
-                    {this.props.name}
-                        </p>
+          User Name:
+          {' '}
+          {this.props.name}
+        </p>
         <p>
-User Age:
-                    {' '}
-                    {this.props.age}
-                        </p>
+          User Age:
+          {' '}
+          {this.props.age}
+        </p>
       </div>
     );
   }
 }
+
 Main.propTypes = {
   name: PropTypes.string.isRequired,
   age: PropTypes.number.isRequired
