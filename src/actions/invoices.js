@@ -4,12 +4,11 @@ import * as API from '../api/api';
 import { invoiceFormSetInvoiceNo } from './addInvoiceForm';
 import * as reduxHelper from '../helpers/reduxHelper';
 
-export const addInvoice = invoice => (
+export const addInvoice = (invoice) => (
   reduxHelper.action(types.ADD_INVOICE, invoice)
 );
 
-export const startAddInvoice = (invoiceData = {}) => {
-  return dispatch => {
+export const startAddInvoice = (invoiceData = {}) => dispatch => {
     const {
       no,
       products,
@@ -45,26 +44,24 @@ export const startAddInvoice = (invoiceData = {}) => {
       });
 
   };
-};
 
-export const setInvoices = invoices => (
+export const setInvoices = (invoices) => (
   reduxHelper.action(types.SET_INVOICES, { ...invoices })
 );
 
-export const startSetInvoices = () => async dispatch => {
+export const startSetInvoices = () => async (dispatch) => {
   try {
     const res = await API.getInvoices();
-    
+
     if (res.data.status === true) {
       dispatch(setInvoices(res.data.payload));
     }
-      
   } catch (err) {
     // console.log(err);
   }
 };
 
-export const setInvoiceNo = () => async dispatch => {
+export const setInvoiceNo = () => async (dispatch) => {
   try {
     const res = await API.getNewInvoiceNo();
     const opStatus = res.data;

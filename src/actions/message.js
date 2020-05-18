@@ -1,7 +1,7 @@
 import * as types from './actionTypes';
 import * as reduxHelper from '../helpers/reduxHelper';
 
-export const showGlobalMessage = ({ type, text }) => (  
+export const showGlobalMessage = ({ type, text }) => (
   reduxHelper.action(types.SHOW_MESSAGE, { type, text })
 );
 

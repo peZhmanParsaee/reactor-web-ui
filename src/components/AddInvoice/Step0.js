@@ -23,7 +23,10 @@ import GridItem from '../Grid/GridItem';
 
 class Step0 extends PureComponent {
   render() {
-    const { classes } = this.props;
+    const { classes, invoiceNo, invoiceDate, autosuggestProps, single, handleAutoSuggestChage, 
+      isAddProductDialogOpen, onCloseAddProductDialog, showGlobalMessage,
+      onSaveAddProductDialog
+     } = this.props;
 
     return (
       <div className={classes.container}>
@@ -31,15 +34,15 @@ class Step0 extends PureComponent {
           <GridItem xs={12} sm={12} md={6} style={{marginBottom: '15px'}}>
             <Typography style={{fontWeight: 'bold'}}>
               شماره فاکتور
-            </Typography>              
-            <span>{ this.props.invoiceNo }</span>
+            </Typography>
+            <span>{invoiceNo}</span>
           </GridItem>
           <GridItem xs={12} sm={12} md={6} style={{marginBottom: '15px'}}>
             <Typography style={{fontWeight: 'bold'}}>
               تاریخ امروز
             </Typography>
-            <span>{ this.props.invoiceDate }</span>
-          </GridItem>          
+            <span>{invoiceDate}</span>
+          </GridItem>
           <GridItem xs={12} sm={12} md={6}
             className="autosuggest"
             style={{marginBottom: '15px'}}
@@ -49,12 +52,12 @@ class Step0 extends PureComponent {
                 نام و نام خانوادگی
               </Typography>
               <Autosuggest
-                {...this.props.autosuggestProps}
+                {...autosuggestProps}
                 inputProps={{
                   classes,
                   placeholder: 'نام و نام خانوادگی',
-                  value: this.props.single,
-                  onChange: this.props.handleAutoSuggestChage('single'),
+                  value: single,
+                  onChange: handleAutoSuggestChage('single'),
                 }}
                 theme={{
                   container: classes.container,
@@ -62,7 +65,7 @@ class Step0 extends PureComponent {
                   suggestionsList: classes.suggestionsList,
                   suggestion: classes.suggestion
                 }}
-                renderSuggestionsContainer={options => (
+                renderSuggestionsContainer={(options) => (
                   <Paper {...options.containerProps} square>
                     {options.children}
                   </Paper>
@@ -72,17 +75,15 @@ class Step0 extends PureComponent {
           </GridItem>
         </GridContainer>
         <GridContainer>
-          <GridItem xs={12} sm={12} md={12}>
-            
-          </GridItem>
+          <GridItem xs={12} sm={12} md={12} />
         </GridContainer>
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <AddProductDialog 
-              show={this.props.isAddProductDialogOpen} 
-              onCloseDialog={this.props.onCloseAddProductDialog}
-              showGlobalMessage={this.props.showGlobalMessage}
-              onSaveAddProductDialog={this.props.onSaveAddProductDialog}
+              show={isAddProductDialogOpen}
+              onCloseDialog={onCloseAddProductDialog}
+              showGlobalMessage={showGlobalMessage}
+              onSaveAddProductDialog={onSaveAddProductDialog}
             />
           </GridItem>
         </GridContainer>

@@ -1,21 +1,23 @@
 import React from 'react';
-import InvoiceProductsListItem from './InvoiceProductsListItem';
-import {List, ListItem, Select, MenuItem, TextField, Typography } from '@material-ui/core';
+import {
+  List, ListItem, Select, MenuItem, TextField
+} from '@material-ui/core';
 
 // @material-ui/icons
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 
-import {separateDigits} from '../../helpers/numberHelpers';
+import InvoiceProductsListItem from './InvoiceProductsListItem';
+import { separateDigits } from '../../helpers/numberHelpers';
 
-export const InvoiceProductsList = props => {
+export default InvoiceProductsList = (props) => {
   const onAddNewProductToInvoice = () => {
 
   };
 
   return (
     <List>
-      <ListItem className={props.classes.addFactorProductsListItemHead} key={`iplh_1`}>
+      <ListItem className={props.classes.addFactorProductsListItemHead} key="iplh_1">
         <List className={props.classes.addFactorProductsNestedList}>
           <ListItem style={{width:'30%'}}
             className={props.classes.addFactorProductsNestedListItemHead}
@@ -35,9 +37,8 @@ export const InvoiceProductsList = props => {
             key={`iplh_1_5`}></ListItem>
         </List>
       </ListItem>
-      
       {
-        props.products.map(product => {
+        props.products.map((product) => {
           return <InvoiceProductsListItem 
             key={`ipli1_${product.id}`}
             itemKey={`ipli_${product.id}_i`}

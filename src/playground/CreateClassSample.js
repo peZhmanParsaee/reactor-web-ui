@@ -1,3 +1,3 @@
 import React from 'react';
 
-export default () => React.createElement("div", "klsdfj");
+export default () => React.createElement('div', 'klsdfj');

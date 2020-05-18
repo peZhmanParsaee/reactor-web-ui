@@ -38,10 +38,28 @@ function getSteps() {
 }
 
 class AddInvoicePage extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {      
+      no: null,
+      date: null,
+      products: [],
+      customerId: 0,
+      address: null,
+      totalPrice: null,
+
+      cityId: 0,
+      provinceId: 0,
+      mailType: null,
+      deliverAfter: null,
+      deliverAfterTimeUnit: null
+    };
+  }
   
   async componentDidMount() {
     this.props.actions.setInvoiceNo();
-
 
     history.pushState(null, null, location.href);
     window.onpopstate = (event) => {
@@ -53,18 +71,23 @@ class AddInvoicePage extends Component {
       }
     };
   }
+
   componentWillUnmount() {
     window.onpopstate = () => {};
   }  
+
   onOpenAddProductDialog = (e) => {
     this.props.actions.invoiceFormSetAddProductDialogOpenState(true);
   };
+
   closeAddProductDialog = () => {
     this.props.actions.invoiceFormSetAddProductDialogOpenState(false);
   };
+
   onSaveAddProductDialog = (product) => {
     return this.props.actions.startAddProduct(product);
   };
+
   onNewProductSelectChange = (event) => {
     event.persist();
     const _id = event.target.value;
@@ -79,6 +102,7 @@ class AddInvoicePage extends Component {
     };
     this.props.actions.invoiceFormAddNewProductToInvoice(newInvoiceProduct);
   };
+
   onNewProductCountChange = (event) => {    
     event.persist();
     const count = event.target.value;
@@ -93,17 +117,19 @@ class AddInvoicePage extends Component {
         }}))
     }
   };
+
   onAddedProductCountChange = (event) => {
     event.persist();
     const count = event.target.value;
+
     if (count.match(/^[1-9]{1}[0-9]{0,2}$/)) {
       this.props.actions.invoiceFormSetInvoiceProductCount({
         invoiceProductId: event.target.id,
         count: count
       });
-
     }
   };
+
   onAddNewProductToInvoice = (event) => {
     if (!this.props.addInvoiceForm.invoice.newProduct._id || !this.props.addInvoiceForm.invoice.newProduct.count) {
       this.showMessage({ type: "warning", text: "خطای اعتبارسنجی، نام محصول و تعداد اجباری است." });      
@@ -111,6 +137,7 @@ class AddInvoicePage extends Component {
     }
     this.addNewProductToInvoice();
   };
+
   addNewProductToInvoice = () => {
     const product = this.props.products.find(x => x._id == this.props.addInvoiceForm.invoice.newProduct._id);
     
@@ -125,12 +152,15 @@ class AddInvoicePage extends Component {
 
     this.props.actions.invoiceFormAddNewProductToInvoice(newInvoiceProduct);
   };
+
   showMessage = ({ text, type }) => {
     this.props.actions.showGlobalMessage({ type, text });
   };
+
   onRemoveProductFromInvoice = (_id) => {
     this.props.actions.invoiceFormRemoveProductFromInvoiceById(_id);
   };
+
   handleNextStep = () => {
     if (this.props.addInvoiceForm.activeStep === 0) {
       if (!this.props.addInvoiceForm.invoice.products.length && !this.props.addInvoiceForm.invoice.customerId) {
@@ -216,44 +246,65 @@ class AddInvoicePage extends Component {
       console.log('Error, Unrecognized step in add new invoice form');
     }
   };
+
   handleBackStep = () => {
     if (this.props.addInvoiceForm.activeStep === 1) {
       this.props.actions.invoiceFormSetActiveStep(this.props.addInvoiceForm.activeStep - 1);
     }
   };
+
   onProvinceChange = (event) => {
     const provinceId = event.target.value;
     if (provinceId) {
       this.props.actions.invoiceFormSetProvinceId(provinceId);
     }
   };
+
   onCityChange = (event) => {
     const cityId = event.target.value;
-    this.props.actions.invoiceFormSetCityId(cityId);
+    // this.props.actions.invoiceFormSetCityId(cityId);
+    this.setState(_ => {
+      cityId
+    });
   };
+
   onMailTypeChange = (event) => {
     const mailType = event.target.value;
-    this.props.actions.invoiceFormSetMailType(mailType);
+    // this.props.actions.invoiceFormSetMailType(mailType);
+    this.setState(_ => {
+      mailType
+    });
   };
+
   onDeliverAfterChange = (event) => {
     const deliverAfter = event.target.value;
     if (deliverAfter.match(/^[1-9]{1}[0-9]{0,1}$/)) {
-      this.props.actions.invoiceFormSetDeliverAfter(deliverAfter);
+      // this.props.actions.invoiceFormSetDeliverAfter(deliverAfter);
+      this.setState(_ => {
+        deliverAfter
+      });
     }
   };
+
   onDeliverAfterTimeUnitChange = (event) => {
     const deliverAfterTimeUnit = event.target.value;
-    this.props.actions.invoiceFormSetDeliverAfterTimeUnit(deliverAfterTimeUnit);
+    // this.props.actions.invoiceFormSetDeliverAfterTimeUnit(deliverAfterTimeUnit);
+    this.setState(_ => {
+      deliverAfterTimeUnit
+    });
   };
+
   handleSuggestionsFetchRequested = ({ value }) => {
     this.getSuggestions(value)
       .then(suggestions => {
         this.props.actions.invoiceFormSetSuggestions({ single: value, suggestions});
       });    
   };
+
   handleSuggestionsClearRequested = () => {
     this.props.actions.invoiceFormSetSuggestions({ suggestions: []});
   };
+
   handleChange = name => (event, { newValue }) => {
     const selectedCustomer = this.props.customers.find(x => x.fullName === newValue);
     
@@ -267,6 +318,7 @@ class AddInvoicePage extends Component {
       this.props.actions.invoiceFormSetSuggestion({ [name]: newValue, customerId: null, single: newValue });
     }    
   };
+
   renderSuggestion = (suggestion, { query, isHighlighted }) => {
     const matches = match(suggestion.fullName, query);
     const parts = parse(suggestion.fullName, matches);
@@ -289,6 +341,7 @@ class AddInvoicePage extends Component {
       </MenuItem>
     );
   };
+
   getSuggestions = (value) => {
     const inputValue = value;
     const inputLength = inputValue.length;
@@ -303,9 +356,11 @@ class AddInvoicePage extends Component {
         .catch(err => console.error);
     }
   };
+
   getSuggestionValue = (suggestion) => {
     return suggestion.fullName;
   };
+
   render() {
     const { classes } = this.props;
     const steps = getSteps();
@@ -324,40 +379,43 @@ class AddInvoicePage extends Component {
 
     if (activeStep === 0) {
       stepContent = <Step0 
-        invoiceNo={this.props.addInvoiceForm.invoice.no} 
-        invoiceDate={this.props.addInvoiceForm.invoice.date} 
-        invoiceProducts={this.props.addInvoiceForm.invoice.products}
-        handleAutoSuggestChage={this.handleChange}
         autosuggestProps={autosuggestProps}
+        isAddProductDialogOpen={this.props.addInvoiceForm.isAddProductDialogOpen}
+        
+        invoiceNo={this.props.addInvoiceForm.invoice.no} 
+        invoiceDate={this.state.date} 
+        invoiceProducts={this.props.addInvoiceForm.invoice.products}        
         single={this.props.addInvoiceForm.single}
         newProductId={this.props.addInvoiceForm.invoice.newProduct._id}
         newProductCount={this.props.addInvoiceForm.invoice.newProduct.count}
         newProductUnitPrice={this.props.addInvoiceForm.invoice.newProduct.unitPrice}
-        newProductTotalPrice={this.props.addInvoiceForm.invoice.newProduct.totalPrice}
-        onNewProductSelectChange={this.onNewProductSelectChange}
-        onRemoveProductFromInvoice={this.onRemoveProductFromInvoice}
+        newProductTotalPrice={this.props.addInvoiceForm.invoice.newProduct.totalPrice}        
         products={this.props.products}
-        isAddProductDialogOpen={this.props.addInvoiceForm.isAddProductDialogOpen}
+        
+        handleAutoSuggestChage={this.handleChange}
         onCloseAddProductDialog={this.closeAddProductDialog}
         onSaveAddProductDialog={this.onSaveAddProductDialog}
         onNewProductCountChange={this.onNewProductCountChange}
         onAddedProductCountChange={this.onAddedProductCountChange}
         onOpenAddProductDialog={this.onOpenAddProductDialog}
+        onNewProductSelectChange={this.onNewProductSelectChange}
+        onRemoveProductFromInvoice={this.onRemoveProductFromInvoice}
         showGlobalMessage={this.props.actions.showGlobalMessage}
       />
     } else if (activeStep == 1) {
       stepContent = <Step1 
-        provinceId={this.props.addInvoiceForm.invoice.address.provinceId}
-        cityId={this.props.addInvoiceForm.invoice.address.cityId}
+        provinces={this.props.provinces}
+        provinceId={this.state.provinceId}
+        cityId={this.state.cityId}        
+        mailType={this.state.mailType}
+        deliverAfter={this.state.deliverAfter}
+        deliverAfterTimeUnit={this.state.deliverAfterTimeUnit}
+
         onProvinceChange={this.onProvinceChange}
         onCityChange={this.onCityChange}
-        provinces={this.props.provinces}
-        mailType={this.props.addInvoiceForm.invoice.mailType}
-        onMailTypeChange={this.onMailTypeChange}
-        deliverAfter={this.props.addInvoiceForm.invoice.deliverAfter}
-        onDeliverAfterChange={this.onDeliverAfterChange}
-        deliverAfterTimeUnit={this.props.addInvoiceForm.invoice.deliverAfterTimeUnit}
         onDeliverAfterTimeUnitChange={this.onDeliverAfterTimeUnitChange}
+        onMailTypeChange={this.onMailTypeChange}
+        onDeliverAfterChange={this.onDeliverAfterChange}
       />
     }
     

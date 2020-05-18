@@ -2,27 +2,24 @@ import * as types from './actionTypes';
 import * as API from '../api/api';
 import * as reduxHelper from '../helpers/reduxHelper';
 
-export const setCustomers = customers => (
+export const setCustomers = (customers) => (
   reduxHelper.action(types.SET_CUSTOMERS, customers)
 );
 
-export const startSetCustomers = () => {
-  return dispatch => {
-    return API.getCustomers()
-      .then(res => {
-        if (res.data.status === true) {
-          dispatch(setCustomers(res.data.payload));
-        }
-      });
-  };
+export const startSetCustomers = () => dispatch => {
+  return API.getCustomers()
+    .then(res => {
+      if (res.data.status === true) {
+        dispatch(setCustomers(res.data.payload));
+      }
+    });
 };
 
-export const searchCustomers = customerName => (
+export const searchCustomers = (customerName) => (
   reduxHelper.action(types.SEARCH_CUSTOMERS, { customerName })
 );
 
-export const startSearchCustomers = customerName => {
-  return dispatch => {
+export const startSearchCustomers = (customerName) => dispatch => {
     dispatch(searchCustomers(customerName));
         
     return API.searchCustomers(customerName)
@@ -39,4 +36,3 @@ export const startSearchCustomers = customerName => {
         console.error('an error was happened ', error);
       });
   };
-};

@@ -1,8 +1,8 @@
-import * as types from '../actions/actionTypes';
 import moment from 'moment-jalaali';
+import * as types from '../actions/actionTypes';
 
 const INITIAL_STATE = {
-  activeStep: 0,    
+  activeStep: 0,
   isAddProductDialogOpen: false,
   invoice: {
     no: 0,
@@ -19,15 +19,15 @@ const INITIAL_STATE = {
       provinceId: '',
       cityId: ''
     },
-    mailType: "registered",
-    deliverAfter: "",
-    deliverAfterTimeUnit: "",
+    mailType: 'registered',
+    deliverAfter: '',
+    deliverAfterTimeUnit: '',
     totalPrice: 0
   },
   message: {
-    text: "",
+    text: '',
     show: false,
-    type: "warning"
+    type: 'warning'
   },
   single: '',
   popper: '',
@@ -36,8 +36,7 @@ const INITIAL_STATE = {
 };
 
 export default (state = INITIAL_STATE, action) => {
-  switch(action.type) {
-    
+  switch (action.type) {
   case types.INVOICE_FORM_CLEAR_STATE:
 
     return INITIAL_STATE;
@@ -57,7 +56,7 @@ export default (state = INITIAL_STATE, action) => {
         no: action.payload.invoiceNo
       }
     };
-      
+
   case types.INVOICE_FORM_SET_ADD_PRODUCT_DIALOG_OPEN:
     return {
       ...state,
@@ -70,17 +69,17 @@ export default (state = INITIAL_STATE, action) => {
       invoice: { ...state.invoice, customerId: action.payload.customerId }
     };
 
-  case types.INVOICE_FORM_SET_SUGGESTIONS:       
+  case types.INVOICE_FORM_SET_SUGGESTIONS:
     return {
       ...state,
-      suggestions: [ ...action.payload.suggestions ],
+      suggestions: [...action.payload.suggestions],
       // single: action.payload.single
     };
 
   case types.INVOICE_FORM_SET_SUGGESTION:
     return {
       ...state,
-      name: action.payload.name,        
+      name: action.payload.name,
       invoice: {
         ...state.invoice,
         customerId: action.payload.customerId
@@ -89,15 +88,15 @@ export default (state = INITIAL_STATE, action) => {
     };
 
   case types.INVOICE_FORM_ADD_NEW_PRODUCT_TO_INVOICE:
-    
+
     return {
       ...state,
       invoice: {
         ...state.invoice,
         products: [
-          ...state.invoice.products, 
+          ...state.invoice.products,
           action.payload.newInvoiceProduct
-        ], 
+        ],
         newProduct: {
           _id: 0,
           count: 1,
@@ -115,7 +114,7 @@ export default (state = INITIAL_STATE, action) => {
         ...state.invoice,
         newProduct: { ...action.payload.newProduct },
         products: [
-          ...state.invoice.products, 
+          ...state.invoice.products,
           action.payload.newInvoiceProduct
         ]
       }
@@ -126,12 +125,12 @@ export default (state = INITIAL_STATE, action) => {
       ...state,
       invoice: {
         ...state.invoice,
-        products: state.invoice.products.filter(invoiceProduct => invoiceProduct.id != action.payload.invoiceProductId)
+        products: state.invoice.products.filter((invoiceProduct) => invoiceProduct.id != action.payload.invoiceProductId)
       }
     };
 
   case types.INVOICE_FORM_SET_INVOICE_PRODUCT_COUNT:
-    let tempInvoiceProducts = state.invoice.products;
+    const tempInvoiceProducts = state.invoice.products;
 
     for (let i = 0; i < state.invoice.products.length; i++) {
       if (state.invoice.products[i].id === action.payload.invoiceProductId) {
@@ -149,7 +148,7 @@ export default (state = INITIAL_STATE, action) => {
         products: tempInvoiceProducts
       }
     };
-    
+
   case types.INVOICE_FORM_SET_PROVINCE_ID:
     return {
       ...state,
@@ -173,7 +172,7 @@ export default (state = INITIAL_STATE, action) => {
         }
       }
     };
-    
+
   case types.INVOICE_FORM_SET_MAIL_TYPE:
     return {
       ...state,
@@ -182,7 +181,7 @@ export default (state = INITIAL_STATE, action) => {
         mailType: action.payload.mailType
       }
     };
-    
+
   case types.INVOICE_FORM_SET_DELIVER_AFTER:
     return {
       ...state,
@@ -191,7 +190,7 @@ export default (state = INITIAL_STATE, action) => {
         deliverAfter: action.payload.deliverAfter
       }
     };
-    
+
   case types.INVOICE_FORM_SET_DELIVER_AFTER_TIME_UNIT:
     return {
       ...state,
