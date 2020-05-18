@@ -23,6 +23,15 @@ module.exports = {
         "jest"
     ],
     "rules": {
+        "no-unused-vars": [
+            "error",
+            {
+                "vars": "local",
+                "args": "none"
+            }
+        ],
+        "comma-dangle": "off",
+        "react/jsx-filename-extension": 0,
         "jest/no-disabled-tests": "warn",
         "jest/no-focused-tests": "error",
         "jest/no-identical-title": "error",
