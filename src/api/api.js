@@ -40,29 +40,36 @@ const apiCall = ({
 
 export const getCustomers = () => apiCall({ url: 'v1/customer' });
 
-export const searchCustomers = (customerName) => apiCall({
-  url: 'v1/customer/search',
-  params: {
-    q: customerName
-  }
-});
+export const searchCustomers = (customerName) => {
+  const { source } = CancelToken;
+  apiCall({
+    url: 'v1/customer/search',
+    params: {
+      q: customerName,
+    },
+    cancelToken: source.token,
+  });
+};
 
-export const addInvoice = (invoice) => apiCall({
-  url: 'v1/invoice',
-  method: 'POST',
-  data: invoice
-});
+export const addInvoice = (invoice) =>
+  apiCall({
+    url: 'v1/invoice',
+    method: 'POST',
+    data: invoice,
+  });
 
 export const getInvoices = () => apiCall({ url: 'v1/invoice' });
 
-export const addProduct = (product) => apiCall({
-  url: 'v1/product',
-  method: 'POST',
-  data: product
-});
+export const addProduct = (product) =>
+  apiCall({
+    url: 'v1/product',
+    method: 'POST',
+    data: product,
+  });
 
 export const getProducts = () => apiCall({ url: 'v1/product' });
 
 export const getProvinces = () => apiCall({ url: 'v1/province' });
 
-export const getNewInvoiceNo = () => apiCall({ url: 'v1/invoice/new-invoice-no' });
+export const getNewInvoiceNo = () =>
+  apiCall({ url: 'v1/invoice/new-invoice-no' });
