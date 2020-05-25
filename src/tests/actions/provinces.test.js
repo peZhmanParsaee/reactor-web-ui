@@ -9,7 +9,7 @@ import provinces from '../fixtures/provinces';
 
 global.API_ENDPOINT = 'http://localhost:1234';
 
-const getUrl = route => `${API_ENDPOINT}/api/${route}`;
+const getUrl = (route) => `${API_ENDPOINT}/api/${route}`;
 
 describe('provinces actions', () => {
   it('should return set provinces type correctly', () => {
@@ -22,12 +22,12 @@ describe('provinces actions', () => {
       type: types.SET_PROVINCES,
       payload: provinces
     });
-  })
+  });
 });
 
-describe('provinces async actions', () => {  
+describe('provinces async actions', () => {
   const middlewares = [thunk];
-  const mockStore = configureStore(middlewares);  
+  const mockStore = configureStore(middlewares);
   const mock = new MockAdapter(axios);
 
   it('should create SET_PROVINCES correctly', () => {
@@ -40,22 +40,22 @@ describe('provinces async actions', () => {
   });
 
   it('should create SET_PROVINCES when fetching provinces has been done', () => {
-    mock.onGet(getUrl('v1/province'))
-      .reply(200, {
-        status: true,
-        payload: provinces        
-      });
-    
+    mock.onGet(getUrl('v1/province')).reply(200, {
+      status: true,
+      payload: provinces
+    });
+
     const initialState = { provinces: [] };
     const store = mockStore(initialState);
 
-    store.dispatch(provincesActions.startSetProvinces())
-      .then(() => {
-        const expectedActions = [{
+    store.dispatch(provincesActions.startSetProvinces()).then(() => {
+      const expectedActions = [
+        {
           type: types.SET_PROVINCES,
           payload: provinces
-        }];
-        expect(store.getActions()).toEqual(expectedActions)
-      });
+        }
+      ];
+      expect(store.getActions()).toEqual(expectedActions);
+    });
   });
 });
