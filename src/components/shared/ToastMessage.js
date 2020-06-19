@@ -19,39 +19,39 @@ import InfoIcon from '@material-ui/icons/Info';
 import CloseIcon from '@material-ui/icons/Close';
 
 // actions
-import { setMessageOpenState } from '../../actions/message';
+import { setMessageOpenState } from '../../redux/actions/message';
 
 const variantIcon = {
   success: CheckCircleIcon,
   warning: WarningIcon,
   error: ErrorIcon,
-  info: InfoIcon,
+  info: InfoIcon
 };
 
-const styles1 = theme => ({
+const styles1 = (theme) => ({
   success: {
-    backgroundColor: green[600],
+    backgroundColor: green[600]
   },
   error: {
-    backgroundColor: theme.palette.error.dark,
+    backgroundColor: theme.palette.error.dark
   },
   info: {
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: theme.palette.primary.dark
   },
   warning: {
-    backgroundColor: amber[700],
+    backgroundColor: amber[700]
   },
   icon: {
-    fontSize: 20,
+    fontSize: 20
   },
   iconVariant: {
     opacity: 0.9,
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing.unit
   },
   message: {
     display: 'flex',
-    alignItems: 'center',
-  },
+    alignItems: 'center'
+  }
 });
 
 class ToastMessage extends React.PureComponent {
@@ -64,12 +64,11 @@ class ToastMessage extends React.PureComponent {
     const { text: message, open, type: variant } = this.props.state;
     const Icon = variantIcon[variant];
 
-
     return (
       <Snackbar
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'left',
+          horizontal: 'left'
         }}
         open={open}
         autoHideDuration={6000}
@@ -93,11 +92,10 @@ class ToastMessage extends React.PureComponent {
               onClick={this.handleClose}
             >
               <CloseIcon className={classes.icon} />
-            </IconButton>,
+            </IconButton>
           ]}
-          
         />
-      </Snackbar>      
+      </Snackbar>
     );
   }
 }
@@ -105,7 +103,7 @@ class ToastMessage extends React.PureComponent {
 ToastMessage.propTypes = {
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
-  message: PropTypes.node,
+  message: PropTypes.node
   // variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
 };
 
@@ -117,4 +115,7 @@ const mapDispatchToProps = (dispatch) => ({
   setMessageOpenState: ({ open }) => dispatch(setMessageOpenState({ open }))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles1)(ToastMessage));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles1)(ToastMessage));

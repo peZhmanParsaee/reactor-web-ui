@@ -1,10 +1,9 @@
 import * as types from './actionTypes';
-import * as API from '../api/api';
-import * as reduxHelper from '../helpers/reduxHelper';
+import * as API from '../../api';
+import * as reduxHelper from '../../helpers/reduxHelper';
 
-export const setCustomers = (customers) => (
-  reduxHelper.action(types.SET_CUSTOMERS, customers)
-);
+export const setCustomers = (customers) =>
+  reduxHelper.action(types.SET_CUSTOMERS, customers);
 
 export const startSetCustomers = () => async (dispatch) => {
   const res = await API.getCustomers();
@@ -13,9 +12,8 @@ export const startSetCustomers = () => async (dispatch) => {
   }
 };
 
-export const searchCustomers = (customerName) => (
-  reduxHelper.action(types.SEARCH_CUSTOMERS, { customerName })
-);
+export const searchCustomers = (customerName) =>
+  reduxHelper.action(types.SEARCH_CUSTOMERS, { customerName });
 
 export const startSearchCustomers = (customerName) => (dispatch) => {
   dispatch(searchCustomers(customerName));

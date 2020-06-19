@@ -7,7 +7,7 @@ import parse from 'autosuggest-highlight/parse';
 // @material-ui/core
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Stepper from '@material-ui/core/Stepper';;
+import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -26,23 +26,21 @@ import { generateKey } from '../../helpers/keyHelper';
 import AddInvoiceContext from './AddInvoiceContext';
 
 // action creators
-import * as invoicesActions from '../../actions/invoices';
-import * as addInvoiceActions from '../../actions/addInvoiceForm';
-import * as productsActions from '../../actions/products';
-import * as customersActions from '../../actions/customers';
-import * as messageActions from '../../actions/message';
-
+import * as invoicesActions from '../../redux/actions/invoices';
+import * as addInvoiceActions from '../../redux/actions/addInvoiceForm';
+import * as productsActions from '../../redux/actions/products';
+import * as customersActions from '../../redux/actions/customers';
+import * as messageActions from '../../redux/actions/message';
 
 function getSteps() {
-  return [ 'تکمیل اطلاعات اولیه', 'تاریخ تحویل' ];
+  return ['تکمیل اطلاعات اولیه', 'تاریخ تحویل'];
 }
 
 class AddInvoicePage extends Component {
-
   constructor(props) {
     super(props);
 
-    this.state = {      
+    this.state = {
       no: null,
       date: null,
       products: [],
@@ -57,7 +55,7 @@ class AddInvoicePage extends Component {
       deliverAfterTimeUnit: null
     };
   }
-  
+
   async componentDidMount() {
     this.props.actions.setInvoiceNo();
 
@@ -74,7 +72,7 @@ class AddInvoicePage extends Component {
 
   componentWillUnmount() {
     window.onpopstate = () => {};
-  }  
+  }
 
   onOpenAddProductDialog = (e) => {
     this.props.actions.invoiceFormSetAddProductDialogOpenState(true);
@@ -91,7 +89,7 @@ class AddInvoicePage extends Component {
   onNewProductSelectChange = (event) => {
     event.persist();
     const _id = event.target.value;
-    const product = this.props.products.find(x => x._id == _id);
+    const product = this.props.products.find((x) => x._id == _id);
     const newInvoiceProduct = {
       id: generateKey(),
       productId: event.target.value,
@@ -103,18 +101,23 @@ class AddInvoicePage extends Component {
     this.props.actions.invoiceFormAddNewProductToInvoice(newInvoiceProduct);
   };
 
-  onNewProductCountChange = (event) => {    
+  onNewProductCountChange = (event) => {
     event.persist();
     const count = event.target.value;
     if (count.match(/^[1-9]{1}[0-9]{0,2}$/)) {
       this.setState(() => ({
-        invoice: { ...this.props.addInvoiceForm.invoice, 
-          newProduct:{ 
-            ...this.props.addInvoiceForm.invoice.newProduct, 
+        invoice: {
+          ...this.props.addInvoiceForm.invoice,
+          newProduct: {
+            ...this.props.addInvoiceForm.invoice.newProduct,
             count: parseInt(event.target.value, 10),
-            totalPrice: parseInt(event.target.value * this.props.addInvoiceForm.invoice.newProduct.unitPrice)
+            totalPrice: parseInt(
+              event.target.value *
+                this.props.addInvoiceForm.invoice.newProduct.unitPrice
+            )
           }
-        }}))
+        }
+      }));
     }
   };
 
@@ -131,16 +134,24 @@ class AddInvoicePage extends Component {
   };
 
   onAddNewProductToInvoice = (event) => {
-    if (!this.props.addInvoiceForm.invoice.newProduct._id || !this.props.addInvoiceForm.invoice.newProduct.count) {
-      this.showMessage({ type: "warning", text: "خطای اعتبارسنجی، نام محصول و تعداد اجباری است." });      
+    if (
+      !this.props.addInvoiceForm.invoice.newProduct._id ||
+      !this.props.addInvoiceForm.invoice.newProduct.count
+    ) {
+      this.showMessage({
+        type: 'warning',
+        text: 'خطای اعتبارسنجی، نام محصول و تعداد اجباری است.'
+      });
       return;
     }
     this.addNewProductToInvoice();
   };
 
   addNewProductToInvoice = () => {
-    const product = this.props.products.find(x => x._id == this.props.addInvoiceForm.invoice.newProduct._id);
-    
+    const product = this.props.products.find(
+      (x) => x._id == this.props.addInvoiceForm.invoice.newProduct._id
+    );
+
     const newInvoiceProduct = {
       id: generateKey(),
       productId: this.props.addInvoiceForm.invoice.newProduct._id,
@@ -163,35 +174,40 @@ class AddInvoicePage extends Component {
 
   handleNextStep = () => {
     if (this.props.addInvoiceForm.activeStep === 0) {
-      if (!this.props.addInvoiceForm.invoice.products.length && !this.props.addInvoiceForm.invoice.customerId) {
-        this.showMessage({ 
-          type: "warning",
-          text: "انتخاب مشتری و افزودن حداقل یک محصول اجباری است."
+      if (
+        !this.props.addInvoiceForm.invoice.products.length &&
+        !this.props.addInvoiceForm.invoice.customerId
+      ) {
+        this.showMessage({
+          type: 'warning',
+          text: 'انتخاب مشتری و افزودن حداقل یک محصول اجباری است.'
         });
         return;
       } else if (!this.props.addInvoiceForm.invoice.products.length) {
-        this.showMessage({ 
-          type: "warning",
-          text: "افزودن حداقل یک محصول اجباری است."
+        this.showMessage({
+          type: 'warning',
+          text: 'افزودن حداقل یک محصول اجباری است.'
         });
         return;
       } else if (!this.props.addInvoiceForm.invoice.customerId) {
-        this.showMessage({ 
-          type: "warning",
-          text: "انتخاب مشتری اجباری است."
+        this.showMessage({
+          type: 'warning',
+          text: 'انتخاب مشتری اجباری است.'
         });
         return;
-      }      
+      }
 
-      this.props.actions.invoiceFormSetActiveStep(this.props.addInvoiceForm.activeStep + 1);
-
+      this.props.actions.invoiceFormSetActiveStep(
+        this.props.addInvoiceForm.activeStep + 1
+      );
     } else if (this.props.addInvoiceForm.activeStep === 1) {
-      if (this.props.addInvoiceForm.invoice.products.length 
-        && this.props.addInvoiceForm.invoice.customerId
-        && this.props.addInvoiceForm.invoice.address.provinceId
-        && this.props.addInvoiceForm.invoice.address.cityId
-        && this.props.addInvoiceForm.invoice.deliverAfter
-        && this.props.addInvoiceForm.invoice.deliverAfterTimeUnit
+      if (
+        this.props.addInvoiceForm.invoice.products.length &&
+        this.props.addInvoiceForm.invoice.customerId &&
+        this.props.addInvoiceForm.invoice.address.provinceId &&
+        this.props.addInvoiceForm.invoice.address.cityId &&
+        this.props.addInvoiceForm.invoice.deliverAfter &&
+        this.props.addInvoiceForm.invoice.deliverAfterTimeUnit
       ) {
         let { newProduct, ...invoice } = this.props.addInvoiceForm.invoice;
         const invoiceData = {
@@ -208,8 +224,8 @@ class AddInvoicePage extends Component {
         this.props.actions.startAddInvoice(invoiceData);
         this.props.actions.invoiceFormClearState();
         this.showMessage({
-          type: "success",
-          text: "فاکتور با موفقیت ثبت شد"
+          type: 'success',
+          text: 'فاکتور با موفقیت ثبت شد'
         });
 
         // .then(opStatus => {
@@ -218,13 +234,13 @@ class AddInvoicePage extends Component {
         //   console.log(opStatus.status === true);
         //   if (opStatus.status === true) {
         //     this.props.history.push('/');
-                
+
         //     // this.props.showGlobalMessage({
         //     //   type: "success",
         //     //   text: "فاکتور با موفقیت ثبت شد"
         //     // });
         //   } else {
-        //     this.showMessage({ 
+        //     this.showMessage({
         //       type: "error",
         //       text: opStatus.message || "خطا در انجام عملیات"
         //     });
@@ -233,23 +249,22 @@ class AddInvoicePage extends Component {
         // .catch(err => {
 
         // });
-          
       } else {
-        this.showMessage({ 
-          type: "warning",
-          text: "اطلاعات فاکتور را جهت ثبت کامل نمایید."
+        this.showMessage({
+          type: 'warning',
+          text: 'اطلاعات فاکتور را جهت ثبت کامل نمایید.'
         });
       }
-    } 
-    
-    else {
+    } else {
       console.log('Error, Unrecognized step in add new invoice form');
     }
   };
 
   handleBackStep = () => {
     if (this.props.addInvoiceForm.activeStep === 1) {
-      this.props.actions.invoiceFormSetActiveStep(this.props.addInvoiceForm.activeStep - 1);
+      this.props.actions.invoiceFormSetActiveStep(
+        this.props.addInvoiceForm.activeStep - 1
+      );
     }
   };
 
@@ -263,16 +278,16 @@ class AddInvoicePage extends Component {
   onCityChange = (event) => {
     const cityId = event.target.value;
     // this.props.actions.invoiceFormSetCityId(cityId);
-    this.setState(_ => {
-      cityId
+    this.setState((_) => {
+      cityId;
     });
   };
 
   onMailTypeChange = (event) => {
     const mailType = event.target.value;
     // this.props.actions.invoiceFormSetMailType(mailType);
-    this.setState(_ => {
-      mailType
+    this.setState((_) => {
+      mailType;
     });
   };
 
@@ -280,8 +295,8 @@ class AddInvoicePage extends Component {
     const deliverAfter = event.target.value;
     if (deliverAfter.match(/^[1-9]{1}[0-9]{0,1}$/)) {
       // this.props.actions.invoiceFormSetDeliverAfter(deliverAfter);
-      this.setState(_ => {
-        deliverAfter
+      this.setState((_) => {
+        deliverAfter;
       });
     }
   };
@@ -289,34 +304,42 @@ class AddInvoicePage extends Component {
   onDeliverAfterTimeUnitChange = (event) => {
     const deliverAfterTimeUnit = event.target.value;
     // this.props.actions.invoiceFormSetDeliverAfterTimeUnit(deliverAfterTimeUnit);
-    this.setState(_ => {
-      deliverAfterTimeUnit
+    this.setState((_) => {
+      deliverAfterTimeUnit;
     });
   };
 
   handleSuggestionsFetchRequested = ({ value }) => {
-    this.getSuggestions(value)
-      .then(suggestions => {
-        this.props.actions.invoiceFormSetSuggestions({ single: value, suggestions});
-      });    
+    this.getSuggestions(value).then((suggestions) => {
+      this.props.actions.invoiceFormSetSuggestions({
+        single: value,
+        suggestions
+      });
+    });
   };
 
   handleSuggestionsClearRequested = () => {
-    this.props.actions.invoiceFormSetSuggestions({ suggestions: []});
+    this.props.actions.invoiceFormSetSuggestions({ suggestions: [] });
   };
 
-  handleChange = name => (event, { newValue }) => {
-    const selectedCustomer = this.props.customers.find(x => x.fullName === newValue);
-    
+  handleChange = (name) => (event, { newValue }) => {
+    const selectedCustomer = this.props.customers.find(
+      (x) => x.fullName === newValue
+    );
+
     if (selectedCustomer) {
-      this.props.actions.invoiceFormSetSuggestion({ 
-        [name]: newValue, 
+      this.props.actions.invoiceFormSetSuggestion({
+        [name]: newValue,
         customerId: selectedCustomer._id,
         single: newValue
       });
     } else {
-      this.props.actions.invoiceFormSetSuggestion({ [name]: newValue, customerId: null, single: newValue });
-    }    
+      this.props.actions.invoiceFormSetSuggestion({
+        [name]: newValue,
+        customerId: null,
+        single: newValue
+      });
+    }
   };
 
   renderSuggestion = (suggestion, { query, isHighlighted }) => {
@@ -335,7 +358,7 @@ class AddInvoicePage extends Component {
               <strong key={String(index)} style={{ fontWeight: 300 }}>
                 {part.text}
               </strong>
-            ),
+            )
           )}
         </div>
       </MenuItem>
@@ -346,14 +369,14 @@ class AddInvoicePage extends Component {
     const inputValue = value;
     const inputLength = inputValue.length;
 
-    if (inputLength === 0)
-      return [];
+    if (inputLength === 0) return [];
     else {
-      return this.props.actions.startSearchCustomers(inputValue)
-        .then(opStatus => {
+      return this.props.actions
+        .startSearchCustomers(inputValue)
+        .then((opStatus) => {
           return opStatus.payload;
         })
-        .catch(err => console.error);
+        .catch((err) => console.error);
     }
   };
 
@@ -374,51 +397,58 @@ class AddInvoicePage extends Component {
       onSuggestionsFetchRequested: this.handleSuggestionsFetchRequested,
       onSuggestionsClearRequested: this.handleSuggestionsClearRequested,
       getSuggestionValue: this.getSuggestionValue,
-      renderSuggestion: this.renderSuggestion,
+      renderSuggestion: this.renderSuggestion
     };
 
     if (activeStep === 0) {
-      stepContent = <Step0 
-        autosuggestProps={autosuggestProps}
-        isAddProductDialogOpen={this.props.addInvoiceForm.isAddProductDialogOpen}
-        
-        invoiceNo={this.props.addInvoiceForm.invoice.no} 
-        invoiceDate={this.state.date} 
-        invoiceProducts={this.props.addInvoiceForm.invoice.products}        
-        single={this.props.addInvoiceForm.single}
-        newProductId={this.props.addInvoiceForm.invoice.newProduct._id}
-        newProductCount={this.props.addInvoiceForm.invoice.newProduct.count}
-        newProductUnitPrice={this.props.addInvoiceForm.invoice.newProduct.unitPrice}
-        newProductTotalPrice={this.props.addInvoiceForm.invoice.newProduct.totalPrice}        
-        products={this.props.products}
-        
-        handleAutoSuggestChage={this.handleChange}
-        onCloseAddProductDialog={this.closeAddProductDialog}
-        onSaveAddProductDialog={this.onSaveAddProductDialog}
-        onNewProductCountChange={this.onNewProductCountChange}
-        onAddedProductCountChange={this.onAddedProductCountChange}
-        onOpenAddProductDialog={this.onOpenAddProductDialog}
-        onNewProductSelectChange={this.onNewProductSelectChange}
-        onRemoveProductFromInvoice={this.onRemoveProductFromInvoice}
-        showGlobalMessage={this.props.actions.showGlobalMessage}
-      />
+      stepContent = (
+        <Step0
+          autosuggestProps={autosuggestProps}
+          isAddProductDialogOpen={
+            this.props.addInvoiceForm.isAddProductDialogOpen
+          }
+          invoiceNo={this.props.addInvoiceForm.invoice.no}
+          invoiceDate={this.state.date}
+          invoiceProducts={this.props.addInvoiceForm.invoice.products}
+          single={this.props.addInvoiceForm.single}
+          newProductId={this.props.addInvoiceForm.invoice.newProduct._id}
+          newProductCount={this.props.addInvoiceForm.invoice.newProduct.count}
+          newProductUnitPrice={
+            this.props.addInvoiceForm.invoice.newProduct.unitPrice
+          }
+          newProductTotalPrice={
+            this.props.addInvoiceForm.invoice.newProduct.totalPrice
+          }
+          products={this.props.products}
+          handleAutoSuggestChage={this.handleChange}
+          onCloseAddProductDialog={this.closeAddProductDialog}
+          onSaveAddProductDialog={this.onSaveAddProductDialog}
+          onNewProductCountChange={this.onNewProductCountChange}
+          onAddedProductCountChange={this.onAddedProductCountChange}
+          onOpenAddProductDialog={this.onOpenAddProductDialog}
+          onNewProductSelectChange={this.onNewProductSelectChange}
+          onRemoveProductFromInvoice={this.onRemoveProductFromInvoice}
+          showGlobalMessage={this.props.actions.showGlobalMessage}
+        />
+      );
     } else if (activeStep == 1) {
-      stepContent = <Step1 
-        provinces={this.props.provinces}
-        provinceId={this.state.provinceId}
-        cityId={this.state.cityId}        
-        mailType={this.state.mailType}
-        deliverAfter={this.state.deliverAfter}
-        deliverAfterTimeUnit={this.state.deliverAfterTimeUnit}
-
-        onProvinceChange={this.onProvinceChange}
-        onCityChange={this.onCityChange}
-        onDeliverAfterTimeUnitChange={this.onDeliverAfterTimeUnitChange}
-        onMailTypeChange={this.onMailTypeChange}
-        onDeliverAfterChange={this.onDeliverAfterChange}
-      />
+      stepContent = (
+        <Step1
+          provinces={this.props.provinces}
+          provinceId={this.state.provinceId}
+          cityId={this.state.cityId}
+          mailType={this.state.mailType}
+          deliverAfter={this.state.deliverAfter}
+          deliverAfterTimeUnit={this.state.deliverAfterTimeUnit}
+          onProvinceChange={this.onProvinceChange}
+          onCityChange={this.onCityChange}
+          onDeliverAfterTimeUnitChange={this.onDeliverAfterTimeUnitChange}
+          onMailTypeChange={this.onMailTypeChange}
+          onDeliverAfterChange={this.onDeliverAfterChange}
+        />
+      );
     }
-    
+
     return (
       <AddInvoiceContext.Provider
         value={{
@@ -426,54 +456,55 @@ class AddInvoicePage extends Component {
         }}
       >
         <Fragment>
-          
-          <Header/>
-          
+          <Header />
+
           <div className={classes.mainContent}>
             <div className={classes.container}>
               <GridContainer>
                 <GridItem xs={12}>
-                  <Stepper activeStep={activeStep}
-                    className={classes.stepper}
-                  >
-                    { steps.map((label, index) => {
+                  <Stepper activeStep={activeStep} className={classes.stepper}>
+                    {steps.map((label, index) => {
                       const props = {};
-                      const labelProps = { };
+                      const labelProps = {};
                       return (
                         <Step key={label} {...props}>
-                          <StepLabel 
+                          <StepLabel
                             {...labelProps}
                             classes={{
                               iconContainer: classes.iconContainer
                             }}
                             className={classes.StepLabel}
-                            >{label}</StepLabel>
+                          >
+                            {label}
+                          </StepLabel>
                         </Step>
                       );
                     })}
                   </Stepper>
-                  { stepContent }
+                  {stepContent}
                   <div className={classes.stepperActions}>
-                    <Button disabled={activeStep === 0}
+                    <Button
+                      disabled={activeStep === 0}
                       onClick={this.handleBackStep}
                       className={classes.button}
                     >
                       بازگشت
                     </Button>
-                    <Button variant="contained"
+                    <Button
+                      variant="contained"
                       color="primary"
                       onClick={this.handleNextStep}
                       className={classes.button}
                     >
-                      { this.props.addInvoiceForm.activeStep === 1 ? "ثبت" : "مرحله بعد" }
+                      {this.props.addInvoiceForm.activeStep === 1
+                        ? 'ثبت'
+                        : 'مرحله بعد'}
                     </Button>
                   </div>
                 </GridItem>
               </GridContainer>
-              
             </div>
           </div>
-        
         </Fragment>
       </AddInvoiceContext.Provider>
     );
@@ -493,7 +524,7 @@ AddInvoicePage.propTypes = {
   actions: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     products: state.products,
     customers: state.customers,
@@ -502,31 +533,70 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: {
-    startAddInvoice: invoice => dispatch(invoicesActions.startAddInvoice(invoice)),
+    startAddInvoice: (invoice) =>
+      dispatch(invoicesActions.startAddInvoice(invoice)),
     setInvoiceNo: () => dispatch(invoicesActions.setInvoiceNo()),
 
-    startAddProduct: product => dispatch(productsActions.startAddProduct(product)),
-    
-    startSearchCustomers: customerName => dispatch(customersActions.startSearchCustomers(customerName)),
-    
-    showGlobalMessage: message => dispatch(messageActions.showGlobalMessage(message)),
-    
-    invoiceFormSetAddProductDialogOpenState: openState => dispatch(addInvoiceActions.invoiceFormSetAddProductDialogOpenState(openState)),
-    invoiceFormSetSuggestions: ({ single, suggestions }) => dispatch(addInvoiceActions.invoiceFormSetSuggestions({ single, suggestions })),
-    invoiceFormSetSuggestion: ({ name, customerId, single }) => dispatch(addInvoiceActions.invoiceFormSetSuggestion({ name, customerId, single })),
-    invoiceFormAddNewProductToInvoice: product => dispatch(addInvoiceActions.invoiceFormAddNewProductToInvoice(product)),
-    invoiceFormRemoveProductFromInvoiceById: invoiceProductId => dispatch(addInvoiceActions.invoiceFormRemoveProductFromInvoiceById(invoiceProductId)),
-    invoiceFormSetInvoiceProductCount: ({ invoiceProductId, count }) => dispatch(addInvoiceActions.invoiceFormSetInvoiceProductCount({ invoiceProductId, count })),
-    invoiceFormSetProvinceId: provinceId => dispatch(addInvoiceActions.invoiceFormSetProvinceId(provinceId)),
-    invoiceFormSetCityId: cityId => dispatch(addInvoiceActions.invoiceFormSetCityId(cityId)),  
-    invoiceFormSetMailType: mailType => dispatch(addInvoiceActions.invoiceFormSetMailType(mailType)),
-    invoiceFormSetDeliverAfter: deliverAfter => dispatch(addInvoiceActions.invoiceFormSetDeliverAfter(deliverAfter)),
-    invoiceFormSetDeliverAfterTimeUnit: deliverAfterTimeUnit => dispatch(addInvoiceActions.invoiceFormSetDeliverAfterTimeUnit(deliverAfterTimeUnit)),
-    invoiceFormSetActiveStep: activeStep => dispatch(addInvoiceActions.invoiceFormSetActiveStep(activeStep)),
-    invoiceFormClearState: () => dispatch(addInvoiceActions.invoiceFormClearState())
+    startAddProduct: (product) =>
+      dispatch(productsActions.startAddProduct(product)),
+
+    startSearchCustomers: (customerName) =>
+      dispatch(customersActions.startSearchCustomers(customerName)),
+
+    showGlobalMessage: (message) =>
+      dispatch(messageActions.showGlobalMessage(message)),
+
+    invoiceFormSetAddProductDialogOpenState: (openState) =>
+      dispatch(
+        addInvoiceActions.invoiceFormSetAddProductDialogOpenState(openState)
+      ),
+    invoiceFormSetSuggestions: ({ single, suggestions }) =>
+      dispatch(
+        addInvoiceActions.invoiceFormSetSuggestions({ single, suggestions })
+      ),
+    invoiceFormSetSuggestion: ({ name, customerId, single }) =>
+      dispatch(
+        addInvoiceActions.invoiceFormSetSuggestion({ name, customerId, single })
+      ),
+    invoiceFormAddNewProductToInvoice: (product) =>
+      dispatch(addInvoiceActions.invoiceFormAddNewProductToInvoice(product)),
+    invoiceFormRemoveProductFromInvoiceById: (invoiceProductId) =>
+      dispatch(
+        addInvoiceActions.invoiceFormRemoveProductFromInvoiceById(
+          invoiceProductId
+        )
+      ),
+    invoiceFormSetInvoiceProductCount: ({ invoiceProductId, count }) =>
+      dispatch(
+        addInvoiceActions.invoiceFormSetInvoiceProductCount({
+          invoiceProductId,
+          count
+        })
+      ),
+    invoiceFormSetProvinceId: (provinceId) =>
+      dispatch(addInvoiceActions.invoiceFormSetProvinceId(provinceId)),
+    invoiceFormSetCityId: (cityId) =>
+      dispatch(addInvoiceActions.invoiceFormSetCityId(cityId)),
+    invoiceFormSetMailType: (mailType) =>
+      dispatch(addInvoiceActions.invoiceFormSetMailType(mailType)),
+    invoiceFormSetDeliverAfter: (deliverAfter) =>
+      dispatch(addInvoiceActions.invoiceFormSetDeliverAfter(deliverAfter)),
+    invoiceFormSetDeliverAfterTimeUnit: (deliverAfterTimeUnit) =>
+      dispatch(
+        addInvoiceActions.invoiceFormSetDeliverAfterTimeUnit(
+          deliverAfterTimeUnit
+        )
+      ),
+    invoiceFormSetActiveStep: (activeStep) =>
+      dispatch(addInvoiceActions.invoiceFormSetActiveStep(activeStep)),
+    invoiceFormClearState: () =>
+      dispatch(addInvoiceActions.invoiceFormClearState())
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(appStyle)(AddInvoicePage));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(appStyle)(AddInvoicePage));

@@ -1,12 +1,11 @@
 import * as types from './actionTypes';
 import { showLoading, hideLoading } from './loading';
-import * as API from '../api/api';
+import * as API from '../../api';
 import { invoiceFormSetInvoiceNo } from './addInvoiceForm';
-import * as reduxHelper from '../helpers/reduxHelper';
+import * as reduxHelper from '../../helpers/reduxHelper';
 
-export const addInvoice = (invoice) => (
-  reduxHelper.action(types.ADD_INVOICE, invoice)
-);
+export const addInvoice = (invoice) =>
+  reduxHelper.action(types.ADD_INVOICE, invoice);
 
 export const startAddInvoice = (invoiceData = {}) => (dispatch) => {
   const {
@@ -35,18 +34,16 @@ export const startAddInvoice = (invoiceData = {}) => (dispatch) => {
 
   dispatch(showLoading());
 
-  return API.addInvoice(invoice)
-    .then((insertedInvoiceRes) => {
-      const opStatus = insertedInvoiceRes.data;
-      dispatch(addInvoice(opStatus.payload));
-      dispatch(hideLoading());
-      return opStatus;
-    });
+  return API.addInvoice(invoice).then((insertedInvoiceRes) => {
+    const opStatus = insertedInvoiceRes.data;
+    dispatch(addInvoice(opStatus.payload));
+    dispatch(hideLoading());
+    return opStatus;
+  });
 };
 
-export const setInvoices = (invoices) => (
-  reduxHelper.action(types.SET_INVOICES, { ...invoices })
-);
+export const setInvoices = (invoices) =>
+  reduxHelper.action(types.SET_INVOICES, { ...invoices });
 
 export const startSetInvoices = () => async (dispatch) => {
   try {

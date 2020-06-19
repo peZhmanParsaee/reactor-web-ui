@@ -1,15 +1,12 @@
 import * as types from './actionTypes';
-import * as API from '../api/api';
-import * as reduxHelper from '../helpers/reduxHelper';
+import * as API from '../../api';
+import * as reduxHelper from '../../helpers/reduxHelper';
 
-export const addProduct = (product) => reduxHelper.action(types.ADD_PRODUCT, product);
+export const addProduct = (product) =>
+  reduxHelper.action(types.ADD_PRODUCT, product);
 
 export const startAddProduct = (productData = {}) => async (dispatch) => {
-  const {
-    name,
-    stock,
-    unitPrice
-  } = productData;
+  const { name, stock, unitPrice } = productData;
 
   const product = { name, stock, unitPrice };
 
@@ -19,9 +16,8 @@ export const startAddProduct = (productData = {}) => async (dispatch) => {
   return opStatus;
 };
 
-export const setProducts = (products) => (
-  reduxHelper.action(types.SET_PRODUCTS, products)
-);
+export const setProducts = (products) =>
+  reduxHelper.action(types.SET_PRODUCTS, products);
 
 export const startSetProducts = () => async (dispatch) => {
   const res = await API.getProducts();

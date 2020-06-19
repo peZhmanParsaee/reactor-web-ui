@@ -3,26 +3,28 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { create } from 'jss';
 import rtl from 'jss-rtl';
-import { StylesProvider, jssPreset, createGenerateClassName } from '@material-ui/styles';
+import {
+  StylesProvider,
+  jssPreset,
+  createGenerateClassName
+} from '@material-ui/styles';
 import App1 from './playground/context/app1';
 import App from './playground/App';
 import CreateClassSample from './playground/CreateClassSample';
 
-import configureStore from './store/configureStore';
-import { startSetProvinces } from './actions/provinces';
-import { startSetProducts } from './actions/products';
+import configureStore from './redux/store/configureStore';
+import { startSetProvinces } from './redux/actions/provinces';
+import { startSetProducts } from './redux/actions/products';
 import Loading from './components/shared/Loading';
 import AppRouter from './router/AppRouter';
 
 import './styles/styles.scss';
 
-
 const jss = create({
-  plugins: [...jssPreset().plugins, rtl()],
+  plugins: [...jssPreset().plugins, rtl()]
 });
 
 const generateClassName = createGenerateClassName();
-
 
 const store = configureStore();
 
@@ -31,7 +33,7 @@ const jsx = (
     <Provider store={store}>
       <AppRouter />
     </Provider>
-  </StylesProvider>  
+  </StylesProvider>
 );
 
 // ReactDOM.render(<CreateClassSample />, document.getElementById('app'));
@@ -41,7 +43,6 @@ const jsx = (
 // ReactDOM.render(<MainApp />, document.getElementById('app'));
 
 // ReactDOM.render(<MainAppPureComponent />, document.getElementById('app'));
-
 
 ReactDOM.render(jsx, document.getElementById('app'));
 
