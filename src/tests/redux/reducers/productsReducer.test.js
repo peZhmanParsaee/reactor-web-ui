@@ -1,6 +1,6 @@
-import productsReducer from '../../reducers/productsReducer';
-import * as types from '../../actions/actionTypes';
-import products from '../fixtures/products';
+import productsReducer from '../../../redux/reducers/productsReducer';
+import * as types from '../../../redux/actions/actionTypes';
+import products from '../../fixtures/products';
 
 test('should set default state', () => {
   const state = productsReducer(undefined, { type: '@@INIT' });
@@ -17,9 +17,9 @@ test('should set products state to an array', () => {
 });
 
 test('should add product', () => {
-  const product =  {
-    name: 'prod xyz', 
-    unitPrice: 15000, 
+  const product = {
+    name: 'prod xyz',
+    unitPrice: 15000,
     count: 125
   };
   const action = {

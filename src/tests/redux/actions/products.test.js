@@ -1,5 +1,5 @@
-import * as productsActions from '../../actions/products';
-import * as types from '../../actions/actionTypes';
+import * as productsActions from '../../../redux/actions/products';
+import * as types from '../../../redux/actions/actionTypes';
 
 test('should setup add product action object with provided values', () => {
   const action = productsActions.addProduct({

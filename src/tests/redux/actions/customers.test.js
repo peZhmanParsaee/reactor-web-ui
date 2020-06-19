@@ -1,5 +1,5 @@
-import * as customersActions from '../../actions/customers';
-import * as types from '../../actions/actionTypes';
+import * as customersActions from '../../../redux/actions/customers';
+import * as types from '../../../redux/actions/actionTypes';
 
 describe('customers actions', () => {
   it('should return set customers type correctly', () => {

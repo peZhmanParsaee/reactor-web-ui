@@ -3,9 +3,9 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 
-import * as provincesActions from '../../actions/provinces';
-import * as types from '../../actions/actionTypes';
-import provinces from '../fixtures/provinces';
+import * as provincesActions from '../../../redux/actions/provinces';
+import * as types from '../../../redux/actions/actionTypes';
+import provinces from '../../fixtures/provinces';
 
 global.API_ENDPOINT = 'http://localhost:1234';
 
