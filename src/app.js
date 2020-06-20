@@ -8,9 +8,6 @@ import {
   jssPreset,
   createGenerateClassName
 } from '@material-ui/styles';
-import App1 from './playground/context/app1';
-import App from './playground/App';
-import CreateClassSample from './playground/CreateClassSample';
 
 import configureStore from './redux/store/configureStore';
 import { startSetProvinces } from './redux/actions/provinces';
@@ -35,14 +32,6 @@ const jsx = (
     </Provider>
   </StylesProvider>
 );
-
-// ReactDOM.render(<CreateClassSample />, document.getElementById('app'));
-// setTimeout(() => {
-//   ReactDOM.unmountComponentAtNode(document.getElementById('app'));}, 10000);
-
-// ReactDOM.render(<MainApp />, document.getElementById('app'));
-
-// ReactDOM.render(<MainAppPureComponent />, document.getElementById('app'));
 
 ReactDOM.render(jsx, document.getElementById('app'));
 
