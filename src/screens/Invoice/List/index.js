@@ -3,8 +3,8 @@ import axios from 'axios';
 import moment from 'moment-jalaali';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import JalaliUtils from "@date-io/jalaali";
-import { DatePicker, MuiPickersUtilsProvider } from "material-ui-pickers";
+import JalaliUtils from '@date-io/jalaali';
+import { DatePicker, MuiPickersUtilsProvider } from 'material-ui-pickers';
 
 // @material-ui/core
 import { withStyles } from '@material-ui/core/styles';
@@ -28,10 +28,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 // local dependencies
-import { separateDigits } from '../helpers/numberHelpers';
-import { generateKey } from '../helpers/keyHelper';
-import appStyle from '../styles/jss/layouts/appStyle';
-
+import { separateDigits } from '../../../helpers/numberHelpers';
+import { generateKey } from '../../../helpers/keyHelper';
+import appStyle from '../../../styles/jss/layouts/appStyle';
 
 class SalesReportPage extends PureComponent {
   constructor(props) {
@@ -47,106 +46,127 @@ class SalesReportPage extends PureComponent {
       toDate: null,
       fromDateCalendarFocused: false,
       toDateCalendarFocused: false,
-      invoiceType: "INVOICE_ITEMS",
+      invoiceType: 'INVOICE_ITEMS',
       selectedDate: new Date('2014-08-18T21:11:54'),
       selectedDate2: moment(),
       startDate: null,
       endDate: null
     };
   }
-  componentWillMount () {
+  componentWillMount() {
     const { openDrawer } = this.props.location.state;
     if (openDrawer !== undefined && openDrawer !== null) {
       this.setState(() => ({ open: openDrawer }));
     }
   }
-  handleStartDateChange = date => {
+  handleStartDateChange = (date) => {
     this.setState(() => ({ startDate: date }));
   };
-  handleEndDateChange = date => {
+  handleEndDateChange = (date) => {
     this.setState(() => ({ endDate: date }));
   };
   componentDidMount() {
     this.loadMoreItems();
 
-    this.refs.iScroll.addEventListener("scroll", () => {
-      if (this.refs.iScroll.scrollTop + this.refs.iScroll.clientHeight >=this.refs.iScroll.scrollHeight){
+    this.refs.iScroll.addEventListener('scroll', () => {
+      if (
+        this.refs.iScroll.scrollTop + this.refs.iScroll.clientHeight >=
+        this.refs.iScroll.scrollHeight
+      ) {
         this.loadMoreItems();
       }
     });
-  };
+  }
   displayInvoices() {
     let jsxItems = [];
 
     for (var invoice of this.state.invoices) {
-      if (this.state.invoiceType === "INVOICES") {
+      if (this.state.invoiceType === 'INVOICES') {
         const jsx = (
-          <ListItem key={invoice._id} className={ this.props.classes.reportListItemRow }>
-            <List className={ this.props.classes.reportNestedListItemRow }>
-              <ListItem className={ this.props.classes.reportNestedListItem }>
-                { invoice.customerName }
+          <ListItem
+            key={invoice._id}
+            className={this.props.classes.reportListItemRow}
+          >
+            <List className={this.props.classes.reportNestedListItemRow}>
+              <ListItem className={this.props.classes.reportNestedListItem}>
+                {invoice.customerName}
               </ListItem>
-              <ListItem className={ this.props.classes.reportNestedListItem }>
-                { separateDigits({ number: invoice.totalPrice, showCurrency: true }) }
+              <ListItem className={this.props.classes.reportNestedListItem}>
+                {separateDigits({
+                  number: invoice.totalPrice,
+                  showCurrency: true
+                })}
               </ListItem>
-              <ListItem className={ this.props.classes.reportNestedListItem }
-                style={{
-                  width: 120
-                }}
-              >{ invoice.no }</ListItem>
-              <ListItem className={ this.props.classes.reportNestedListItem }
-                style={{ width: 228 }}
-              >{ invoice.deliverAtFormatted }</ListItem>
-            </List>
-          </ListItem>
-        );
-       
-        jsxItems.push(jsx);
-      }
-      if (this.state.invoiceType === "INVOICE_ITEMS") {
-        const jsx = (
-          <ListItem key={generateKey()} className={ this.props.classes.reportListItemRow }>
-            <List className={ this.props.classes.reportNestedListItemRow }>
-              <ListItem className={ this.props.classes.reportNestedListItem }>
-                { invoice.customerName }
-              </ListItem>
-              <ListItem className={ this.props.classes.reportNestedListItem }>
-                { invoice.productName }
-              </ListItem>
-              <ListItem className={ this.props.classes.reportNestedListItem }
+              <ListItem
+                className={this.props.classes.reportNestedListItem}
                 style={{
                   width: 120
                 }}
               >
-                { invoice.invoiceNo }
+                {invoice.no}
               </ListItem>
-            </List>           
+              <ListItem
+                className={this.props.classes.reportNestedListItem}
+                style={{ width: 228 }}
+              >
+                {invoice.deliverAtFormatted}
+              </ListItem>
+            </List>
           </ListItem>
         );
-       
+
+        jsxItems.push(jsx);
+      }
+      if (this.state.invoiceType === 'INVOICE_ITEMS') {
+        const jsx = (
+          <ListItem
+            key={generateKey()}
+            className={this.props.classes.reportListItemRow}
+          >
+            <List className={this.props.classes.reportNestedListItemRow}>
+              <ListItem className={this.props.classes.reportNestedListItem}>
+                {invoice.customerName}
+              </ListItem>
+              <ListItem className={this.props.classes.reportNestedListItem}>
+                {invoice.productName}
+              </ListItem>
+              <ListItem
+                className={this.props.classes.reportNestedListItem}
+                style={{
+                  width: 120
+                }}
+              >
+                {invoice.invoiceNo}
+              </ListItem>
+            </List>
+          </ListItem>
+        );
+
         jsxItems.push(jsx);
       }
     }
 
     return jsxItems;
-  };
+  }
   loadMoreItems() {
     if (this.state.finished === false) {
       this.setState({ loadingState: true });
 
-      const startDateTimeStamp = this.state.startDate && moment(this.state.startDate).valueOf();
-      const endDateTimeStamp = this.state.endDate && moment(this.state.endDate).valueOf();
-      axios.get(`${API_ENDPOINT}/api/v1/invoice?invoiceType=${this.state.invoiceType}&offset=${this.state.offset}&limit=${this.state.limit}&fromDate=${startDateTimeStamp}&toDate=${endDateTimeStamp}`)
-        .then(res => {
+      const startDateTimeStamp =
+        this.state.startDate && moment(this.state.startDate).valueOf();
+      const endDateTimeStamp =
+        this.state.endDate && moment(this.state.endDate).valueOf();
+      axios
+        .get(
+          `${API_ENDPOINT}/api/v1/invoice?invoiceType=${this.state.invoiceType}&offset=${this.state.offset}&limit=${this.state.limit}&fromDate=${startDateTimeStamp}&toDate=${endDateTimeStamp}`
+        )
+        .then((res) => {
           if (res.data.status === true) {
             if (res.data.payload.length) {
               this.setState(() => ({
                 offset: this.state.offset + this.state.limit,
                 loadingState: false,
-                invoices: [
-                  ...this.state.invoices,
-                  ...res.data.payload
-                ]
+                invoices: [...this.state.invoices, ...res.data.payload]
               }));
             } else {
               this.setState(() => ({
@@ -159,7 +179,7 @@ class SalesReportPage extends PureComponent {
     } else {
       console.log('Finished ');
     }
-  };
+  }
   handleDrawerOpen = () => {
     this.setState(() => ({ open: true }));
   };
@@ -171,37 +191,47 @@ class SalesReportPage extends PureComponent {
     this.setState(() => ({ invoiceType, invoices: [] }));
   };
   onSeachClick = () => {
-    this.setState(() => ({
-      offset: 0,
-      invoices: [],
-      open: false,
-      finished: false
-    }), () => {
-      this.loadMoreItems();
-    });
+    this.setState(
+      () => ({
+        offset: 0,
+        invoices: [],
+        open: false,
+        finished: false
+      }),
+      () => {
+        this.loadMoreItems();
+      }
+    );
   };
-  handleDateChange = date => {
-    this.setState({ selectedDate: date })
+  handleDateChange = (date) => {
+    this.setState({ selectedDate: date });
   };
   render() {
     const { classes } = this.props;
 
     moment.locale('fa-IR');
     moment.loadPersian();
-    
+
     return (
       <Fragment>
-        
-        {this.state.open ? 
-          <div style={{ position: "fixed", zIndex: 1, left: 0, right: 0, top: 0, bottom: 0 }} 
-            onClick={() => this.handleDrawerClose()} /> 
-          : null
-        }
-        
+        {this.state.open ? (
+          <div
+            style={{
+              position: 'fixed',
+              zIndex: 1,
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0
+            }}
+            onClick={() => this.handleDrawerClose()}
+          />
+        ) : null}
+
         <AppBar
           position="fixed"
           className={classNames(classes.appBar, {
-            [classes.appBarShift]: open,
+            [classes.appBarShift]: open
           })}
         >
           <Toolbar disableGutters={!open}>
@@ -218,13 +248,13 @@ class SalesReportPage extends PureComponent {
             </Typography>
           </Toolbar>
         </AppBar>
-        
+
         <Drawer
           className={classes.drawer}
           anchor="left"
           open={this.state.open}
           classes={{
-            paper: classes.drawerPaper,
+            paper: classes.drawerPaper
           }}
           onClose={(open) => {
             this.setState(() => ({ open: false }));
@@ -232,19 +262,20 @@ class SalesReportPage extends PureComponent {
         >
           <div className={classes.drawerHeader}>
             <IconButton onClick={this.handleDrawerClose}>
-              { <ChevronRightIcon /> }
+              {<ChevronRightIcon />}
             </IconButton>
           </div>
           <Divider />
           <List>
             <ListItem key={1}>
-              <ListItemText primary="انتخاب بازه زمانی"
+              <ListItemText
+                primary="انتخاب بازه زمانی"
                 style={{
-                  textAlign: "right"
+                  textAlign: 'right'
                 }}
               />
             </ListItem>
-            
+
             <ListItem key={5}>
               <MuiPickersUtilsProvider utils={JalaliUtils} locale="fa">
                 <div className="picker">
@@ -253,14 +284,15 @@ class SalesReportPage extends PureComponent {
                     okLabel="تأیید"
                     cancelLabel="لغو"
                     clearLabel="پاک کردن"
-                    labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "از تاریخ")}
+                    labelFunc={(date) =>
+                      date ? date.format('jYYYY/jMM/jDD') : 'از تاریخ'
+                    }
                     value={this.state.startDate}
                     onChange={this.handleStartDateChange}
-                    animateYearScrolling={false}                        
+                    animateYearScrolling={false}
                   />
                 </div>
               </MuiPickersUtilsProvider>
-
             </ListItem>
             <ListItem key={6}>
               <MuiPickersUtilsProvider utils={JalaliUtils} locale="fa">
@@ -270,7 +302,9 @@ class SalesReportPage extends PureComponent {
                     okLabel="تأیید"
                     cancelLabel="لغو"
                     clearLabel="پاک کردن"
-                    labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "تا تاریخ")}
+                    labelFunc={(date) =>
+                      date ? date.format('jYYYY/jMM/jDD') : 'تا تاریخ'
+                    }
                     value={this.state.endDate}
                     onChange={this.handleEndDateChange}
                     animateYearScrolling={false}
@@ -284,9 +318,11 @@ class SalesReportPage extends PureComponent {
             <ListItem key={11}>
               <ListItemText
                 style={{
-                  textAlign: "right"
+                  textAlign: 'right'
                 }}
-              >نوع فاکتور</ListItemText>  
+              >
+                نوع فاکتور
+              </ListItemText>
             </ListItem>
             <ListItem key={12}>
               <FormControl component="fieldset" className={classes.formControl}>
@@ -326,67 +362,76 @@ class SalesReportPage extends PureComponent {
             </ListItem>
           </List>
         </Drawer>
-        
+
         <div className={classes.mainContent}>
-          <div className={classes.reportInfiniteScrollContainer}
-            ref="iScroll" >
+          <div className={classes.reportInfiniteScrollContainer} ref="iScroll">
+            {this.state.invoiceType === 'INVOICES' && (
+              <List>
+                <ListItem className={classes.reportListItemHeadRow}>
+                  <List className={classes.reportNestedListItemHeadRow}>
+                    <ListItem className={classes.reportNestedListItemHead}>
+                      نام خریدار
+                    </ListItem>
+                    <ListItem className={classes.reportNestedListItemHead}>
+                      مبلغ
+                    </ListItem>
+                    <ListItem
+                      className={classes.reportNestedListItemHead}
+                      style={{
+                        width: 120
+                      }}
+                    >
+                      شماره فاکتور
+                    </ListItem>
+                    <ListItem
+                      className={classes.reportNestedListItemHead}
+                      style={{ width: 220 }}
+                    >
+                      زمان تحویل
+                    </ListItem>
+                  </List>
+                </ListItem>
 
-            {
-              this.state.invoiceType === 'INVOICES' && (
-                <List>
-                  <ListItem className={ classes.reportListItemHeadRow }>
-                    <List className={ classes.reportNestedListItemHeadRow }>
-                      <ListItem className={ classes.reportNestedListItemHead }>نام خریدار</ListItem>
-                      <ListItem className={ classes.reportNestedListItemHead }>مبلغ</ListItem>
-                      <ListItem className={ classes.reportNestedListItemHead }
-                        style={{
-                          width: 120
-                        }}
-                      >شماره فاکتور</ListItem>
-                      <ListItem 
-                        className={ classes.reportNestedListItemHead }
-                        style={{ width: 220 }}
-                      >زمان تحویل</ListItem>
-                    </List>
-                  </ListItem>
-                  
-                  { this.displayInvoices() }
-                  
-                </List>
-              )
-            }
+                {this.displayInvoices()}
+              </List>
+            )}
 
-            {
-              this.state.invoiceType === 'INVOICE_ITEMS' && (
-                <List>
-                  <ListItem className={ classes.reportListItemHeadRow }>
-                    <List className={ classes.reportNestedListItemHeadRow }>
-                      <ListItem className={ classes.reportNestedListItemHead }>نام خریدار</ListItem>
-                      <ListItem className={ classes.reportNestedListItemHead }>نام محصول</ListItem>
-                      <ListItem className={ classes.reportNestedListItemHead }
-                        style={{
-                          width: 120
-                        }}
-                      >شماره فاکتور</ListItem>
-                    </List>
-                  </ListItem>
-                  
-                  { this.displayInvoices() }
-                  
-                </List>
-              )
-            }
-            
-            
-            {this.state.loadingState ? <p className="loading"> در حال بارگزاری ادامه داده ها ...</p> : ""}
-    
+            {this.state.invoiceType === 'INVOICE_ITEMS' && (
+              <List>
+                <ListItem className={classes.reportListItemHeadRow}>
+                  <List className={classes.reportNestedListItemHeadRow}>
+                    <ListItem className={classes.reportNestedListItemHead}>
+                      نام خریدار
+                    </ListItem>
+                    <ListItem className={classes.reportNestedListItemHead}>
+                      نام محصول
+                    </ListItem>
+                    <ListItem
+                      className={classes.reportNestedListItemHead}
+                      style={{
+                        width: 120
+                      }}
+                    >
+                      شماره فاکتور
+                    </ListItem>
+                  </List>
+                </ListItem>
+
+                {this.displayInvoices()}
+              </List>
+            )}
+
+            {this.state.loadingState ? (
+              <p className="loading"> در حال بارگزاری ادامه داده ها ...</p>
+            ) : (
+              ''
+            )}
           </div>
         </div>
-        
       </Fragment>
     );
   }
-} 
+}
 
 SalesReportPage.propTypes = {
   classes: PropTypes.object.isRequired

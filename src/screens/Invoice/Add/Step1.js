@@ -12,11 +12,11 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import GridItem from '../Grid/GridItem';
-import GridContainer from '../Grid/GridContainer';
+import GridItem from '../../../components/Grid/GridItem';
+import GridContainer from '../../../components/Grid/GridContainer';
 
 // local dependencies
-import appStyle from '../../styles/jss/layouts/appStyle';
+import appStyle from '../../../styles/jss/layouts/appStyle';
 
 class Step1 extends PureComponent {
   render() {
@@ -24,110 +24,132 @@ class Step1 extends PureComponent {
     return (
       <div className="container">
         <GridContainer>
-          <GridItem xs={12} sm={12} md={6}
+          <GridItem
+            xs={12}
+            sm={12}
+            md={6}
             style={{
-              marginBottom: "30px"
+              marginBottom: '30px'
             }}
           >
-            <Typography 
+            <Typography
               style={{
-                fontWeight: "bold"
+                fontWeight: 'bold'
               }}
             >
-                استان
+              استان
             </Typography>
             <Select
               value={this.props.provinceId}
               onChange={this.props.onProvinceChange}
               className={classes.selectBox}
             >
-              {this.props.provinces.map(province => {
+              {this.props.provinces.map((province) => {
                 return (
                   <MenuItem key={province._id} value={province._id}>
-                    { province.name }
+                    {province.name}
                   </MenuItem>
                 );
               })}
             </Select>
           </GridItem>
-          <GridItem xs={12} sm={12} md={6}
+          <GridItem
+            xs={12}
+            sm={12}
+            md={6}
             style={{
-              marginBottom: "30px"
+              marginBottom: '30px'
             }}
           >
             <Typography
               style={{
-                fontWeight: "bold"
+                fontWeight: 'bold'
               }}
             >
-                شهر
+              شهر
             </Typography>
             <Select
               value={this.props.cityId}
               onChange={this.props.onCityChange}
               className={classes.selectBox}
             >
-              {this.props.provinces
-                .find(province => {
-                  return province._id === this.props.provinceId;
-                }) ?
-                this.props.provinces
-                  .find(province => {
-                    return province._id === this.props.provinceId;
-                  })
-                  .cities
-                  .map(cityInProvince => {
-                    return (
-                      <MenuItem key={cityInProvince._id} value={cityInProvince._id}>
-                        { cityInProvince.name }
-                      </MenuItem>
-                    );
-                  }): null
-              }
+              {this.props.provinces.find((province) => {
+                return province._id === this.props.provinceId;
+              })
+                ? this.props.provinces
+                    .find((province) => {
+                      return province._id === this.props.provinceId;
+                    })
+                    .cities.map((cityInProvince) => {
+                      return (
+                        <MenuItem
+                          key={cityInProvince._id}
+                          value={cityInProvince._id}
+                        >
+                          {cityInProvince.name}
+                        </MenuItem>
+                      );
+                    })
+                : null}
             </Select>
           </GridItem>
-          <GridItem xs={12} sm={12} md={12}
+          <GridItem
+            xs={12}
+            sm={12}
+            md={12}
             style={{
-              marginBottom: "30px"
+              marginBottom: '30px'
             }}
           >
             <FormControl component="fieldset" className="formControl">
-              <FormLabel component="legend"
+              <FormLabel
+                component="legend"
                 style={{
-                  fontWeight: "bold"
+                  fontWeight: 'bold'
                 }}
-              >نوع پست</FormLabel>
+              >
+                نوع پست
+              </FormLabel>
               <RadioGroup
                 aria-label="MailType"
                 name="mailType"
                 className={classes.group}
                 value={this.props.mailType}
                 onChange={this.props.onMailTypeChange}
-                style={{display: 'flex', flexDirection: 'row'}}
+                style={{ display: 'flex', flexDirection: 'row' }}
               >
-                <FormControlLabel value="registered" control={<Radio />} label="عادی" />
-                <FormControlLabel value="certified" control={<Radio />} label="پیشتاز" />
+                <FormControlLabel
+                  value="registered"
+                  control={<Radio />}
+                  label="عادی"
+                />
+                <FormControlLabel
+                  value="certified"
+                  control={<Radio />}
+                  label="پیشتاز"
+                />
               </RadioGroup>
             </FormControl>
           </GridItem>
-          <GridItem xs={12} sm={12} md={12}
+          <GridItem
+            xs={12}
+            sm={12}
+            md={12}
             style={{
-              marginBottom: "30px"
+              marginBottom: '30px'
             }}
           >
-            <FormControl className="formControl" >
-              <FormLabel component="legend"
-                            
-              >تاریخ تحویل</FormLabel>                
-                            
-              <div style={{display: 'flex', flexDirection: 'row'}}>
+            <FormControl className="formControl">
+              <FormLabel component="legend">تاریخ تحویل</FormLabel>
+
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
                 <TextField
                   type="number"
                   value={this.props.deliverAfter}
                   onChange={this.props.onDeliverAfterChange}
                   style={{
-                    display: "inline-block",
-                    marginLeft: "10px"
+                    display: 'inline-block',
+                    marginLeft: '10px'
                   }}
                 />
 
@@ -136,31 +158,35 @@ class Step1 extends PureComponent {
                   onChange={this.props.onDeliverAfterTimeUnitChange}
                   className={classes.selectBox}
                   style={{
-                    display: "inline-block",
-                    marginLeft: "10px"
+                    display: 'inline-block',
+                    marginLeft: '10px'
                   }}
                 >
-                  <MenuItem key="hour" value="hour">ساعت</MenuItem>
-                  <MenuItem key="day" value="day">روز</MenuItem>
-                  <MenuItem key="month" value="month">ماه</MenuItem>
+                  <MenuItem key="hour" value="hour">
+                    ساعت
+                  </MenuItem>
+                  <MenuItem key="day" value="day">
+                    روز
+                  </MenuItem>
+                  <MenuItem key="month" value="month">
+                    ماه
+                  </MenuItem>
                 </Select>
 
                 <Typography
                   style={{
-                    display: "inline-block",
-                    marginLeft: "10px"
+                    display: 'inline-block',
+                    marginLeft: '10px'
                   }}
                 >
-                                    بعد از تاریخ ثبت سفارش
+                  بعد از تاریخ ثبت سفارش
                 </Typography>
-
               </div>
-                            
             </FormControl>
           </GridItem>
         </GridContainer>
       </div>
-    )
+    );
   }
 }
 

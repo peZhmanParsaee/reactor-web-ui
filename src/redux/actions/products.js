@@ -6,6 +6,8 @@ export const addProduct = (product) =>
   reduxHelper.action(types.ADD_PRODUCT, product);
 
 export const startAddProduct = (productData = {}) => async (dispatch) => {
+  dispatch(reduxHelper.action(types.ADD_PRODUCT_LOADING));
+
   const { name, stock, unitPrice } = productData;
 
   const product = { name, stock, unitPrice };
@@ -13,6 +15,7 @@ export const startAddProduct = (productData = {}) => async (dispatch) => {
   const insertedProductRes = await API.addProduct(product);
   const opStatus = insertedProductRes.data;
   dispatch(addProduct(opStatus.payload));
+
   return opStatus;
 };
 

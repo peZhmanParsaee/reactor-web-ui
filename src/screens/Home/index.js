@@ -13,8 +13,8 @@ import ReceiptIcon from '@material-ui/icons/Receipt';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 // local dependencies
-import Header from './shared/Header';
-import homePageStyle from '../styles/jss/components/homePageStyle';
+import Header from '../../components/Header';
+import homePageStyle from '../../styles/jss/components/homePageStyle';
 
 class HomePage extends React.PureComponent {
   componentWillMount() {
@@ -37,13 +37,19 @@ class HomePage extends React.PureComponent {
             <ListItemIcon>
               <ReceiptIcon />
             </ListItemIcon>
-            <ListItemText primary="ثبت فاکتور جدید" className={classes.mainNavItem} />
+            <ListItemText
+              primary="ثبت فاکتور جدید"
+              className={classes.mainNavItem}
+            />
           </ListItem>
           <ListItem button component={Link} to="/sales-report">
             <ListItemIcon>
               <DescriptionIcon />
             </ListItemIcon>
-            <ListItemText primary="گزارش فروش" className={classes.mainNavItem} />
+            <ListItemText
+              primary="گزارش فروش"
+              className={classes.mainNavItem}
+            />
           </ListItem>
         </List>
       </>

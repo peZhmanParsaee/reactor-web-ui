@@ -13,24 +13,24 @@ import StepLabel from '@material-ui/core/StepLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 
 // local components
-import Header from '../shared/Header';
-import GridContainer from '../Grid/GridContainer';
-import GridItem from '../Grid/GridItem';
-import Step0 from '../AddInvoice/Step0';
-import Step1 from '../AddInvoice/Step1';
+import Header from '../../../components/Header';
+import GridContainer from '../../../components/Grid/GridContainer';
+import GridItem from '../../../components/Grid/GridItem';
+import Step0 from './Step0';
+import Step1 from './Step1';
 import AutoSuggestInput from './AutoSuggestInput';
 
 // local dependencies
-import appStyle from '../../styles/jss/layouts/appStyle';
-import { generateKey } from '../../helpers/keyHelper';
+import appStyle from '../../../styles/jss/layouts/appStyle';
+import { generateKey } from '../../../helpers/keyHelper';
 import AddInvoiceContext from './AddInvoiceContext';
 
 // action creators
-import * as invoicesActions from '../../redux/actions/invoices';
-import * as addInvoiceActions from '../../redux/actions/addInvoiceForm';
-import * as productsActions from '../../redux/actions/products';
-import * as customersActions from '../../redux/actions/customers';
-import * as messageActions from '../../redux/actions/message';
+import * as invoicesActions from '../../../redux/actions/invoices';
+import * as addInvoiceActions from '../../../redux/actions/addInvoiceForm';
+import * as productsActions from '../../../redux/actions/products';
+import * as customersActions from '../../../redux/actions/customers';
+import * as messageActions from '../../../redux/actions/message';
 
 function getSteps() {
   return ['تکمیل اطلاعات اولیه', 'تاریخ تحویل'];

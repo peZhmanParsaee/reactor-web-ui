@@ -13,7 +13,7 @@ import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 
 import InvoiceProductsListItem from './InvoiceProductsListItem';
-import { separateDigits } from '../../helpers/numberHelpers';
+import { separateDigits } from '../../../helpers/numberHelpers';
 
 const InvoiceProductsList = (props) => {
   const onAddNewProductToInvoice = () => {};

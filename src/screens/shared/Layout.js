@@ -8,20 +8,18 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 
 // local components
-import AddInvoicePage from '../components/AddInvoice/AddInvoicePage';
-import SalesReportPage from '../components/SalesReportPage';
-import Footer from '../components/shared/Footer';
-import ToastMessage from '../components/shared/ToastMessage';
+import AddInvoicePage from '../Invoice/Add';
+import SalesReportPage from '../Invoice/List';
+import Footer from '../../components/Footer';
+import ToastMessage from '../../components/ToastMessage';
 
 // local dependencies
-import layoutStyle from '../styles/jss/layouts/layoutStyle';
-import AppTheme from '../themes/AppTheme';
-
-
+import layoutStyle from '../../styles/jss/layouts/layoutStyle';
+import AppTheme from '../../themes/AppTheme';
 
 class Layout extends React.Component {
   areWeInReportRoute = () => {
-    return this.props.location.pathname === "/sales-report";
+    return this.props.location.pathname === '/sales-report';
   };
   render() {
     const { classes } = this.props;
@@ -30,7 +28,6 @@ class Layout extends React.Component {
       <MuiThemeProvider theme={AppTheme}>
         <CssBaseline />
         <div className={classes.wrapper}>
-        
           <Switch>
             <Route path="/add-invoice" component={AddInvoicePage} />
             <Route path="/sales-report" component={SalesReportPage} />
@@ -38,15 +35,13 @@ class Layout extends React.Component {
           </Switch>
 
           <ToastMessage />
-          
-          { this.areWeInReportRoute() ? null : <Footer />  }
-        
+
+          {this.areWeInReportRoute() ? null : <Footer />}
         </div>
       </MuiThemeProvider>
-        
     );
-  }  
-};
+  }
+}
 
 Layout.propTypes = {
   classes: PropTypes.object.isRequired

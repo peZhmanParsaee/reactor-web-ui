@@ -2,10 +2,10 @@ import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { createBrowserHistory } from 'history';
-import NotFoundPage from '../components/NotFoundPage';
+import NotFoundPage from '../screens/shared/NotFoundPage';
 import AppTheme from '../themes/AppTheme';
 
-import Layout from '../layouts/Layout';
+import Layout from '../screens/shared/Layout';
 
 const history = createBrowserHistory();
 

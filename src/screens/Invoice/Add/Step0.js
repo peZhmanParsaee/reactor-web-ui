@@ -8,47 +8,50 @@ import FormControl from '@material-ui/core/FormControl';
 import { withStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 
-
-// // @material-ui/icons
-
-
 // local dependencies
-import appStyle from '../../styles/jss/layouts/appStyle';
+import appStyle from '../../../styles/jss/layouts/appStyle';
 
 // local components
-import AddProductDialog from '../AddProductDialog';
-import GridContainer from '../Grid/GridContainer';
-import GridItem from '../Grid/GridItem';
+import AddProductDialog from './AddProductDialog';
+import GridContainer from '../../../components/Grid/GridContainer';
+import GridItem from '../../../components/Grid/GridItem';
 // import InvoiceProductsListItem from './InvoiceProductsListItem';
 
 class Step0 extends PureComponent {
   render() {
-    const { classes, invoiceNo, invoiceDate, autosuggestProps, single, handleAutoSuggestChage, 
-      isAddProductDialogOpen, onCloseAddProductDialog, showGlobalMessage,
+    const {
+      classes,
+      invoiceNo,
+      invoiceDate,
+      autosuggestProps,
+      single,
+      handleAutoSuggestChage,
+      isAddProductDialogOpen,
+      onCloseAddProductDialog,
+      showGlobalMessage,
       onSaveAddProductDialog
-     } = this.props;
+    } = this.props;
 
     return (
       <div className={classes.container}>
         <GridContainer>
-          <GridItem xs={12} sm={12} md={6} style={{marginBottom: '15px'}}>
-            <Typography style={{fontWeight: 'bold'}}>
-              شماره فاکتور
-            </Typography>
+          <GridItem xs={12} sm={12} md={6} style={{ marginBottom: '15px' }}>
+            <Typography style={{ fontWeight: 'bold' }}>شماره فاکتور</Typography>
             <span>{invoiceNo}</span>
           </GridItem>
-          <GridItem xs={12} sm={12} md={6} style={{marginBottom: '15px'}}>
-            <Typography style={{fontWeight: 'bold'}}>
-              تاریخ امروز
-            </Typography>
+          <GridItem xs={12} sm={12} md={6} style={{ marginBottom: '15px' }}>
+            <Typography style={{ fontWeight: 'bold' }}>تاریخ امروز</Typography>
             <span>{invoiceDate}</span>
           </GridItem>
-          <GridItem xs={12} sm={12} md={6}
+          <GridItem
+            xs={12}
+            sm={12}
+            md={6}
             className="autosuggest"
-            style={{marginBottom: '15px'}}
+            style={{ marginBottom: '15px' }}
           >
             <FormControl>
-              <Typography style={{fontWeight: 'bold'}}>
+              <Typography style={{ fontWeight: 'bold' }}>
                 نام و نام خانوادگی
               </Typography>
               <Autosuggest
@@ -57,7 +60,7 @@ class Step0 extends PureComponent {
                   classes,
                   placeholder: 'نام و نام خانوادگی',
                   value: single,
-                  onChange: handleAutoSuggestChage('single'),
+                  onChange: handleAutoSuggestChage('single')
                 }}
                 theme={{
                   container: classes.container,
@@ -79,7 +82,7 @@ class Step0 extends PureComponent {
         </GridContainer>
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
-            <AddProductDialog 
+            <AddProductDialog
               show={isAddProductDialogOpen}
               onCloseDialog={onCloseAddProductDialog}
               showGlobalMessage={showGlobalMessage}
@@ -88,7 +91,7 @@ class Step0 extends PureComponent {
           </GridItem>
         </GridContainer>
       </div>
-    )
+    );
   }
 }
 

@@ -4,13 +4,12 @@ const INITIAL_STATE = [];
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-  case types.SET_PROVINCES:
-    return action.provinces;
-  default:
-    return state;
+    case types.SET_PROVINCES:
+      return [...state, action.provinces];
+    default:
+      return state;
   }
 };
-
 
 // import {
 //   SET_PROVINCES,
@@ -23,10 +22,10 @@ export default (state = INITIAL_STATE, action) => {
 //   console.log("action type => ", action.type);
 //   switch (action.type) {
 //     case SET_PROVINCES:
-//       console.log(`SET_PROVINCES action is ${JSON.stringify(action)}`); 
+//       console.log(`SET_PROVINCES action is ${JSON.stringify(action)}`);
 //       return { data: action.payload };
 //     case API_START:
-//       console.log(`API_START action is ${JSON.stringify(action)}`); 
+//       console.log(`API_START action is ${JSON.stringify(action)}`);
 //       if (action.payload === FETCH_PROVINCES) {
 //         return {
 //           ...state,
@@ -35,7 +34,7 @@ export default (state = INITIAL_STATE, action) => {
 //       }
 //       break;
 //     case API_END:
-//       console.log(`API_END action is ${JSON.stringify(action)}`); 
+//       console.log(`API_END action is ${JSON.stringify(action)}`);
 //       if (action.payload === FETCH_PROVINCES) {
 //         return {
 //           ...state,

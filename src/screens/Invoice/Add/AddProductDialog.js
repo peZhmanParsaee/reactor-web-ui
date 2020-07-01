@@ -17,11 +17,10 @@ import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 // local dependencies
-import appStyle from '../styles/jss/layouts/appStyle';
-import RESOURCES from '../resources';
+import appStyle from '../../../styles/jss/layouts/appStyle';
+import RESOURCES from '../../../resources';
 
-
-class AddProductDialog extends PureComponent {  
+class AddProductDialog extends PureComponent {
   state = {
     name: '',
     stock: '',
@@ -36,52 +35,51 @@ class AddProductDialog extends PureComponent {
       unitPrice: '',
       loadingStatus: false
     }));
-  };
+  }
   showMessage = ({ text, type }) => {
     this.props.showGlobalMessage({ type, text });
   };
   onAddProduct = () => {
     if (!this.state.name || !this.state.stock || !this.state.unitPrice) {
-      this.showMessage({ 
-        type: "warning",
-        text: "خطای اعتبارسنجی، ورودیها را بررسی کنید."
+      this.showMessage({
+        type: 'warning',
+        text: 'خطای اعتبارسنجی، ورودیها را بررسی کنید.'
       });
       return;
     }
 
-    this.onShowAddProductLoading()
-      .then(ack => {
-        const product = { 
-          name: this.state.name,
-          stock: this.state.stock, 
-          unitPrice: this.state.unitPrice
-        };
+    this.onShowAddProductLoading().then((ack) => {
+      const product = {
+        name: this.state.name,
+        stock: this.state.stock,
+        unitPrice: this.state.unitPrice
+      };
 
-        this.props.onSaveAddProductDialog(product)
-          .then(opStatus => {
-            if (opStatus.status === true) {
-              this.clearState();
-              this.onCloseDialog();
-            } else {
-              this.showMessage({ 
-                type: "error",
-                text: opStatus.message || "خطا در انجام عملیات"
-              });
-            }
-          })
-          .catch(err => {
-            this.showMessage({ 
-              type: "error",
-              text: "خطا در انجام عملیات!"
+      this.props
+        .onSaveAddProductDialog(product)
+        .then((opStatus) => {
+          if (opStatus.status === true) {
+            this.clearState();
+            this.onCloseDialog();
+          } else {
+            this.showMessage({
+              type: 'error',
+              text: opStatus.message || 'خطا در انجام عملیات'
             });
-          })
-          .finally(() =>{
-            this.onHideAddProductLoading();
+          }
+        })
+        .catch((err) => {
+          this.showMessage({
+            type: 'error',
+            text: 'خطا در انجام عملیات!'
           });
-      });
-    
+        })
+        .finally(() => {
+          this.onHideAddProductLoading();
+        });
+    });
   };
-  onShowAddProductLoading = () => {    
+  onShowAddProductLoading = () => {
     return new Promise((resolve, reject) => {
       this.setState({ loadingStatus: true }, () => resolve('done'));
     });
@@ -90,7 +88,7 @@ class AddProductDialog extends PureComponent {
     this.setState({ loadingStatus: false });
   };
   onCloseDialog = () => {
-    this.setState(() =>({
+    this.setState(() => ({
       name: '',
       stock: '',
       unitPrice: '',
@@ -101,9 +99,8 @@ class AddProductDialog extends PureComponent {
   onNameChage = (event) => {
     const name = event.target.value;
     if (
-      (persianRex.letter.test(name) 
-      || persianRex.text.test(name)             
-      || !name) && name.length <= 50
+      (persianRex.letter.test(name) || persianRex.text.test(name) || !name) &&
+      name.length <= 50
     ) {
       this.setState(() => ({ name }));
     }
@@ -133,55 +130,67 @@ class AddProductDialog extends PureComponent {
 
     return (
       <Fragment>
-        <Dialog 
-          open={this.props.show}
-          onClose={this.onCloseDialog}
-        >
+        <Dialog open={this.props.show} onClose={this.onCloseDialog}>
           <DialogTitle>اضافه کردن محصول جدید</DialogTitle>
           <DialogContent>
             <form>
-              <FormControl fullWidth 
-                className={classes.textField}>
-                <InputLabel htmlFor="name"
+              <FormControl fullWidth className={classes.textField}>
+                <InputLabel
+                  htmlFor="name"
                   className="form-control__input-label"
                 >
-                  { RESOURCES.FIELDS.ADD_PRODUCT__PRODUCT_NAME }
+                  {RESOURCES.FIELDS.ADD_PRODUCT__PRODUCT_NAME}
                 </InputLabel>
-                <Input id="name"
+                <Input
+                  id="name"
                   onChange={this.onNameChage}
                   value={this.state.name}
-                  autoComplete='off'
-                  onKeyDown={ this.moveNextElementInForm }
+                  autoComplete="off"
+                  onKeyDown={this.moveNextElementInForm}
                   ref={this.focusInput}
                 />
               </FormControl>
-              <FormControl fullWidth
-                className={classNames(classes.withoutLabel, classes.textField)} >
-                <InputLabel 
+              <FormControl
+                fullWidth
+                className={classNames(classes.withoutLabel, classes.textField)}
+              >
+                <InputLabel
                   htmlFor="stock"
                   className="form-control__input-label"
-                >موجودی</InputLabel>
-                <Input id="stock"
+                >
+                  موجودی
+                </InputLabel>
+                <Input
+                  id="stock"
                   value={this.state.stock}
                   onChange={this.onStockChange}
                   type="text"
-                  endAdornment={<InputAdornment position="start">عدد</InputAdornment>}
-                  autoComplete='off'
-                  onKeyDown={ this.moveNextElementInForm }
+                  endAdornment={
+                    <InputAdornment position="start">عدد</InputAdornment>
+                  }
+                  autoComplete="off"
+                  onKeyDown={this.moveNextElementInForm}
                 />
               </FormControl>
-              <FormControl fullWidth
+              <FormControl
+                fullWidth
                 className={classNames(classes.withoutLabel, classes.textField)}
               >
-                <InputLabel htmlFor="unit-price"            
+                <InputLabel
+                  htmlFor="unit-price"
                   className="form-control__input-label"
-                >قیمت واحد</InputLabel>
-                <Input id="unit-price"
+                >
+                  قیمت واحد
+                </InputLabel>
+                <Input
+                  id="unit-price"
                   value={this.state.unitPrice}
                   onChange={this.onUnitPriceChange}
                   type="text"
-                  endAdornment={<InputAdornment position="start">تومان</InputAdornment>}
-                  autoComplete='off'
+                  endAdornment={
+                    <InputAdornment position="start">تومان</InputAdornment>
+                  }
+                  autoComplete="off"
                   onKeyDown={(event) => {
                     if (event.keyCode == 13) {
                       this.onAddProduct();
@@ -192,24 +201,19 @@ class AddProductDialog extends PureComponent {
             </form>
           </DialogContent>
           <DialogActions>
-            { this.state.loadingStatus && (
-                <CircularProgress
-                  size={24}
-                  thickness={4}
-                />
-              )
-            }
-            
-            <Button onClick={this.onAddProduct}
-              disabled={this.state.loadingStatus }
+            {this.state.loadingStatus && (
+              <CircularProgress size={24} thickness={4} />
+            )}
+
+            <Button
+              onClick={this.onAddProduct}
+              disabled={this.state.loadingStatus}
               color="primary"
               variant="contained"
             >
               ذخیره
             </Button>
-            <Button onClick={this.onCloseDialog}
-              variant="contained"
-            >
+            <Button onClick={this.onCloseDialog} variant="contained">
               انصراف
             </Button>
           </DialogActions>

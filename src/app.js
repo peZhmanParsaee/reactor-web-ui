@@ -12,7 +12,7 @@ import {
 import configureStore from './redux/store/configureStore';
 import { startSetProvinces } from './redux/actions/provinces';
 import { startSetProducts } from './redux/actions/products';
-import Loading from './components/shared/Loading';
+import Loading from './components/Loading';
 import AppRouter from './router/AppRouter';
 
 import './styles/styles.scss';
