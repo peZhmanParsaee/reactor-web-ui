@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import ReactShallowRenderer from 'react-test-renderer/shallow';
 
-import { Loading } from '../../../components/shared/Loading';
+import { Loading } from '../../../components/Loading';
 
 test('should render Loading with ReactShallowRenderer correctly', () => {
   const renderer = new ReactShallowRenderer();

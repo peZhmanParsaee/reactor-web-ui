@@ -7,7 +7,7 @@ export default (state = INITIAL_STATE, action) => {
     case types.ADD_PRODUCT:
       return [...state, action.payload.product];
     case types.SET_PRODUCTS:
-      return [...state, action.payload.products];
+      return action.payload.products;
     default:
       return state;
   }

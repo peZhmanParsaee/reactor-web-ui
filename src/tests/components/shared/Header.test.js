@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactShallowRenderer from 'react-test-renderer/shallow';
-import Header from '../../../components/shared/Header';
+import Header from '../../../components/Header';
 
 test('should render Header correctly', () => {
   const renderer = new ReactShallowRenderer();
