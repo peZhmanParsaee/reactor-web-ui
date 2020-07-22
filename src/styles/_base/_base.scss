@@ -2,21 +2,27 @@
   font-family: 'Vazir';
   src: url('/assets/fonts/vazir/Vazir.eot') format('eot');
   src: url('/assets/fonts/vazir/Vazir.ttf') format('truetype'),
-       url('/assets/fonts/vazir/Vazir.woff') format('woff'),
-       url('/assets/fonts/vazir/Vazir.woff2') format('woff2');
+    url('/assets/fonts/vazir/Vazir.woff') format('woff'),
+    url('/assets/fonts/vazir/Vazir.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'VazirFD';
   src: url('/assets/fonts/vazir/Farsi-Digits/Vazir-FD.eot') format('eot');
   src: url('/assets/fonts/vazir/Farsi-Digits/Vazir-FD.ttf') format('truetype'),
-       url('/assets/fonts/vazir/Farsi-Digits/Vazir-FD.woff') format('woff'),
-       url('/assets/fonts/vazir/Farsi-Digits/Vazir-FD.woff2') format('woff2');
+    url('/assets/fonts/vazir/Farsi-Digits/Vazir-FD.woff') format('woff'),
+    url('/assets/fonts/vazir/Farsi-Digits/Vazir-FD.woff2') format('woff2');
+}
+
+:root {
+  font-size: 0.75em;
+  --main-font: VazirFD, Tahoma, Arial, sans-serif;
 }
 
 body {
-  font-family: VazirFD;
+  font-family: var(--main-font);
   direction: rtl;
+  line-height: 1.2;
 }
 
 .form-control__input-label {
