@@ -1,13 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { create } from 'jss';
-import rtl from 'jss-rtl';
-import {
-  StylesProvider,
-  jssPreset,
-  createGenerateClassName
-} from '@material-ui/styles';
 
 import configureStore from './redux/store/configureStore';
 import { startSetProvinces } from './redux/actions/provinces';
@@ -15,22 +8,15 @@ import { startSetProducts } from './redux/actions/products';
 import Loading from './components/Loading';
 import AppRouter from './router/AppRouter';
 
-import './styles/styles.scss';
-
-const jss = create({
-  plugins: [...jssPreset().plugins, rtl()]
-});
-
-const generateClassName = createGenerateClassName();
+// import 'bootstrap/dist/css/bootstrap.min.css';
+import './styles/main.scss';
 
 const store = configureStore();
 
 const jsx = (
-  <StylesProvider jss={jss} generateClassName={generateClassName}>
-    <Provider store={store}>
-      <AppRouter />
-    </Provider>
-  </StylesProvider>
+  <Provider store={store}>
+    <AppRouter />
+  </Provider>
 );
 
 ReactDOM.render(jsx, document.getElementById('app'));
