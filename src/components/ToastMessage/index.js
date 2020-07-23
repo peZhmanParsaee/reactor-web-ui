@@ -115,7 +115,4 @@ const mapDispatchToProps = (dispatch) => ({
   setMessageOpenState: ({ open }) => dispatch(setMessageOpenState({ open }))
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withStyles(styles1)(ToastMessage));
+export default connect(mapStateToProps, mapDispatchToProps)(ToastMessage);
