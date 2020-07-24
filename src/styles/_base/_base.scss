@@ -17,16 +17,80 @@
 :root {
   font-size: 0.75em;
   --main-font: VazirFD, Tahoma, Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+}
+
+body * + * {
+  margin-top: 1.5em;
 }
 
 body {
   font-family: var(--main-font);
-  direction: rtl;
+  // direction: rtl;
   line-height: 1.2;
+  background-color: #eee;
 }
 
-.form-control__input-label {
-  direction: rtl;
-  right: 0;
-  transform-origin: top right !important;
+nav {
+  background-color: rgb(0, 114, 176);
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+nav > ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+nav > ul > li {
+  display: inline;
+  margin-left: 1em;
+}
+
+nav > ul > li > a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+header {
+  background-color: rgb(0, 114, 176);
+  color: #fff;
+  padding: 1em 1.5em;
+  border-radius: 0.5em;
+}
+
+.content {
+  margin-right: -1.5em;
+  margin-left: -1.5em;
+}
+
+.container {
+  display: table;
+  width: 100%;
+  border-spacing: 1.5em 0;
+}
+
+.main {
+  width: 70%;
+  padding: 1em 1.5em;
+}
+
+.sidebar {
+  width: 30%;
+  padding: 1.5em;
+}
+
+.main,
+.sidebar {
+  display: table-cell;
+  background-color: #fff;
+  border-radius: 0.5em;
 }

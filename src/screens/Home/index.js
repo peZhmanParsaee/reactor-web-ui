@@ -10,15 +10,28 @@ class HomePage extends Component {
   render() {
     return (
       <div className="wrapper">
-        <header>header</header>
+        <header>
+          <h1>Reactor Store</h1>
+        </header>
         <nav>
           <ul>
-            <li>Home Page</li>
-            <li>Search</li>
-            <li>About us</li>
+            <li>
+              <a href="#">Home Page</a>
+            </li>
+            <li>
+              <a href="#">Search</a>
+            </li>
+            <li>
+              <a href="#">About us</a>
+            </li>
           </ul>
         </nav>
-        <main>Main Content</main>
+        <div className="content">
+          <div className="container">
+            <main className="main">Main Content</main>
+            <aside className="sidebar">sidebar</aside>
+          </div>
+        </div>
         <footer>Footer</footer>
       </div>
     );
