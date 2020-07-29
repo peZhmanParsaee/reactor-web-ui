@@ -21,7 +21,6 @@ import Step1 from './Step1';
 import AutoSuggestInput from './AutoSuggestInput';
 
 // local dependencies
-import appStyle from '../../../styles/jss/layouts/appStyle';
 import { generateKey } from '../../../helpers/keyHelper';
 import AddInvoiceContext from './AddInvoiceContext';
 
@@ -596,7 +595,4 @@ const mapDispatchToProps = (dispatch) => ({
   }
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withStyles(appStyle)(AddInvoicePage));
+export default connect(mapStateToProps, mapDispatchToProps)(AddInvoicePage);

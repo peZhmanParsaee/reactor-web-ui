@@ -8,14 +8,10 @@ import FormControl from '@material-ui/core/FormControl';
 import { withStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 
-// local dependencies
-import appStyle from '../../../styles/jss/layouts/appStyle';
-
 // local components
 import AddProductDialog from './AddProductDialog';
 import GridContainer from '../../../components/Grid/GridContainer';
 import GridItem from '../../../components/Grid/GridItem';
-// import InvoiceProductsListItem from './InvoiceProductsListItem';
 
 class Step0 extends PureComponent {
   render() {
@@ -117,4 +113,4 @@ Step0.propTypes = {
   showGlobalMessage: PropTypes.func.isRequired
 };
 
-export default withStyles(appStyle)(Step0);
+export default Step0;

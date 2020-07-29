@@ -7,7 +7,6 @@ import JalaliUtils from '@date-io/jalaali';
 import { DatePicker, MuiPickersUtilsProvider } from 'material-ui-pickers';
 
 // @material-ui/core
-import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Radio from '@material-ui/core/Radio';
@@ -30,7 +29,6 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 // local dependencies
 import { separateDigits } from '../../../helpers/numberHelpers';
 import { generateKey } from '../../../helpers/keyHelper';
-import appStyle from '../../../styles/jss/layouts/appStyle';
 
 class SalesReportPage extends PureComponent {
   constructor(props) {
@@ -437,4 +435,4 @@ SalesReportPage.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(appStyle)(SalesReportPage);
+export default SalesReportPage;

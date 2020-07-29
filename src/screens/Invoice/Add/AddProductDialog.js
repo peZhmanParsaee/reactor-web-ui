@@ -13,11 +13,9 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 // local dependencies
-import appStyle from '../../../styles/jss/layouts/appStyle';
 import RESOURCES from '../../../resources';
 
 class AddProductDialog extends PureComponent {
@@ -229,4 +227,4 @@ AddProductDialog.propTypes = {
   onCloseDialog: PropTypes.func.isRequired
 };
 
-export default withStyles(appStyle)(AddProductDialog);
+export default AddProductDialog;

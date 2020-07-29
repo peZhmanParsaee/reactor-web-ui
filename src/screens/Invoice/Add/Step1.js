@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 // material-ui/core
 import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
-import { withStyles } from '@material-ui/core';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -14,9 +13,6 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import GridItem from '../../../components/Grid/GridItem';
 import GridContainer from '../../../components/Grid/GridContainer';
-
-// local dependencies
-import appStyle from '../../../styles/jss/layouts/appStyle';
 
 class Step1 extends PureComponent {
   render() {
@@ -205,4 +201,4 @@ Step1.propTypes = {
   onDeliverAfterTimeUnitChange: PropTypes.func.isRequired
 };
 
-export default withStyles(appStyle)(Step1);
+export default Step1;

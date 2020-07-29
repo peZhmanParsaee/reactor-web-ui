@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-// local dependencies
-import Header from '../../components/Header';
-import homePageStyle from '../../styles/jss/components/homePageStyle';
-
 class HomePage extends Component {
   render() {
     return (
@@ -32,7 +28,7 @@ class HomePage extends Component {
             <aside className="sidebar">sidebar</aside>
           </div>
         </div>
-        <footer>Footer</footer>
+        <footer>Biult by love for open source</footer>
       </div>
     );
   }

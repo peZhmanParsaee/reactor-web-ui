@@ -3,13 +3,10 @@ import PropTypes from 'prop-types';
 import { pure, onlyUpdateForKeys } from 'recompose';
 
 // @material-ui/core
-import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import TypoGraphy from '@material-ui/core/Typography';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
-
-import headerStyle from '../../styles/jss/components/headerStyle';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 const Header = (props) => {
   const { classes } = props;
@@ -32,4 +29,4 @@ Header.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default pure(withStyles(headerStyle)(Header));
+export default Header;
