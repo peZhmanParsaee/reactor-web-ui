@@ -1,17 +1,17 @@
 @font-face {
   font-family: 'Vazir';
-  src: url('/assets/fonts/vazir/Vazir.eot') format('eot');
-  src: url('/assets/fonts/vazir/Vazir.ttf') format('truetype'),
-    url('/assets/fonts/vazir/Vazir.woff') format('woff'),
-    url('/assets/fonts/vazir/Vazir.woff2') format('woff2');
+  src: url('../fonts/vazir/Vazir.eot') format('eot');
+  src: url('../fonts/vazir/Vazir.ttf') format('truetype'),
+    url('../fonts/vazir/Vazir.woff') format('woff'),
+    url('../fonts/vazir/Vazir.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'VazirFD';
-  src: url('/assets/fonts/vazir/Farsi-Digits/Vazir-FD.eot') format('eot');
-  src: url('/assets/fonts/vazir/Farsi-Digits/Vazir-FD.ttf') format('truetype'),
-    url('/assets/fonts/vazir/Farsi-Digits/Vazir-FD.woff') format('woff'),
-    url('/assets/fonts/vazir/Farsi-Digits/Vazir-FD.woff2') format('woff2');
+  src: url('../fonts/vazir/Farsi-Digits/Vazir-FD.eot') format('eot');
+  src: url('../fonts/vazir/Farsi-Digits/Vazir-FD.ttf') format('truetype'),
+    url('../fonts/vazir/Farsi-Digits/Vazir-FD.woff') format('woff'),
+    url('../fonts/vazir/Farsi-Digits/Vazir-FD.woff2') format('woff2');
 }
 
 :root {
