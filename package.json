@@ -25,7 +25,7 @@
     "@material-ui/icons": "3.0.2",
     "@material-ui/styles": "3.0.0-alpha.10",
     "autosuggest-highlight": "3.1.1",
-    "axios": "0.18.0",
+    "axios": "0.21.1",
     "axios-mock-adapter": "^1.18.1",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.3",
